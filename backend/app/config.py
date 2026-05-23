@@ -36,6 +36,8 @@ class Settings(BaseSettings):
     # MaxMind GeoIP2 Insights — fraud & geo gating
     MAXMIND_ACCOUNT_ID: str = ""
     MAXMIND_LICENSE_KEY: str = ""
+    # Comma-separated phone numbers that bypass the geo check (owner testing)
+    MAXMIND_WHITELISTED_PHONES: str = "050000007,055000000"
 
 
 settings = Settings()

@@ -21,13 +21,6 @@ logger = logging.getLogger(__name__)
 
 MAXMIND_INSIGHTS_URL = "https://geoip.maxmind.com/geoip/v2.1/insights/{ip}"
 
-WHITELISTED_PHONES: set[str] = {
-    "055000000",
-    "+966055000000",
-    "966055000000",
-    "0966055000000",
-}
-
 
 class GeoCheckResult(NamedTuple):
     allowed: bool
@@ -38,10 +31,16 @@ def _normalize_phone(phone: str) -> str:
     return phone.replace(" ", "").replace("-", "").replace("+", "")
 
 
+def _whitelisted_phones() -> list[str]:
+    """Return normalized whitelisted phones from settings (comma-separated)."""
+    raw = settings.MAXMIND_WHITELISTED_PHONES
+    return [_normalize_phone(p.strip()) for p in raw.split(",") if p.strip()]
+
+
 def is_phone_whitelisted(phone: str) -> bool:
     normalized = _normalize_phone(phone)
-    for wl in WHITELISTED_PHONES:
-        if _normalize_phone(wl) == normalized or normalized.endswith(_normalize_phone(wl)):
+    for wl in _whitelisted_phones():
+        if wl == normalized or normalized.endswith(wl):
             return True
     return False
 
