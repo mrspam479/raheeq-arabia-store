@@ -68,7 +68,7 @@ export function UpsellModal() {
     try {
       if (upsellToken !== 'preview-upsell-token') {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL ?? 'https://api.raheeqarabia.com'}/api/orders/${lastOrderId}/upsell`,
+          `${process.env.NEXT_PUBLIC_API_URL || 'https://api.raheeqarabia.com'}/api/orders/${lastOrderId}/upsell`,
           {
             method: 'PATCH',
             headers: {

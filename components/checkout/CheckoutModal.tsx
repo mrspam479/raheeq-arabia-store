@@ -75,7 +75,8 @@ export function CheckoutModal() {
         customer: { full_name: values.name, phone: values.phone },
         lines: lines.map((l) => ({
           product_slug: l.productId,
-          offer_code: l.offerCode,
+          // Fallback: derive offer_code from tier if old cart item lacks it
+          offer_code: l.offerCode ?? (l.tier === 1 ? 'T1' : l.tier === 2 ? 'T2' : 'T3'),
         })),
         tracking: {
           event_id: uuidv4(),
@@ -99,7 +100,7 @@ export function CheckoutModal() {
       };
 
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL ?? 'https://api.raheeqarabia.com'}/api/orders`,
+        `${process.env.NEXT_PUBLIC_API_URL || 'https://api.raheeqarabia.com'}/api/orders`,
         {
           method: 'POST',
           headers: {

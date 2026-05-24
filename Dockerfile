@@ -17,8 +17,8 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Build args — all NEXT_PUBLIC_ vars must be declared here to be baked into the bundle
-ARG NEXT_PUBLIC_API_URL
-ARG NEXT_PUBLIC_SITE_URL
+ARG NEXT_PUBLIC_API_URL=https://api.raheeqarabia.com
+ARG NEXT_PUBLIC_SITE_URL=https://raheeqarabia.com
 ARG NEXT_PUBLIC_ENABLE_PIXELS
 ARG NEXT_PUBLIC_META_PIXEL_ID
 ARG NEXT_PUBLIC_TIKTOK_PIXEL_ID

@@ -13,11 +13,14 @@ export const OFFER_MAP = {
   T3: { quantity: 3, priceSar: 349, labelAr: 'Glow Kit (الأنصح)' },
 } as const;
 
+const TIER_TO_CODE: Record<1 | 2 | 3, 'T1' | 'T2' | 'T3'> = { 1: 'T1', 2: 'T2', 3: 'T3' };
+
 export function recomputeLineForTier(line: CartLine, tier: 1 | 2 | 3): CartLine {
   const tierData = TIER_PRICES[tier];
   return {
     ...line,
     tier,
+    offerCode: TIER_TO_CODE[tier],
     quantity: tierData.quantity,
     unitPrice: tierData.priceSar / tierData.quantity,
     totalPrice: tierData.priceSar,
