@@ -288,7 +288,15 @@ FAQS: dict[str, list[dict]] = {
 
 async def run_seed(session: AsyncSession) -> None:
     """Idempotent seed — safe to run on every boot."""
-    await session.execute(text("CREATE EXTENSION IF NOT EXISTS pgcrypto"))
+    await session.execute(text("""
+        DO $$
+        BEGIN
+            CREATE EXTENSION IF NOT EXISTS pgcrypto;
+        EXCEPTION WHEN OTHERS THEN
+            NULL;
+        END
+        $$
+    """))
 
     for product_data in PRODUCTS:
         slug = product_data["slug"]

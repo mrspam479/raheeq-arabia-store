@@ -15,13 +15,10 @@ RUN groupadd --system app && useradd --system --gid app --create-home app
 RUN chmod +x ./docker-entrypoint.sh
 USER app
 
+# PORT default — EasyPanel overrides this at runtime with the service's configured port
 ENV PORT=8000
 EXPOSE 8000
 
+# Entrypoint runs migrations then starts gunicorn on ${PORT}
+# No CMD arguments needed — the entrypoint handles everything
 ENTRYPOINT ["./docker-entrypoint.sh"]
-CMD gunicorn app.main:app \
-    --workers=2 \
-    --worker-class=uvicorn.workers.UvicornWorker \
-    --bind="0.0.0.0:${PORT}" \
-    --timeout=60 \
-    --access-logfile=- --error-logfile=-

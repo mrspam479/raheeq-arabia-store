@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     API_BASE_URL: str = "https://api.raheeqarabia.com"
     FRONTEND_URL: str = "https://raheeqarabia.com"
 
-    DATABASE_URL: str = "postgresql+psycopg://raheeqarabia:raheeqarabia@raheeqarabia_database:5432/raheeqarabia"
+    DATABASE_URL: str = "postgresql+psycopg://raheeqarabia:raheeqarabia@raheeqarabia_database:5432/raheeqarabia?sslmode=disable"
     SECRET_KEY: str = "change-me-in-production"
     BACKEND_API_KEY: str = "change-me-in-production"
 

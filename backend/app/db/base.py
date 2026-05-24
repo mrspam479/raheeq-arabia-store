@@ -4,14 +4,12 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_asyn
 
 from app.config import settings
 
-# sslmode=disable passed via connect_args for EasyPanel internal plain TCP connection
-connect_args: dict[str, str] = {"sslmode": "disable"} if "sslmode" not in settings.DATABASE_URL else {}
-
+# sslmode=disable is embedded in the DATABASE_URL query string (?sslmode=disable)
+# so we don't need connect_args here — that avoids psycopg3 keyword-arg compatibility issues
 engine = create_async_engine(
     settings.DATABASE_URL,
     echo=settings.APP_ENV == "dev",
     pool_pre_ping=True,
-    connect_args=connect_args,
 )
 
 AsyncSessionLocal = async_sessionmaker(

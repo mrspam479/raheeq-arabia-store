@@ -20,7 +20,17 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    op.execute("CREATE EXTENSION IF NOT EXISTS pgcrypto")
+    # pgcrypto is optional on PostgreSQL ≥ 13 (gen_random_uuid is built-in).
+    # Wrap in a DO block so a permission error doesn't abort the whole transaction.
+    op.execute(sa.text("""
+        DO $$
+        BEGIN
+            CREATE EXTENSION IF NOT EXISTS pgcrypto;
+        EXCEPTION WHEN OTHERS THEN
+            NULL;
+        END
+        $$
+    """))
 
     op.create_table(
         "products",
