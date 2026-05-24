@@ -32,6 +32,8 @@ async def send_event(
     custom_data: dict,
     referrer: str | None = None,
 ) -> None:
+    if not settings.ENABLE_CAPI or not settings.ENABLE_TIKTOK_CAPI:
+        return
     if not settings.TIKTOK_PIXEL_CODE or not settings.TIKTOK_ACCESS_TOKEN:
         return
 
@@ -57,7 +59,7 @@ async def send_event(
     if settings.TIKTOK_TEST_EVENT_CODE:
         payload["test_event_code"] = settings.TIKTOK_TEST_EVENT_CODE
 
-    url = "https://business-api.tiktok.com/open_api/v1.3/event/track/"
+    url = f"https://business-api.tiktok.com/open_api/{settings.TIKTOK_API_VERSION}/event/track/"
     headers = {
         "Access-Token": settings.TIKTOK_ACCESS_TOKEN,
         "Content-Type": "application/json",

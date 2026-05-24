@@ -29,6 +29,8 @@ async def send_event(
     user_data: UserData,
     custom_data: dict,
 ) -> None:
+    if not settings.ENABLE_CAPI or not settings.ENABLE_META_CAPI:
+        return
     if not settings.META_PIXEL_ID or not settings.META_ACCESS_TOKEN:
         return
 
@@ -49,7 +51,7 @@ async def send_event(
     if settings.META_TEST_EVENT_CODE:
         payload["test_event_code"] = settings.META_TEST_EVENT_CODE
 
-    url = f"https://graph.facebook.com/v20.0/{settings.META_PIXEL_ID}/events?access_token={settings.META_ACCESS_TOKEN}"
+    url = f"https://graph.facebook.com/{settings.META_API_VERSION}/{settings.META_PIXEL_ID}/events?access_token={settings.META_ACCESS_TOKEN}"
     async with httpx.AsyncClient(timeout=10) as client:
         r = await client.post(url, json=payload)
         if r.status_code >= 400:

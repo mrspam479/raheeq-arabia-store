@@ -33,7 +33,7 @@ def _normalize_phone(phone: str) -> str:
 
 def _whitelisted_phones() -> list[str]:
     """Return normalized whitelisted phones from settings (comma-separated)."""
-    raw = settings.MAXMIND_WHITELISTED_PHONES
+    raw = settings.WHITELISTED_PHONES
     return [_normalize_phone(p.strip()) for p in raw.split(",") if p.strip()]
 
 
@@ -52,6 +52,9 @@ async def check_ip(ip: str, phone: str | None = None) -> GeoCheckResult:
     """
     if phone and is_phone_whitelisted(phone):
         return GeoCheckResult(allowed=True, reason="whitelisted_phone")
+
+    if not settings.ENABLE_IP_FRAUD_CHECK:
+        return GeoCheckResult(allowed=True, reason="ip_fraud_check_disabled")
 
     if not settings.MAXMIND_ACCOUNT_ID or not settings.MAXMIND_LICENSE_KEY:
         logger.warning("MaxMind credentials not configured — skipping geo check")

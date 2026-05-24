@@ -29,6 +29,8 @@ async def send_event(
     user_data: UserData,
     custom_data: dict,
 ) -> None:
+    if not settings.ENABLE_CAPI or not settings.ENABLE_SNAP_CAPI:
+        return
     if not settings.SNAP_PIXEL_ID or not settings.SNAP_ACCESS_TOKEN:
         return
 
