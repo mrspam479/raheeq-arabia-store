@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import asyncio
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
@@ -18,19 +17,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     configure_logging(settings.LOG_LEVEL)
     logger = structlog.get_logger()
 
-    # Run Alembic migrations
-    try:
-        import asyncio as _asyncio
-        from alembic import command
-        from alembic.config import Config as AlembicConfig
-
-        cfg = AlembicConfig("alembic.ini")
-        await _asyncio.to_thread(command.upgrade, cfg, "head")
-        logger.info("alembic.upgrade.done")
-    except Exception:
-        logger.exception("alembic.upgrade.failed")
-
-    # Seed catalog
+    # Seed catalog (migrations already run by docker-entrypoint.sh before startup)
     try:
         from app.db.base import AsyncSessionLocal
         from app.db.seed import run_seed
