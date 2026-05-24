@@ -15,11 +15,12 @@ const UPSELL_PRICE = 99;
 const COUNTDOWN_SECONDS = 15;
 
 export function UpsellModal() {
-  const { isUpsellOpen, closeUpsell, lastOrderId, upsellToken, clearCart } = useCartStore();
+  const { isUpsellOpen, closeUpsell, lastOrderId, upsellToken, upsellSku, clearCart } = useCartStore();
   const router = useRouter();
   const [seconds, setSeconds] = useState(COUNTDOWN_SECONDS);
   const [accepting, setAccepting] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const acceptedRef = useRef(false);
 
   const handleExpire = useCallback(() => {
     clearCart();
@@ -30,6 +31,7 @@ export function UpsellModal() {
   useEffect(() => {
     if (!isUpsellOpen) {
       setSeconds(COUNTDOWN_SECONDS);
+      acceptedRef.current = false;
       if (intervalRef.current) clearInterval(intervalRef.current);
       return;
     }
@@ -57,7 +59,9 @@ export function UpsellModal() {
   };
 
   const handleAccept = async () => {
+    if (acceptedRef.current || accepting) return;
     if (!lastOrderId || !upsellToken) return;
+    acceptedRef.current = true;
     if (intervalRef.current) clearInterval(intervalRef.current);
 
     setAccepting(true);
@@ -71,7 +75,7 @@ export function UpsellModal() {
               'Content-Type': 'application/json',
               'X-Upsell-Token': upsellToken,
             },
-            body: JSON.stringify({ upsell_token: upsellToken }),
+            body: JSON.stringify({ token: upsellToken, sku: upsellSku ?? '' }),
           },
         );
 
@@ -185,14 +189,15 @@ export function UpsellModal() {
               fullWidth
               loading={accepting}
               onClick={handleAccept}
-              className="h-14 text-lg"
+              className="h-16 text-lg touch-manipulation select-none"
             >
               أضيفيها لطلبي الآن · 99 SAR
             </Button>
 
             <button
               onClick={handleDecline}
-              className="text-center font-tajawal text-xs text-charcoal/50 transition-colors hover:text-charcoal"
+              disabled={accepting}
+              className="w-full py-3 text-center font-tajawal text-xs text-charcoal/50 transition-colors hover:text-charcoal disabled:opacity-40 touch-manipulation"
             >
               لا شكرًا، كمّلي طلبي بدون العرض
             </button>

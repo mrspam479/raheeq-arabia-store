@@ -55,6 +55,7 @@ export function PdpClient({
       quantity: selectedOffer.quantity,
       unitPrice: selectedOffer.priceSar / selectedOffer.quantity,
       imageUrl: product.coverImageUrl,
+      offerCode: selectedOffer.code,
     });
     openCart();
     showToast(COPY.TOAST.ADDED, 'success');

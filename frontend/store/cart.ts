@@ -14,6 +14,7 @@ interface CartState {
   isUpsellOpen: boolean;
   lastOrderId: string | null;
   upsellToken: string | null;
+  upsellSku: string | null;
 
   addLine: (line: Omit<CartLine, 'totalPrice'>) => void;
   removeLine: (productId: string) => void;
@@ -23,7 +24,7 @@ interface CartState {
   closeCart: () => void;
   openCheckout: () => void;
   closeCheckout: () => void;
-  openUpsell: (orderId: string, token: string) => void;
+  openUpsell: (orderId: string, token: string, sku: string) => void;
   closeUpsell: () => void;
   totalSar: () => number;
   totalItems: () => number;
@@ -38,6 +39,7 @@ export const useCartStore = create<CartState>()(
       isUpsellOpen: false,
       lastOrderId: null,
       upsellToken: null,
+      upsellSku: null,
 
       addLine: (incoming) => {
         set((state) => {
@@ -84,8 +86,8 @@ export const useCartStore = create<CartState>()(
       closeCart: () => set({ isCartOpen: false }),
       openCheckout: () => set({ isCheckoutOpen: true, isCartOpen: false }),
       closeCheckout: () => set({ isCheckoutOpen: false }),
-      openUpsell: (orderId, token) =>
-        set({ isUpsellOpen: true, isCheckoutOpen: false, lastOrderId: orderId, upsellToken: token }),
+      openUpsell: (orderId, token, sku) =>
+        set({ isUpsellOpen: true, isCheckoutOpen: false, lastOrderId: orderId, upsellToken: token, upsellSku: sku }),
       closeUpsell: () => set({ isUpsellOpen: false }),
 
       totalSar: () => get().lines.reduce((sum, l) => sum + l.totalPrice, 0),
@@ -98,6 +100,7 @@ export const useCartStore = create<CartState>()(
         lines: state.lines,
         lastOrderId: state.lastOrderId,
         upsellToken: state.upsellToken,
+        upsellSku: state.upsellSku,
       }),
     },
   ),
