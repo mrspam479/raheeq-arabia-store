@@ -8,6 +8,7 @@ export type CartLine = {
   unitPrice: number;
   totalPrice: number;
   imageUrl: string;
+  offerCode: OfferCode;
 };
 
 export type Offer = {
@@ -63,43 +64,44 @@ export type Product = {
   seo: ProductSeo;
 };
 
-export type OrderLine = {
-  product_id: string;
-  quantity: number;
-  unit_price: number;
+export type OrderLineIn = {
+  product_slug: string;
+  offer_code: string;
 };
 
 export type OrderCreateIn = {
-  customer: { name: string; phone: string };
-  lines: OrderLine[];
-  tracking?: {
+  customer: { full_name: string; phone: string };
+  lines: OrderLineIn[];
+  tracking: {
+    event_id: string;
     fbp?: string;
     fbc?: string;
     ttp?: string;
     ttclid?: string;
     sc_click_id?: string;
-    ip?: string;
-    user_agent?: string;
-    page_url?: string;
+    referrer?: string;
+    landing_url?: string;
+    utm?: {
+      source?: string;
+      medium?: string;
+      campaign?: string;
+      content?: string;
+      term?: string;
+    };
+    client_user_agent?: string;
   };
-  utm?: {
-    source?: string;
-    medium?: string;
-    campaign?: string;
-    content?: string;
-    term?: string;
-  };
+  honeypot?: string;
 };
 
 export type OrderCreateOut = {
-  order_id: string;
-  status: string;
-  total_sar: number;
-  upsell_token: string;
-  upsell_offer?: {
+  order: {
+    id: string;
+    status: string;
+    total_sar: number;
+  };
+  upsell: {
+    token: string;
     sku: string;
-    name_ar: string;
     price_sar: number;
-    cover_image_url?: string;
   } | null;
 };

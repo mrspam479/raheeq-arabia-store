@@ -250,6 +250,7 @@ function CrossSellItem({
       quantity: 3,
       unitPrice: 349 / 3,
       imageUrl: `/images/products/${slug}/cover.svg`,
+      offerCode: 'T3',
     });
   };
 

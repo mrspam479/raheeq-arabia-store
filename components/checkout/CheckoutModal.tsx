@@ -72,29 +72,30 @@ export function CheckoutModal() {
     try {
       const utmParams = new URLSearchParams(window.location.search);
       const payload = {
-        customer: { name: values.name, phone: values.phone },
+        customer: { full_name: values.name, phone: values.phone },
         lines: lines.map((l) => ({
-          product_id: l.productId,
-          quantity: l.quantity,
-          unit_price: l.unitPrice,
+          product_slug: l.productId,
+          offer_code: l.offerCode,
         })),
         tracking: {
-          fbp: getCookie('_fbp'),
-          fbc: getCookie('_fbc'),
-          ttp: getCookie('_ttp'),
+          event_id: uuidv4(),
+          fbp: getCookie('_fbp') || undefined,
+          fbc: getCookie('_fbc') || undefined,
+          ttp: getCookie('_ttp') || undefined,
           ttclid: utmParams.get('ttclid') ?? undefined,
           sc_click_id: utmParams.get('ScCid') ?? undefined,
-          ip: undefined,
-          user_agent: navigator.userAgent,
-          page_url: window.location.href,
+          referrer: document.referrer || undefined,
+          landing_url: window.location.href,
+          client_user_agent: navigator.userAgent,
+          utm: {
+            source: utmParams.get('utm_source') ?? undefined,
+            medium: utmParams.get('utm_medium') ?? undefined,
+            campaign: utmParams.get('utm_campaign') ?? undefined,
+            content: utmParams.get('utm_content') ?? undefined,
+            term: utmParams.get('utm_term') ?? undefined,
+          },
         },
-        utm: {
-          source: utmParams.get('utm_source') ?? undefined,
-          medium: utmParams.get('utm_medium') ?? undefined,
-          campaign: utmParams.get('utm_campaign') ?? undefined,
-          content: utmParams.get('utm_content') ?? undefined,
-          term: utmParams.get('utm_term') ?? undefined,
-        },
+        honeypot: '',
       };
 
       const res = await fetch(
@@ -112,26 +113,29 @@ export function CheckoutModal() {
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
         const detail = (err as { detail?: string | { message?: string } }).detail;
-        const msg = typeof detail === 'string'
-          ? detail
-          : (detail as { message?: string })?.message ?? COPY.ERROR_PAGES.GENERIC;
+        const msg =
+          typeof detail === 'string'
+            ? detail
+            : (detail as { message?: string })?.message ?? COPY.ERROR_PAGES.GENERIC;
         throw new Error(msg);
       }
 
       const data = await res.json() as {
-        order_id: string;
-        upsell_token: string;
-        upsell_offer?: unknown;
+        order: { id: string; status: string; total_sar: number };
+        upsell: { token: string; sku: string; price_sar: number } | null;
       };
 
-      trackPurchase(data.order_id, total, values.phone, values.name);
+      const orderId = data.order.id;
+      const upsellToken = data.upsell?.token ?? '';
+      const upsellSku = data.upsell?.sku ?? '';
 
-      openUpsell(data.order_id, data.upsell_token);
+      trackPurchase(orderId, total, values.phone, values.name);
+      openUpsell(orderId, upsellToken, upsellSku);
     } catch (err) {
       if (isLocalPreview()) {
         const previewOrderId = `preview-${Date.now()}`;
         trackPurchase(previewOrderId, total, values.phone, values.name);
-        openUpsell(previewOrderId, 'preview-upsell-token');
+        openUpsell(previewOrderId, 'preview-upsell-token', 'habba-noura');
         return;
       }
 
