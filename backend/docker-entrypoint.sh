@@ -30,7 +30,9 @@ else:
 PY
 
 echo "[entrypoint] alembic upgrade head"
-alembic upgrade head
+if ! alembic upgrade head; then
+    echo "[entrypoint] WARNING: alembic migration failed – starting app anyway; check DB connection"
+fi
 
-echo "[entrypoint] starting app"
+echo "[entrypoint] starting app on port ${PORT:-8000}"
 exec "$@"

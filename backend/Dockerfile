@@ -19,9 +19,9 @@ ENV PORT=8000
 EXPOSE 8000
 
 ENTRYPOINT ["./docker-entrypoint.sh"]
-CMD ["gunicorn", "app.main:app", \
-     "--workers=2", \
-     "--worker-class=uvicorn.workers.UvicornWorker", \
-     "--bind=0.0.0.0:8000", \
-     "--timeout=60", \
-     "--access-logfile=-", "--error-logfile=-"]
+CMD gunicorn app.main:app \
+    --workers=2 \
+    --worker-class=uvicorn.workers.UvicornWorker \
+    --bind="0.0.0.0:${PORT}" \
+    --timeout=60 \
+    --access-logfile=- --error-logfile=-
