@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Cormorant_Garamond, Inter, Tajawal } from 'next/font/google';
+import { Cormorant_Garamond, Tajawal } from 'next/font/google';
 import './globals.css';
 import { JsonLdOrganization } from '@/components/brand/JsonLd';
 import { AnnouncementBar } from '@/components/layout/AnnouncementBar';
@@ -25,14 +25,6 @@ const cormorant = Cormorant_Garamond({
   weight: ['500', '600', '700'],
   style: ['normal', 'italic'],
   variable: '--font-cormorant',
-  display: 'swap',
-  preload: false,
-});
-
-const inter = Inter({
-  subsets: ['latin'],
-  weight: ['400', '500', '600'],
-  variable: '--font-inter',
   display: 'swap',
   preload: false,
 });
@@ -66,7 +58,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html
       lang="ar"
       dir="rtl"
-      className={`${tajawal.variable} ${cormorant.variable} ${inter.variable}`}
+      className={`${tajawal.variable} ${cormorant.variable}`}
     >
       <head>
         <meta name="theme-color" content="#0E4F3A" />
