@@ -99,17 +99,14 @@ export function CheckoutModal() {
         honeypot: '',
       };
 
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL || 'https://api.raheeqarabia.com'}/api/orders`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Idempotency-Key': idempotencyRef.current,
-          },
-          body: JSON.stringify(payload),
+      const res = await fetch('/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Idempotency-Key': idempotencyRef.current,
         },
-      );
+        body: JSON.stringify(payload),
+      });
 
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
