@@ -1,6 +1,5 @@
 /**
  * Server-side proxy for PATCH /api/orders/:orderId/upsell
- * Forwards to the backend with the upsell token.
  */
 import { type NextRequest, NextResponse } from 'next/server';
 
@@ -13,7 +12,7 @@ export async function PATCH(
   try {
     const { orderId } = await params;
     const body = await req.text();
-    const upsellToken = req.headers.get('x-upsell-token') || '';
+    const upsellToken = req.headers.get('x-upsell-token') ?? '';
 
     const res = await fetch(`${BACKEND}/api/orders/${orderId}/upsell`, {
       method: 'PATCH',
@@ -25,13 +24,11 @@ export async function PATCH(
     });
 
     const data = await res.text();
-
     return new NextResponse(data, {
       status: res.status,
       headers: { 'Content-Type': 'application/json' },
     });
-  } catch (err) {
-    console.error('[upsell proxy] error:', err);
+  } catch {
     return NextResponse.json(
       { detail: { code: 'NETWORK_ERROR', message: 'تعذّر الاتصال بالخادم، حاولي مرة أخرى.' } },
       { status: 503 },
