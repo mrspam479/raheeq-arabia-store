@@ -109,23 +109,29 @@ export function CheckoutModal() {
       });
 
       if (!res.ok) {
-        const err = await res.json().catch(() => ({})) as Record<string, unknown>;
-        const detail = err['detail'];
-        const errorObj = err['error'] as Record<string, unknown> | undefined;
-
-        let msg: string = COPY.ERROR_PAGES.GENERIC;
-        if (typeof detail === 'string') {
-          msg = detail;
-        } else if (detail && typeof (detail as Record<string, unknown>)['message'] === 'string') {
-          msg = (detail as Record<string, unknown>)['message'] as string;
-        } else if (Array.isArray(detail) && detail.length > 0) {
-          // FastAPI 422 validation error: [{loc, msg, type}]
-          const first = detail[0] as Record<string, unknown> | undefined;
-          msg = typeof first?.['msg'] === 'string' ? first['msg'] as string : COPY.ERROR_PAGES.GENERIC;
-        } else if (errorObj && typeof errorObj['message'] === 'string') {
-          msg = errorObj['message'] as string;
+        const rawText = await res.text().catch(() => '');
+        let msg: string = `خطأ ${res.status}`;
+        try {
+          const err = JSON.parse(rawText) as Record<string, unknown>;
+          const detail = err['detail'];
+          const errorObj = err['error'] as Record<string, unknown> | undefined;
+          if (typeof detail === 'string') {
+            msg = detail;
+          } else if (detail && typeof (detail as Record<string, unknown>)['message'] === 'string') {
+            msg = (detail as Record<string, unknown>)['message'] as string;
+          } else if (Array.isArray(detail) && detail.length > 0) {
+            const first = detail[0] as Record<string, unknown> | undefined;
+            const loc = Array.isArray(first?.['loc']) ? (first['loc'] as unknown[]).join('.') : '';
+            const fieldMsg = typeof first?.['msg'] === 'string' ? first['msg'] as string : '';
+            msg = loc ? `${loc}: ${fieldMsg}` : fieldMsg || `خطأ ${res.status}`;
+          } else if (errorObj && typeof errorObj['message'] === 'string') {
+            msg = errorObj['message'] as string;
+          } else if (rawText) {
+            msg = `خطأ ${res.status}`;
+          }
+        } catch {
+          msg = `خطأ ${res.status}`;
         }
-
         throw new Error(msg);
       }
 

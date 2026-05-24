@@ -35,7 +35,7 @@ async def create_order(
     request: Request,
     db: AsyncSession = Depends(get_db),
     _rl: None = Depends(rate_limit_orders),
-    idempotency_key: str = Header(...),
+    idempotency_key: str | None = Header(default=None),
 ) -> OrderCreateOut:
     # Honeypot — silently drop but return 201 to confuse bots
     if payload.honeypot:
