@@ -15,7 +15,11 @@ class Settings(BaseSettings):
     SECRET_KEY: str = "change-me-in-production"
     BACKEND_API_KEY: str = "change-me-in-production"
 
-    CORS_ORIGINS: list[str] = ["https://raheeqarabia.com", "http://localhost:3000"]
+    CORS_ORIGINS: str = "https://raheeqarabia.com,http://localhost:3000"
+
+    @property
+    def cors_origins_list(self) -> list[str]:
+        return [o.strip() for o in self.CORS_ORIGINS.split(",") if o.strip()]
     PROXY_TRUST_HOPS: int = 1
     LOG_LEVEL: str = "INFO"
 
