@@ -7,7 +7,6 @@ const nextConfig: NextConfig = {
 
   experimental: {
     ppr: false,
-    optimizeCss: true,
   },
 
   images: {
