@@ -113,7 +113,7 @@ export function CheckoutModal() {
         const detail = err['detail'];
         const errorObj = err['error'] as Record<string, unknown> | undefined;
 
-        let msg = COPY.ERROR_PAGES.GENERIC;
+        let msg: string = COPY.ERROR_PAGES.GENERIC;
         if (typeof detail === 'string') {
           msg = detail;
         } else if (detail && typeof (detail as Record<string, unknown>)['message'] === 'string') {
