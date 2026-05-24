@@ -109,12 +109,23 @@ export function CheckoutModal() {
       });
 
       if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        const detail = (err as { detail?: string | { message?: string } }).detail;
-        const msg =
-          typeof detail === 'string'
-            ? detail
-            : (detail as { message?: string })?.message ?? COPY.ERROR_PAGES.GENERIC;
+        const err = await res.json().catch(() => ({})) as Record<string, unknown>;
+        const detail = err['detail'];
+        const errorObj = err['error'] as Record<string, unknown> | undefined;
+
+        let msg = COPY.ERROR_PAGES.GENERIC;
+        if (typeof detail === 'string') {
+          msg = detail;
+        } else if (detail && typeof (detail as Record<string, unknown>)['message'] === 'string') {
+          msg = (detail as Record<string, unknown>)['message'] as string;
+        } else if (Array.isArray(detail) && detail.length > 0) {
+          // FastAPI 422 validation error: [{loc, msg, type}]
+          const first = detail[0] as Record<string, unknown> | undefined;
+          msg = typeof first?.['msg'] === 'string' ? first['msg'] as string : COPY.ERROR_PAGES.GENERIC;
+        } else if (errorObj && typeof errorObj['message'] === 'string') {
+          msg = errorObj['message'] as string;
+        }
+
         throw new Error(msg);
       }
 
