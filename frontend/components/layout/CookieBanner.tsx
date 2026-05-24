@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useUiStore } from '@/store/ui';
 import { Button } from '@/components/ui/Button';
 import { COPY } from '@/data/copy';
@@ -18,12 +19,12 @@ export function CookieBanner() {
       <div className="container mx-auto flex flex-col sm:flex-row items-start sm:items-center gap-4 justify-between">
         <p className="font-tajawal text-sm text-ivory/90 leading-relaxed flex-1">
           {COPY.COOKIE_BANNER.BODY}{' '}
-          <a
+          <Link
             href="/legal/privacy"
             className="underline underline-offset-2 hover:text-saffron transition-colors"
           >
             {COPY.COOKIE_BANNER.PRIVACY_LINK}
-          </a>
+          </Link>
           .
         </p>
         <Button
