@@ -67,17 +67,14 @@ export function UpsellModal() {
     setAccepting(true);
     try {
       if (upsellToken !== 'preview-upsell-token') {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL || 'https://api.raheeqarabia.com'}/api/orders/${lastOrderId}/upsell`,
-          {
-            method: 'PATCH',
-            headers: {
-              'Content-Type': 'application/json',
-              'X-Upsell-Token': upsellToken,
-            },
-            body: JSON.stringify({ token: upsellToken, sku: upsellSku ?? '' }),
+        const res = await fetch(`/api/orders/${lastOrderId}/upsell`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Upsell-Token': upsellToken,
           },
-        );
+          body: JSON.stringify({ token: upsellToken, sku: upsellSku ?? '' }),
+        });
 
         if (!res.ok) {
           throw new Error(COPY.UPSELL.ERROR);
