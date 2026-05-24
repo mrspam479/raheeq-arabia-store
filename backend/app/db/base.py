@@ -1,15 +1,32 @@
 from __future__ import annotations
 
+from urllib.parse import urlparse, urlunparse, urlencode, parse_qs
+
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 from app.config import settings
 
-# sslmode=disable is embedded in the DATABASE_URL query string (?sslmode=disable)
-# so we don't need connect_args here — that avoids psycopg3 keyword-arg compatibility issues
+
+def _ensure_sslmode_disable(url: str) -> str:
+    """
+    Always inject sslmode=disable into the DATABASE_URL.
+    EasyPanel's internal Postgres runs without SSL and psycopg3 defaults
+    to sslmode=prefer which can cause connection hangs.
+    """
+    if "sslmode" in url:
+        return url
+    separator = "&" if "?" in url else "?"
+    return f"{url}{separator}sslmode=disable"
+
+
+_db_url = _ensure_sslmode_disable(settings.DATABASE_URL)
+
 engine = create_async_engine(
-    settings.DATABASE_URL,
+    _db_url,
     echo=settings.APP_ENV == "dev",
     pool_pre_ping=True,
+    pool_size=5,
+    max_overflow=10,
 )
 
 AsyncSessionLocal = async_sessionmaker(

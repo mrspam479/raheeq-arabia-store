@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.7
-FROM python:3.12-slim AS base
+FROM python:3.12-slim
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PIP_NO_CACHE_DIR=1
 WORKDIR /app
 
@@ -11,14 +11,15 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 
 COPY . .
 
-RUN groupadd --system app && useradd --system --gid app --create-home app
-RUN chmod +x ./docker-entrypoint.sh
-USER app
+# Strip any Windows CRLF line endings so the script runs on Linux
+RUN sed -i 's/\r//' ./docker-entrypoint.sh && chmod +x ./docker-entrypoint.sh
 
-# PORT default — EasyPanel overrides this at runtime with the service's configured port
+# Default port — EasyPanel overrides PORT at runtime; we expose the same value
 ENV PORT=8000
-EXPOSE 8000
 
-# Entrypoint runs migrations then starts gunicorn on ${PORT}
-# No CMD arguments needed — the entrypoint handles everything
-ENTRYPOINT ["./docker-entrypoint.sh"]
+# IMPORTANT: do NOT hardcode EXPOSE here.
+# EasyPanel injects PORT at runtime and sets its Traefik routing to match.
+# We read ${PORT} in the entrypoint so gunicorn always listens on the same
+# port that EasyPanel/Traefik expects.
+
+ENTRYPOINT ["/bin/sh", "./docker-entrypoint.sh"]

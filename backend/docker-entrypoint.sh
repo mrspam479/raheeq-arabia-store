@@ -1,50 +1,55 @@
-#!/usr/bin/env bash
-# Strict mode but NOT -u (unset vars tolerated) and NOT pipefail on the alembic block
-set -eo pipefail
+#!/bin/sh
+set -e
 
-# ── 1. Wait for Postgres (up to 60 s) ──────────────────────────────────────
-python - <<'PY'
+# ── Wait for Postgres (max 30 s) ─────────────────────────────────────────────
+echo "[startup] waiting for database..."
+python - <<'PYEOF'
 import os, time, socket
-url = os.environ.get("DATABASE_URL", "")
+
+url  = os.environ.get("DATABASE_URL", "")
 host = "raheeqarabia_database"
 port = 5432
-if "@" in url and "/" in url:
+
+if "@" in url:
     try:
-        rest = url.split("@", 1)[1]
-        hp   = rest.split("/", 1)[0]
-        if ":" in hp:
-            host, p = hp.split(":", 1)
+        rest = url.split("@", 1)[1].split("/")[0]
+        if ":" in rest:
+            host, p = rest.split(":", 1)
             port = int(p)
         else:
-            host = hp
+            host = rest
     except Exception:
         pass
 
-deadline = time.time() + 60
+deadline = time.time() + 30
+ok = False
 while time.time() < deadline:
     try:
         with socket.create_connection((host, port), timeout=2):
-            print(f"[entrypoint] DB reachable at {host}:{port}")
+            print("[startup] database is reachable")
+            ok = True
             break
     except OSError:
-        print(f"[entrypoint] waiting for DB {host}:{port} …")
+        print("[startup] database not ready, retrying...")
         time.sleep(2)
-else:
-    print(f"[entrypoint] DB not reachable after 60 s — continuing anyway")
-PY
 
-# ── 2. Run migrations (non-fatal) ──────────────────────────────────────────
-echo "[entrypoint] running alembic upgrade head"
-alembic upgrade head || echo "[entrypoint] WARNING: alembic failed — app will start anyway"
+if not ok:
+    print("[startup] database unreachable after 30s, continuing anyway")
+PYEOF
 
-# ── 3. Start gunicorn on ${PORT} ───────────────────────────────────────────
-BIND_PORT="${PORT:-8000}"
-echo "[entrypoint] starting gunicorn on 0.0.0.0:${BIND_PORT}"
+# ── Run migrations ────────────────────────────────────────────────────────────
+echo "[startup] running alembic migrations..."
+alembic upgrade head 2>&1 || echo "[startup] migration failed, continuing anyway..."
+
+# ── Start application ─────────────────────────────────────────────────────────
+APP_PORT="${PORT:-8000}"
+echo "[startup] starting gunicorn on 0.0.0.0:${APP_PORT}"
 
 exec gunicorn app.main:app \
-    --workers=1 \
+    --workers=2 \
     --worker-class=uvicorn.workers.UvicornWorker \
-    --bind="0.0.0.0:${BIND_PORT}" \
+    --bind="0.0.0.0:${APP_PORT}" \
     --timeout=120 \
+    --graceful-timeout=30 \
     --access-logfile=- \
     --error-logfile=-
