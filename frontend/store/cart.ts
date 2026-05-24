@@ -45,13 +45,13 @@ export const useCartStore = create<CartState>()(
         set((state) => {
           const existing = state.lines.find((l) => l.productId === incoming.productId);
           if (existing) {
-            return {
-              lines: state.lines.map((l) =>
-                l.productId === incoming.productId
-                  ? { ...l, tier: incoming.tier, quantity: incoming.quantity, totalPrice: incoming.unitPrice * incoming.quantity }
-                  : l,
-              ),
-            };
+          return {
+            lines: state.lines.map((l) =>
+              l.productId === incoming.productId
+                ? { ...l, tier: incoming.tier, offerCode: incoming.offerCode, quantity: incoming.quantity, unitPrice: incoming.unitPrice, totalPrice: incoming.unitPrice * incoming.quantity }
+                : l,
+            ),
+          };
           }
           return {
             lines: [
