@@ -21,6 +21,12 @@ router = APIRouter(prefix="/api/orders", tags=["orders"])
 
 
 def _get_client_ip(request: Request) -> str:
+    # X-Real-Client-IP is set by our Next.js proxy with the CF-Connecting-IP value
+    # (Cloudflare's guaranteed real user IP). This survives the second Cloudflare hop
+    # between the Next.js server and this backend.
+    real_client = request.headers.get("X-Real-Client-IP")
+    if real_client and real_client.strip():
+        return real_client.strip()
     forwarded = request.headers.get("X-Forwarded-For")
     if forwarded:
         return forwarded.split(",")[0].strip()

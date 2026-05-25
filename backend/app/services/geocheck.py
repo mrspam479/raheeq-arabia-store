@@ -65,6 +65,19 @@ async def check_ip(ip: str, phone: str | None = None) -> GeoCheckResult:
             return GeoCheckResult(allowed=True, reason="localhost_dev")
         return GeoCheckResult(allowed=False, reason="no_ip")
 
+    # Block RFC-1918 / data-center IPs that MaxMind cannot geolocate.
+    # These indicate the real user IP was not forwarded — fail closed in production.
+    import ipaddress
+    try:
+        parsed_ip = ipaddress.ip_address(ip)
+        if parsed_ip.is_private or parsed_ip.is_loopback or parsed_ip.is_link_local:
+            if settings.APP_ENV != "production":
+                return GeoCheckResult(allowed=True, reason="private_ip_dev")
+            logger.warning("private_ip_in_production", ip=ip)
+            return GeoCheckResult(allowed=False, reason="private_ip")
+    except ValueError:
+        pass
+
     url = MAXMIND_INSIGHTS_URL.format(ip=ip)
 
     try:
