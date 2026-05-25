@@ -55,7 +55,7 @@ async def list_orders(
     }
 
 
-@router.patch("/orders/{order_id}", status_code=204, dependencies=[Depends(require_api_key)])
+@router.patch("/orders/{order_id}", status_code=204, response_model=None, dependencies=[Depends(require_api_key)])
 async def update_order(
     order_id: uuid.UUID,
     payload: AdminOrderUpdateIn,
