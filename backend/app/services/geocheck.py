@@ -3,11 +3,13 @@ MaxMind GeoIP2 Precision Insights — fraud & geo gating for orders.
 
 Rules:
   1. Whitelisted phone numbers bypass all checks (for owner testing in prod).
-  2. IP must geolocate to Saudi Arabia (country_iso = "SA")
-  3. IP must NOT be flagged as anonymous proxy / VPN / hosting / TOR
-  4. If MaxMind is unreachable or returns an error, we BLOCK the order
-     (fail-closed) — we never let an unverified IP place an order.
-  5. Only exception: if MaxMind is not configured, we allow (so dev works).
+  2. IP must geolocate to Saudi Arabia (country_iso = "SA").
+  3. If IP is in SA but flagged as VPN/proxy → ALLOW (KSA residents use VPNs;
+     COD means they need a real Saudi address anyway).
+  4. If IP is in SA but flagged as TOR/hosting → BLOCK (bots/scrapers).
+  5. If IP is NOT in SA → BLOCK (regardless of phone number).
+  6. If MaxMind is unreachable or errors → BLOCK (fail-closed).
+  7. Only exception: if MaxMind is not configured, allow (dev/staging).
 """
 from __future__ import annotations
 
@@ -119,15 +121,14 @@ async def check_ip(ip: str, phone: str | None = None) -> GeoCheckResult:
             logger.info("Geo-blocked: IP %s from %s (not SA)", ip, country_iso)
             return GeoCheckResult(allowed=False, reason=f"country_not_sa:{country_iso}")
 
-        # Must not be VPN/proxy/hosting/tor
-        if is_anon_proxy or is_anon_vpn or is_hosting or is_tor or is_residential:
+        # Country IS Saudi Arabia — allow VPN/proxy users (likely KSA residents
+        # using VPN for privacy). COD means they need a real Saudi address anyway.
+        # Only block TOR exit nodes and hosting providers (bots/scrapers).
+        if is_tor or is_hosting:
             flags = []
-            if is_anon_proxy: flags.append("anon_proxy")
-            if is_anon_vpn: flags.append("vpn")
-            if is_hosting: flags.append("hosting")
             if is_tor: flags.append("tor")
-            if is_residential: flags.append("residential_proxy")
-            logger.info("Geo-blocked: IP %s flagged as %s", ip, ",".join(flags))
+            if is_hosting: flags.append("hosting")
+            logger.info("Geo-blocked: IP %s in SA but flagged as %s", ip, ",".join(flags))
             return GeoCheckResult(allowed=False, reason=f"suspicious_ip:{','.join(flags)}")
 
         return GeoCheckResult(allowed=True, reason="sa_clean")
