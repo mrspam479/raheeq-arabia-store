@@ -66,14 +66,14 @@ async def create_order(
 
     client_ip = _get_client_ip(request)
 
-    # MaxMind geo + VPN/proxy check (fail-closed)
+    # Fraud check — block TOR/hosting IPs only (VPN users in KSA are allowed)
     geo_result = await geocheck_ip(client_ip, phone=payload.customer.phone)
     if not geo_result.allowed:
         raise HTTPException(
             status_code=403,
             detail={
                 "code": "GEO_BLOCKED",
-                "message": "عذرًا، لا يمكنك إتمام الطلب. الخدمة متاحة فقط من داخل المملكة العربية السعودية.",
+                "message": "عذرًا، لا يمكنك إتمام الطلب من هذا الاتصال. حاولي من شبكة أخرى.",
                 "reason": geo_result.reason,
             },
         )
