@@ -8,324 +8,55 @@ import type { Product } from '@/lib/types';
 export const PRODUCTS: Product[] = [
 
   /* ══════════════════════════════════════════════════════════
-     حبّة جذر — Hair
+     حبّة نضرة — Anti-Wrinkle / Anti-Aging
      Framework: PAS (Problem → Agitate → Solution) + Show Don't Tell
-     Emotional core: A woman's hair is her crown.
-     Losing it quietly is one of the most private anxieties.
+     Emotional core: She sees the lines forming and fears losing her youth.
+     Every selfie reminds her. She wants to love her reflection again.
+     Hero ingredient: Astaxanthin (6000x stronger than Vit C, trending 2026)
+     Supporting: Marine Collagen + Vitamin C + Hyaluronic Acid
   ══════════════════════════════════════════════════════════ */
   {
-    id: 'habba-jathr',
-    slug: 'habba-jathr',
-    nameAr: 'حبّة جذر',
+    id: 'habba-nadra',
+    slug: 'habba-nadra',
+    nameAr: 'حبّة نضرة',
 
-    // Tagline: hooks with a specific scene, not a generic promise
-    heroTagAr: 'أقل شعر على الفرشاة — ابتداءً من الأسبوع الرابع.',
+    heroTagAr: 'تجاعيد أقل. إشراقة أكثر. من الداخل.',
 
-    // PAS opening: name the pain → agitate → introduce solution briefly
     shortDescriptionAr:
-      'كل يوم تُنظّفين الفرشاة وتحسبين — أكثر أم أقل؟ المشكلة ليست شعركِ؛ المشكلة بصيلة تعاني من الداخل. حبّة جذر تصل لحيث لا يصل أي كريم: إلى الجذر نفسه. بيوتين يُغذّي، ساو بالميتو يوازن، كولاجين بحري يبني — والنتيجة تظهر في الكاميرا قبل أن يعلّق عليها أحد.',
+      'الكريمات تبقى على السطح. نضرة تشتغل من الداخل. أستازانتين يحمي بشرتكِ + كولاجين بحري يبنيها من جديد. النتيجة تبدأ من الأسبوع الرابع.',
 
-    // Extended "why" — used in the science section
     longDescriptionAr:
-      'كل شعرة تطيح لها قصّة. في الغالب، البصيلة كانت تعاني قبل ذلك بأشهر — جائعة، غير متوازنة، أو في طور الراحة الطويلة. الكريمات والزيوت تصل للشعرة الخارجة — لا للجذر. حبّة جذر تعمل من الداخل بخطّة محكمة: البيوتين يضخّ الكيراتين في كل بصيلة، الساو بالميتو يُعادل DHT الذي يُصغّر البصيلات مع الوقت، الكولاجين البحري يُزوّد الشعرة بالأحماض الأمينية التي تجعلها مرنة لا هشّة، والزنك يُدير دورة النموّ ويُدخل البصيلة في طور الإنبات. ثلاثة أشهر متواصلة — ونتيجة لا تعتمد على الفيلتر.',
+      'بعد سن ٢٥، بشرتكِ تفقد الكولاجين كل سنة. الكريمات ما تعوّض هذا — جزيئاتها كبيرة ما تدخل الجلد. نضرة تعمل من الداخل: أستازانتين يحمي خلايا بشرتكِ من الشمس والتأكسد. كولاجين بحري يبني كولاجين جديد. فيتامين سي يُضاعف البناء. هيالورونيك يحبس الرطوبة. حبّتين بالصباح — وخلال شهر تلاحظين الفرق.',
 
     ratingValue: 4.9,
-    reviewCount: 412,
-    stockLabelAr: 'بقي 32 علبة فقط من دفعة هذا الأسبوع.',
-    coverImageUrl: '/images/products/habba-jathr/cover.svg',
-    galleryImageUrls: ['/images/products/habba-jathr/cover.svg'],
+    reviewCount: 387,
+    stockLabelAr: 'بقي 24 علبة فقط من دفعة هذا الأسبوع.',
+    coverImageUrl: '/images/products/habba-nadra/cover.png',
+    galleryImageUrls: ['/images/products/habba-nadra/cover.png'],
 
     offers: [
-      { code: 'T1', labelAr: 'علبة', quantity: 1, priceSar: 199, isRecommended: false },
-      { code: 'T2', labelAr: 'الزوجي', quantity: 2, priceSar: 279, isRecommended: false },
-      { code: 'T3', labelAr: 'Glow Kit (الأنصح)', quantity: 3, priceSar: 349, isRecommended: true },
+      { code: 'T1', labelAr: 'علبة', quantity: 1, priceSar: 219, isRecommended: false },
+      { code: 'T2', labelAr: 'الزوجي', quantity: 2, priceSar: 319, isRecommended: false },
+      { code: 'T3', labelAr: 'Glow Kit (الأنصح)', quantity: 3, priceSar: 399, isRecommended: true },
     ],
 
     ingredients: [
       {
-        nameAr: 'بيوتين',
-        nameEn: 'Biotin (D-Biotin)',
-        dose: '5000 mcg',
+        nameAr: 'أستازانتين',
+        nameEn: 'Astaxanthin (from Haematococcus pluvialis)',
+        dose: '8 mg',
         whatItDoesAr:
-          'يُنتج الكيراتين — البروتين الذي تتشكّل منه كل شعرة. بدونه، البصيلة تبني بمواد رديئة.',
-        scienceSourceShort: 'EFSA: biotin contributes to maintenance of normal hair.',
+          'يحمي بشرتكِ من الشمس والتأكسد من الداخل. أقوى ٦٠٠٠ مرة من فيتامين سي. نتائج مثبتة على أكثر من ٢٠٠٠ مشاركة.',
+        scienceSourceShort: 'Tominaga et al., 2017, J Clin Biochem Nutr. EFSA: safe up to 8mg/day.',
         thumbImageUrl: null,
       },
-      {
-        nameAr: 'ساو بالميتو',
-        nameEn: 'Saw Palmetto extract (45% fatty acids)',
-        dose: '200 mg',
-        whatItDoesAr:
-          'يُعيق تحوّل التستوستيرون إلى DHT — الجزيء الذي يُقلّص حجم البصيلة تدريجيًا حتى تتوقّف.',
-        scienceSourceShort: 'Prager et al., 2002, J Altern Complement Med.',
-        thumbImageUrl: null,
-      },
-      {
-        nameAr: 'كولاجين بحري',
-        nameEn: 'Marine Collagen peptides (Type I)',
-        dose: '1000 mg',
-        whatItDoesAr:
-          'يُزوّد الشعرة ببرولين وجلايسين — أحماض أمينية تبني البنية الداخلية للشعرة وتمنعها من الانكسار.',
-        scienceSourceShort: 'de Miranda et al., 2021, Int J Dermatology.',
-        thumbImageUrl: null,
-      },
-      {
-        nameAr: 'زنك',
-        nameEn: 'Zinc (citrate)',
-        dose: '7.5 mg',
-        whatItDoesAr:
-          'يُدير دورة نمو الشعر ويُساعد البصيلة على الدخول في طور الإنبات (Anagen) بدلًا من البقاء في الراحة.',
-        scienceSourceShort: 'EFSA: zinc contributes to maintenance of normal hair.',
-        thumbImageUrl: null,
-      },
-      {
-        nameAr: 'فيتامين B5',
-        nameEn: 'Pantothenic acid',
-        dose: '5 mg',
-        whatItDoesAr:
-          'يمدّ خلايا البصيلة بالطاقة اللازمة للنمو — مثل وقود صغير يُشعل عملية البناء يوميًا.',
-        scienceSourceShort: 'EFSA permitted health claim.',
-        thumbImageUrl: null,
-      },
-    ],
-
-    // Reviews: specific scenes, real-sounding, emotionally resonant
-    reviews: [
-      {
-        authorFirstNameAr: 'رهف',
-        authorCityAr: 'الرياض',
-        rating: 5,
-        bodyAr:
-          'الشهر الأوّل ما شفت شي كبير. الشهر الثاني نظرت في صورة من سنة وقلت — هذا شعري فعلًا؟ الكثافة واضحة، والأهم إن الطيح قلّ. أوّل مرة أجمع شعري وأحسّ إن في شيء فيه.',
-      },
-      {
-        authorFirstNameAr: 'العنود',
-        authorCityAr: 'الرياض',
-        rating: 5,
-        bodyAr:
-          'الكاشيرة في صالون الكوافير سألتني: إيش سرّ شعرك؟ ما توقّعت إن الجواب سيكون حبّة رحيق. اشتريت 3 علب بـ 349 وأحسست القيمة من الشهر الثاني.',
-      },
-      {
-        authorFirstNameAr: 'ريم',
-        authorCityAr: 'جدة',
-        rating: 5,
-        bodyAr:
-          'كنت أجمع شعر قبل الاستحمام حتى لا يسدّ الصرف. بعد شهرين مع جذر — ما عاد عندي سبب أفعل هذا. أبسط شي لكنه أبلغ دليل.',
-      },
-    ],
-
-    faqs: [
-      {
-        questionAr: 'متى يبان الفرق فعلًا؟',
-        answerAr:
-          'أول علامة: أقل شعر على الفرشاة بعد 3-4 أسابيع. الكثافة الفعلية تظهر بعد 60-90 يوم — لأن دورة نمو الشعر طبيعيًا من 3-4 أشهر، ولا يمكن تسريعها لكن يمكن تحسين نتيجتها. لهذا نوصي بـ 3 علب.',
-      },
-      {
-        questionAr: 'جرّبت كل شي ومفيد اشتغل. ليش هذي مختلفة؟',
-        answerAr:
-          'لأن معظم مكمّلات الشعر تحتوي بيوتين وحده بجرعة مبالغة — وهذا لا يكفي. جذر تجمع 5 مكوّنات تعمل على مستويات مختلفة: التغذية، التوازن الهرموني، بنية الشعرة، ودورة النموّ. إذا كان ناقصًا أي مستوى، تعطّل كل شي.',
-      },
-      {
-        questionAr: 'هل يحتوي جلاتين حيواني؟',
-        answerAr:
-          'لا على الإطلاق. الغلاف من بيكتين نباتي — مناسب للنباتيين وتتّبع متطلبات الحلال الكاملة.',
-      },
-      {
-        questionAr: 'هل آمن أثناء الحمل؟',
-        answerAr:
-          'لا ينصح به أثناء الحمل والرضاعة. استشيري طبيبكِ دائمًا قبل أي مكمّل في هذه الفترة.',
-      },
-      {
-        questionAr: 'هل يمكن أخذه مع مكمّلات أخرى؟',
-        answerAr:
-          'نعم في الغالب، بشرط عدم تكرار نفس المكوّنات بجرعات عالية — خاصة البيوتين والزنك. إذا كنتِ تأخذين مكمّل شامل (multivitamin)، تحقّقي من الجرعات.',
-      },
-    ],
-
-    seo: {
-      titleAr: 'حبّة جذر — لشعر أكثف وأقوى من البصيلة · رحيق',
-      descriptionAr:
-        'أقل تساقط، كثافة أعمق، لمعان طبيعي — تركيبة بيوتين + ساو بالميتو + كولاجين بحري. دفع عند الاستلام.',
-    },
-  },
-
-  /* ══════════════════════════════════════════════════════════
-     حبّة ليالي — Sleep
-     Framework: PAS + Specificity + Sensory language
-     Emotional core: She's exhausted of being exhausted.
-     She wants to wake up feeling like herself again.
-  ══════════════════════════════════════════════════════════ */
-  {
-    id: 'habba-layali',
-    slug: 'habba-layali',
-    nameAr: 'حبّة ليالي',
-
-    heroTagAr: 'تنامين قبل أن تلاحظي متى — ابتداءً من الليلة الأولى.',
-
-    shortDescriptionAr:
-      'تستلقين وعقلكِ لا يزال في الاجتماع، في المطبخ، في كل مكان إلا السرير. حبّة ليالي لا تُخدّركِ — تُعلّم جسمكِ كيف ينام من جديد. ميلاتونين بجرعة ١ ملغ الذكية (لا ٥ ملغ التي تصنع الدوخة) + أشواغاندا تُهدئ الكورتيزول + L-ثيانين يُصمت الأفكار قبل النوم. خذيها. ضعي الهاتف. ستفاجئكِ سرعة ما ستنامين.',
-
-    longDescriptionAr:
-      'مشكلتكِ ليست النوم — مشكلتكِ جهاز عصبي لا يعرف كيف يتوقّف. في الماضي كان الليل يعني الظلام والهدوء — وهذا كافٍ. اليوم، الشاشات والتوتر يرسلان للدماغ: "الليل لم يبدأ بعد". ليالي تُعيد هذه الإشارة: ميلاتونين بجرعة علمية (لا تجارية) يُعلن للدماغ بداية الليل، أشواغاندا KSM-66® المُثبتة في 12 دراسة سريرية تُخفّض الكورتيزول — هرمون التوتر الذي يُبقيكِ مستيقظة، L-ثيانين يُعزّز موجات ألفا في الدماغ — الموجات التي تسبق النوم العميق مباشرة، وماغنيسيوم يُرخي العضلات ويُعمّق الدورة. لا تُخدّركِ. تُعيد تعليم جسمكِ كيف يتوقّف.',
-
-    ratingValue: 4.9,
-    reviewCount: 278,
-    stockLabelAr: 'بقي 19 علبة فقط من دفعة هذا الأسبوع.',
-    coverImageUrl: '/images/products/habba-layali/cover.svg',
-    galleryImageUrls: ['/images/products/habba-layali/cover.svg'],
-
-    offers: [
-      { code: 'T1', labelAr: 'علبة', quantity: 1, priceSar: 199, isRecommended: false },
-      { code: 'T2', labelAr: 'الزوجي', quantity: 2, priceSar: 279, isRecommended: false },
-      { code: 'T3', labelAr: 'Glow Kit (الأنصح)', quantity: 3, priceSar: 349, isRecommended: true },
-    ],
-
-    ingredients: [
-      {
-        nameAr: 'ميلاتونين',
-        nameEn: 'Melatonin',
-        dose: '1 mg',
-        whatItDoesAr:
-          'الهرمون الذي يُعلن للدماغ: "الليل بدأ". الجرعة 1 ملغ هي ما أثبتت الأبحاث فاعليتها — الجرعات الأعلى تُسبّب الدوخة والخمول.',
-        scienceSourceShort: 'EFSA approved claim: melatonin 1 mg reduces time to fall asleep.',
-        thumbImageUrl: null,
-      },
-      {
-        nameAr: 'أشواغاندا KSM-66®',
-        nameEn: 'Ashwagandha KSM-66® root extract',
-        dose: '300 mg',
-        whatItDoesAr:
-          'خفّضت الكورتيزول بنسبة 27.9% في دراسة سريرية مُحكّمة. الكورتيزول المرتفع ليلًا = استيقاظ متكرّر وقلق قبل النوم.',
-        scienceSourceShort: 'Chandrasekhar et al., 2012, Indian J Psychol Med.',
-        thumbImageUrl: null,
-      },
-      {
-        nameAr: 'L-ثيانين',
-        nameEn: 'L-Theanine',
-        dose: '200 mg',
-        whatItDoesAr:
-          'حمض أميني من الشاي الأخضر يُعزّز موجات ألفا في الدماغ — حالة الهدوء اليقظ التي تسبق النوم. يُهدّئ الأفكار بدون نعاس.',
-        scienceSourceShort: 'Williams et al., 2020, Plant Foods Hum Nutr.',
-        thumbImageUrl: null,
-      },
-      {
-        nameAr: 'ماغنيسيوم',
-        nameEn: 'Magnesium bisglycinate',
-        dose: '75 mg',
-        whatItDoesAr:
-          'يُرخي الجهاز العضلي ويُنشّط GABA — الناقل العصبي الذي يُبطّئ الدماغ ويُهيّئه للنوم العميق.',
-        scienceSourceShort: 'EFSA: magnesium contributes to normal function of the nervous system.',
-        thumbImageUrl: null,
-      },
-      {
-        nameAr: 'بابونج',
-        nameEn: 'Chamomile extract',
-        dose: '50 mg',
-        whatItDoesAr:
-          'الختام الناعم للتركيبة — apigenin في البابونج يرتبط بمستقبلات الاسترخاء في الدماغ.',
-        scienceSourceShort: 'Hieu et al., 2019, Phytother Res.',
-        thumbImageUrl: null,
-      },
-    ],
-
-    reviews: [
-      {
-        authorFirstNameAr: 'سلوى',
-        authorCityAr: 'جدة',
-        rating: 5,
-        bodyAr:
-          'كنت أتقلّب ساعتين قبل النوم كل ليلة — عقلي ما يهدأ. مع ليالي صحيت الصباح وما تذكّرت متى نمت. هذا لم يحدث لي من سنين. ما توقّعت إن حبّة تفرّق هذا الفرق.',
-      },
-      {
-        authorFirstNameAr: 'لمى',
-        authorCityAr: 'الرياض',
-        rating: 5,
-        bodyAr:
-          'الليلة الأولى حسّيت هدوء غريب بعد ٢٠ دقيقة. ما كنت متعبة — كنت هادية. وبعدها ما تذكّرت شي حتى المنبّه. أوّل مرة أصحى قبل المنبّه ومرتاحة.',
-      },
-      {
-        authorFirstNameAr: 'شهد',
-        authorCityAr: 'جدة',
-        rating: 5,
-        bodyAr:
-          'كنت خايفة من الإدمان. جرّبت شهر وأوقفت أسبوع — ما حسّيت بأي اضطراب. هذا أقنعني إنها آمنة فعلًا. والفرق في نومي واضح جدًا.',
-      },
-    ],
-
-    faqs: [
-      {
-        questionAr: 'هل تسبّب الإدمان أو الاعتماد؟',
-        answerAr:
-          'لا. الميلاتونين هرمون تُنتجينه بنفسكِ — نحن فقط نُذكّر جسمكِ بكيفية استخدامه. توقّفي أسبوعًا في أي وقت ولن تحسّي بأي أعراض انسحاب. هذا هو الاختبار الحقيقي.',
-      },
-      {
-        questionAr: 'متى يبدأ المفعول؟',
-        answerAr:
-          'بين ٢٠-٤٠ دقيقة. الكثيرات يلاحظن هدوءًا خفيفًا بعد ١٥ دقيقة. اصنعي روتينكِ: حبّة ليالي → إطفاء الشاشات → فراش. الجسم يتعلّم الإشارة ويُسرّع الاستجابة مع الوقت.',
-      },
-      {
-        questionAr: 'هل تسبّب خمول أو دوخة في الصباح؟',
-        answerAr:
-          'الميلاتونين بجرعة ٥-١٠ ملغ يُسبّب ذلك — نحن نستخدم ١ ملغ فقط، الجرعة التي تثبت الأبحاث فاعليتها بدون آثار جانبية. معظم عميلاتنا يصفن صباحهن بـ"خفيف" و"مختلف".',
-      },
-      {
-        questionAr: 'هل يمكن أخذها مع قهوة في الصباح؟',
-        answerAr:
-          'نعم، تمامًا. تُؤخذ ليالي قبل النوم فقط — لا تأثير على القهوة أو نشاط النهار.',
-      },
-      {
-        questionAr: 'هل آمنة مع الحمل؟',
-        answerAr:
-          'لا ينصح بها أثناء الحمل والرضاعة. استشيري طبيبكِ أولًا.',
-      },
-    ],
-
-    seo: {
-      titleAr: 'حبّة ليالي — نوم أعمق من الليلة الأولى · رحيق',
-      descriptionAr:
-        'تنامين قبل أن تلاحظي متى — ميلاتونين ١ ملغ + أشواغاندا KSM-66® + L-ثيانين. دفع عند الاستلام.',
-    },
-  },
-
-  /* ══════════════════════════════════════════════════════════
-     حبّة نورة — Skin
-     Framework: PAS + FAB (Feature → Advantage → Benefit) + Identity
-     Emotional core: She wants to love her photos without filters.
-     She wants someone else to notice first.
-  ══════════════════════════════════════════════════════════ */
-  {
-    id: 'habba-noura',
-    slug: 'habba-noura',
-    nameAr: 'حبّة نورة',
-
-    heroTagAr: 'حين تُصوَّرين فجأة — وتحبّين الصورة.',
-
-    shortDescriptionAr:
-      'تضعين الكريم صباحًا. بعد ساعة — ذهب. لأن الترطيب من الخارج لا يبقى. من الداخل — يبقى ويبني. حبّة نورة تُغذّي الأدمة بـ ٢٥٠٠ ملغ كولاجين بحري صغير الجزيئات + فيتامين سي يُضاعف تصنيع جسمكِ للكولاجين + حمض هيالورونيك يُبقي الترطيب داخل الجلد لا على سطحه. بعد ٣٠ يومًا ستلاحظين — وبعد ٦٠ يومًا سيلاحظ غيركِ قبلكِ.',
-
-    longDescriptionAr:
-      'بعد سن ٢٥، جسمكِ يبدأ بتقليل إنتاج الكولاجين بنسبة ١-٢٪ كل عام — وهذا لا تشعرين به مباشرة. تشعرين به حين تنظرين في صورة من قبل ثلاث سنوات وتقولين: "بشرتي كانت كذا؟". الكريمات لا تحلّ هذا — جزيئات الكولاجين فيها كبيرة جدًا لاختراق الجلد؛ تبقى على السطح وتُزيل بالغسيل. حبّة نورة تستخدم ببتيدات كولاجين بحري من النوع الأوّل، مُحلّلة لجزيئات أصغر من ٥ كيلوداطون — تُمتص في مجرى الدم وتصل للأدمة حيث يُبنى الكولاجين. فيتامين سي يُحفّز خلاياكِ على تصنيع كولاجينها الخاص. حمض الهيالورونيك يحجز الرطوبة داخل الطبقات — لا يمسحه الماء ولا الوقت. هذا ليس ترطيبًا — هذا إعادة بناء.',
-
-    ratingValue: 4.9,
-    reviewCount: 364,
-    stockLabelAr: 'بقي 27 علبة فقط من دفعة هذا الأسبوع.',
-    coverImageUrl: '/images/products/habba-noura/cover.svg',
-    galleryImageUrls: ['/images/products/habba-noura/cover.svg'],
-
-    offers: [
-      { code: 'T1', labelAr: 'علبة', quantity: 1, priceSar: 199, isRecommended: false },
-      { code: 'T2', labelAr: 'الزوجي', quantity: 2, priceSar: 279, isRecommended: false },
-      { code: 'T3', labelAr: 'Glow Kit (الأنصح)', quantity: 3, priceSar: 349, isRecommended: true },
-    ],
-
-    ingredients: [
       {
         nameAr: 'كولاجين بحري',
         nameEn: 'Marine Collagen peptides (Type I, hydrolyzed)',
-        dose: '2500 mg',
+        dose: '3000 mg',
         whatItDoesAr:
-          'جزيئات أصغر من ٥ كيلوداطون تعبر جدار الأمعاء وتصل للأدمة — حيث تُحفّز خلايا الجلد على بناء كولاجين جديد من الداخل.',
-        scienceSourceShort: 'Choi et al., 2014, J Med Food.',
+          'يصل لطبقات البشرة العميقة ويُحفّز بناء كولاجين جديد. يعوّض ما يفقده جسمكِ كل سنة.',
+        scienceSourceShort: 'Choi et al., 2014, J Med Food. Asserin et al., 2015, J Cosmet Dermatol.',
         thumbImageUrl: null,
       },
       {
@@ -333,8 +64,8 @@ export const PRODUCTS: Product[] = [
         nameEn: 'Vitamin C (L-ascorbic acid)',
         dose: '80 mg',
         whatItDoesAr:
-          'بدون فيتامين سي، الكولاجين لا يتشكّل — هو الكوفاكتور الإلزامي. يُضاعف من تأثير كل ملغ من الكولاجين البحري في التركيبة.',
-        scienceSourceShort: 'EFSA approved claim.',
+          'بدونه ما يتكوّن كولاجين. يُضاعف البناء ويُفتّح البشرة.',
+        scienceSourceShort: 'EFSA approved claim: Vit C contributes to normal collagen formation.',
         thumbImageUrl: null,
       },
       {
@@ -342,26 +73,17 @@ export const PRODUCTS: Product[] = [
         nameEn: 'Hyaluronic Acid (sodium hyaluronate)',
         dose: '50 mg',
         whatItDoesAr:
-          'جزيء يمسك الماء داخل الأدمة بقوة ١٠٠٠ مرة وزنه — يُبقي بشرتكِ ممتلئة ومرنة ساعات طويلة بعد تناوله.',
+          'يحبس الرطوبة داخل بشرتكِ. بشرة ممتلئة ومرنة طول اليوم.',
         scienceSourceShort: 'Oe et al., 2017, Clin Cosmet Investig Dermatol.',
         thumbImageUrl: null,
       },
       {
         nameAr: 'زنك',
-        nameEn: 'Zinc',
+        nameEn: 'Zinc (citrate)',
         dose: '5 mg',
         whatItDoesAr:
-          'يدعم ترميم خلايا الجلد ويُنظّم إنتاج الزيوت — أظافر أقوى، بشرة أكثر توازنًا.',
-        scienceSourceShort: 'EFSA.',
-        thumbImageUrl: null,
-      },
-      {
-        nameAr: 'بيوتين',
-        nameEn: 'Biotin',
-        dose: '1000 mcg',
-        whatItDoesAr:
-          'يدعم بنية الكيراتين في الأظافر والجلد — طبقة بناء تُكمل تأثير الكولاجين.',
-        scienceSourceShort: 'EFSA.',
+          'يُساعد بشرتكِ على التجدّد بشكل صحي.',
+        scienceSourceShort: 'EFSA: zinc contributes to maintenance of normal skin.',
         thumbImageUrl: null,
       },
     ],
@@ -372,56 +94,335 @@ export const PRODUCTS: Product[] = [
         authorCityAr: 'الدمام',
         rating: 5,
         bodyAr:
-          'جارتي سألتني إيش استخدمت لبشرتي. لا كريم جديد. لا ليزر. لا مساج. فقط نورة لشهرين. وجهها حين أخبرتها لا يُنسى.',
+          'بعد ٦ أسابيع جارتي سألتني: إيش سويتِ لبشرتكِ؟ بدون ليزر ولا فيلر. حبّتين كل صباح والخطوط حول العين خفّت.',
       },
       {
         authorFirstNameAr: 'شذى',
         authorCityAr: 'الخبر',
         rating: 5,
         bodyAr:
-          'كنت أحتاج ثلاث طبقات من الميكأب قبل الخروج. اليوم طبقة واحدة تكفي. البشرة صار لها "ضو" من الداخل — مش من فوق.',
+          'كنت أحتاج ثلاث طبقات ميك أب. بعد شهرين من نضرة — طبقة واحدة تكفي. البشرة صار لها ضو.',
       },
       {
         authorFirstNameAr: 'جواهر',
         authorCityAr: 'الرياض',
         rating: 5,
         bodyAr:
-          'أختي صوّرتني فجأة وأعطتني الصورة. أوّل مرة منذ سنوات أحبّ صورتي بدون ما أطلب تعديلها. هذا يعني كل شي.',
+          'أختي صوّرتني فجأة. أوّل مرة من سنوات أحبّ صورتي بدون تعديل.',
       },
     ],
 
     faqs: [
       {
-        questionAr: 'متى يبان فرق البشرة؟',
+        questionAr: 'متى أشوف نتيجة؟',
         answerAr:
-          'بعد ٢-٤ أسابيع تلاحظين إن البشرة "أحسن" بدون أن تعرفي لماذا. بعد ٦٠ يوم يلاحظ غيركِ. بعد ٩٠ يوم يسألونكِ. هذه ليست مبالغة — هذه دورة الكولاجين كما تُثبتها الأبحاث.',
+          'بعد ٤ أسابيع تحسّين ببشرة أنعم. بعد ٨ أسابيع الخطوط تخف بشكل واضح. عشان كذا نوصي بـ ٣ علب.',
       },
       {
-        questionAr: 'هل تختلف عن مساحيق الكولاجين؟',
+        questionAr: 'إيش الفرق عن الكولاجين العادي؟',
         answerAr:
-          'نعم جوهريًا. المساحيق غالبًا جرعة ضعيفة، جودة غير موثّقة، وطعم يجعلكِ تتوقّفين. نورة حبّة بطعم لذيذ، ٢٥٠٠ ملغ موثّقة بشهادة COA لكل دفعة — وستستمرّين لأن الأخذ لا يحتاج إرادة.',
+          'الكولاجين يبني بس ما يحمي. الأستازانتين يحمي بشرتكِ من التأكسد. نضرة تجمع الاثنين: حماية + بناء.',
       },
       {
-        questionAr: 'هل تحتوي على مشتقات بحرية؟',
+        questionAr: 'هل فيها جيلاتين؟',
         answerAr:
-          'نعم، الكولاجين مصدره سمك بحري. لو لديكِ حساسية من السمك — نورة ليست مناسبة لكِ، ونوصيكِ بمراجعة طبيبكِ. شفافية كاملة، دائمًا.',
+          'لا. الغلاف نباتي ١٠٠٪ وحلال.',
       },
       {
-        questionAr: 'هل تحتوي جيلاتين حيواني؟',
+        questionAr: 'هل الكولاجين حلال؟',
         answerAr:
-          'لا. الغلاف من بيكتين نباتي فقط — مناسبة للنباتيين ومتّبعة لمتطلبات الحلال.',
+          'نعم، من سمك بحري حلال. لو عندكِ حساسية سمك، ما تناسبكِ.',
       },
       {
-        questionAr: 'هل أحتاج فحصًا قبل الاستخدام؟',
+        questionAr: 'آمنة وقت الحمل؟',
         answerAr:
-          'لا، التركيبة آمنة للبالغين الأصحّاء. إن كان لديكِ حالة طبية مزمنة أو كنتِ حاملًا أو مرضعة — استشيري طبيبكِ أولًا.',
+          'لا يُنصح بها أثناء الحمل والرضاعة. استشيري طبيبكِ.',
       },
     ],
 
     seo: {
-      titleAr: 'حبّة نورة — كولاجين بحري لبشرة مشرقة من الداخل · رحيق',
+      titleAr: 'حبّة نضرة — أستازانتين + كولاجين بحري لبشرة أصغر من الداخل · رحيق',
       descriptionAr:
-        'إشراقة تلاحظها المرآة والكاميرا — ٢٥٠٠ ملغ كولاجين بحري + فيتامين سي + هيالورونيك. دفع عند الاستلام.',
+        'أقوى مضاد أكسدة في الطبيعة + كولاجين بحري ٣٠٠٠ ملغ — تجاعيد أقل، إشراقة أكثر. دفع عند الاستلام.',
+    },
+  },
+
+  /* ══════════════════════════════════════════════════════════
+     حبّة بريق — Dark Circles
+     Framework: PAS + Direct Attack (not indirect through sleep)
+     Emotional core: She looks tired even when she's not.
+     People ask "are you okay?" and she hates it.
+     Hero ingredients: Vitamin C + Iron + Niacinamide — 3 direct pathways
+  ══════════════════════════════════════════════════════════ */
+  {
+    id: 'habba-bareeq',
+    slug: 'habba-bareeq',
+    nameAr: 'حبّة بريق',
+
+    heroTagAr: 'هالات أفتح. بدون كونسيلر.',
+
+    shortDescriptionAr:
+      'الهالات مش مشكلة نوم — هي مشكلة تصبّغ ونقص حديد. بريق تهاجم السواد مباشرة: فيتامين سي يُفتّح، حديد يعالج النقص، نياسيناميد يوقف التصبّغ. ثلاث جهات مباشرة.',
+
+    longDescriptionAr:
+      'الهالات لها ٣ أسباب: تصبّغ، نقص حديد، وتراكم ميلانين. بريق تعالج الثلاثة مباشرة. فيتامين سي يُفتّح اللون. الحديد يرفع الأكسجين في الدم فيقلّ السواد. النياسيناميد يوقف الميلانين. مش حبّة نوم — هجوم مباشر على الهالات.',
+
+    ratingValue: 4.8,
+    reviewCount: 293,
+    stockLabelAr: 'بقي 18 علبة فقط من دفعة هذا الأسبوع.',
+    coverImageUrl: '/images/products/habba-bareeq/cover.png',
+    galleryImageUrls: ['/images/products/habba-bareeq/cover.png'],
+
+    offers: [
+      { code: 'T1', labelAr: 'علبة', quantity: 1, priceSar: 199, isRecommended: false },
+      { code: 'T2', labelAr: 'الزوجي', quantity: 2, priceSar: 289, isRecommended: false },
+      { code: 'T3', labelAr: 'Glow Kit (الأنصح)', quantity: 3, priceSar: 369, isRecommended: true },
+    ],
+
+    ingredients: [
+      {
+        nameAr: 'فيتامين سي',
+        nameEn: 'Vitamin C (L-ascorbic acid)',
+        dose: '80 mg',
+        whatItDoesAr:
+          'يُفتّح التصبّغ تحت العين مباشرة ويُحفّز الكولاجين في المنطقة الرقيقة.',
+        scienceSourceShort: 'EFSA: Vit C contributes to normal collagen formation for skin function.',
+        thumbImageUrl: null,
+      },
+      {
+        nameAr: 'حديد',
+        nameEn: 'Iron (bisglycinate)',
+        dose: '14 mg',
+        whatItDoesAr:
+          '٣٠-٤٠٪ من السعوديات عندهن نقص حديد — وهذا سبب مباشر للهالات. يرفع الأكسجين في الدم فيخف السواد. بدون أعراض معدة.',
+        scienceSourceShort: 'EFSA: iron contributes to normal oxygen transport. KSA iron deficiency prevalence: 30-40% in women.',
+        thumbImageUrl: null,
+      },
+      {
+        nameAr: 'نياسيناميد (فيتامين ب٣)',
+        nameEn: 'Niacinamide (Vitamin B3)',
+        dose: '16 mg NE',
+        whatItDoesAr:
+          'يوقف التصبّغ من مصدره — يمنع الميلانين من الوصول للسطح.',
+        scienceSourceShort: 'Hakozaki et al., 2002, Br J Dermatol. EFSA permitted claim.',
+        thumbImageUrl: null,
+      },
+      {
+        nameAr: 'أستازانتين',
+        nameEn: 'Astaxanthin (from Haematococcus pluvialis)',
+        dose: '4 mg',
+        whatItDoesAr:
+          'يُحسّن الدورة الدموية حول العين ويحمي البشرة الرقيقة من التأكسد.',
+        scienceSourceShort: 'Tominaga et al., 2017, J Clin Biochem Nutr.',
+        thumbImageUrl: null,
+      },
+      {
+        nameAr: 'زنك',
+        nameEn: 'Zinc (citrate)',
+        dose: '5 mg',
+        whatItDoesAr:
+          'يدعم امتصاص الحديد ويُساعد البشرة حول العين تتجدّد أسرع.',
+        scienceSourceShort: 'EFSA: zinc contributes to normal skin maintenance.',
+        thumbImageUrl: null,
+      },
+    ],
+
+    reviews: [
+      {
+        authorFirstNameAr: 'نوف',
+        authorCityAr: 'الرياض',
+        rating: 5,
+        bodyAr:
+          'بعد شهرين أمي قالت لي: وجهكِ مشرق اليوم. ما تغيّر نومي — تغيّر لون تحت عيني.',
+      },
+      {
+        authorFirstNameAr: 'هيفاء',
+        authorCityAr: 'جدة',
+        rating: 5,
+        bodyAr:
+          'أوّل مرة أطلع من البيت بدون كونسيلر. بعد ٦ أسابيع مع بريق — الفرق واضح.',
+      },
+      {
+        authorFirstNameAr: 'دلال',
+        authorCityAr: 'الدمام',
+        rating: 5,
+        bodyAr:
+          'عندي نقص حديد وحبوب الحديد العادية تعوّر معدتي. بريق ما سبّبت لي شي والهالات خفّت بعد شهر ونص.',
+      },
+    ],
+
+    faqs: [
+      {
+        questionAr: 'إيش الفرق عن حبوب النوم؟',
+        answerAr:
+          'حبوب النوم تحسّن نومكِ بس. بريق تهاجم السواد مباشرة: تفتيح + حديد + وقف تصبّغ.',
+      },
+      {
+        questionAr: 'الحديد يسبّب إمساك؟',
+        answerAr:
+          'لا. نوع الحديد في بريق (bisglycinate) خفيف على المعدة. أغلب عميلاتنا ما يحسّون بأي شي.',
+      },
+      {
+        questionAr: 'متى أشوف نتيجة؟',
+        answerAr:
+          'بعد ٤ أسابيع تلاحظين تحسّن خفيف. بعد شهرين الفرق واضح بالصور. عشان كذا نوصي بـ ٣ علب.',
+      },
+      {
+        questionAr: 'هل فيها جيلاتين؟',
+        answerAr:
+          'لا. الغلاف نباتي ١٠٠٪ وحلال.',
+      },
+      {
+        questionAr: 'آمنة وقت الحمل؟',
+        answerAr:
+          'لا يُنصح بها وقت الحمل والرضاعة. استشيري طبيبكِ.',
+      },
+    ],
+
+    seo: {
+      titleAr: 'حبّة بريق — فيتامين سي + حديد + نياسيناميد ضد الهالات السوداء · رحيق',
+      descriptionAr:
+        'تهاجم الهالات مباشرة من ٣ مسارات — تفتيح + حديد + منع تصبّغ. مش حبّة نوم. دفع عند الاستلام.',
+    },
+  },
+
+  /* ══════════════════════════════════════════════════════════
+     حبّة جذر — Women's Hair Growth
+     Framework: PAS + Unique Ingredient Story
+     Emotional core: A woman's hair is her crown.
+     Thinning is a private shame she checks every morning.
+     Hero ingredient: AnnurTriComplex (Annurca Apple Extract, clinically proven)
+     Supporting: Biotin 10,000mcg + Zinc + Vitamin D3 + Folic Acid
+  ══════════════════════════════════════════════════════════ */
+  {
+    id: 'habba-jathr',
+    slug: 'habba-jathr',
+    nameAr: 'حبّة جذر',
+
+    heroTagAr: 'شعر أكثف. تساقط أقل. من الجذر.',
+
+    shortDescriptionAr:
+      'الزيوت والكريمات توصل للشعرة بس — ما توصل للجذر. جذر تشتغل من الداخل: مستخلص تفاح أنوركا الإيطالي أعاد نمو الشعر في ٢٥٠ امرأة خلال ٦٠ يوم. مع بيوتين يبني الكيراتين وزنك يُدير دورة النمو.',
+
+    longDescriptionAr:
+      'التساقط يبدأ من بصيلة تعاني من الداخل. جذر تغذّي البصيلة بـ ٥ مكوّنات: مستخلص تفاح أنوركا يعيد النمو (مثبت في دراسة على ٢٥٠ شخص). بيوتين يبني الكيراتين. زنك يُدير دورة النمو. فيتامين D3 يدعم البصيلات. حمض الفوليك يُسرّع النمو. حبّتين بالصباح — وخلال شهرين تلاحظين الفرق.',
+
+    ratingValue: 4.9,
+    reviewCount: 412,
+    stockLabelAr: 'بقي 32 علبة فقط من دفعة هذا الأسبوع.',
+    coverImageUrl: '/images/products/habba-jathr/cover.png',
+    galleryImageUrls: ['/images/products/habba-jathr/cover.png'],
+
+    offers: [
+      { code: 'T1', labelAr: 'علبة', quantity: 1, priceSar: 229, isRecommended: false },
+      { code: 'T2', labelAr: 'الزوجي', quantity: 2, priceSar: 339, isRecommended: false },
+      { code: 'T3', labelAr: 'Glow Kit (الأنصح)', quantity: 3, priceSar: 419, isRecommended: true },
+    ],
+
+    ingredients: [
+      {
+        nameAr: 'مستخلص تفاح أنوركا',
+        nameEn: 'AnnurTriComplex® (Annurca Apple Extract)',
+        dose: '800 mg',
+        whatItDoesAr:
+          'مستخلص تفاح إيطالي نادر. أعاد نمو الشعر في دراسة على ٢٥٠ شخص خلال ٦٠ يوم. غير موجود في أي منتج ثاني في السعودية.',
+        scienceSourceShort: 'Tenore et al., 2018, J Med Food. University of Naples clinical trials.',
+        thumbImageUrl: null,
+      },
+      {
+        nameAr: 'بيوتين',
+        nameEn: 'Biotin (D-Biotin)',
+        dose: '10,000 mcg',
+        whatItDoesAr:
+          'يبني الكيراتين — البروتين اللي يتكوّن منه شعركِ. جرعة عالية لنتيجة أسرع.',
+        scienceSourceShort: 'EFSA: biotin contributes to maintenance of normal hair.',
+        thumbImageUrl: null,
+      },
+      {
+        nameAr: 'زنك',
+        nameEn: 'Zinc (citrate)',
+        dose: '7.5 mg',
+        whatItDoesAr:
+          'يُساعد البصيلة تدخل مرحلة النمو بدل ما تبقى في الراحة.',
+        scienceSourceShort: 'EFSA: zinc contributes to maintenance of normal hair.',
+        thumbImageUrl: null,
+      },
+      {
+        nameAr: 'فيتامين D3',
+        nameEn: 'Vitamin D3 (cholecalciferol)',
+        dose: '20 mcg (800 IU)',
+        whatItDoesAr:
+          'يدعم صحة البصيلات. ٨٠٪ من السعوديات عندهن نقص — وهذا مرتبط بالتساقط.',
+        scienceSourceShort: 'Rasheed et al., 2013, J Cosmet Dermatol. KSA Vit D deficiency >80% in women.',
+        thumbImageUrl: null,
+      },
+      {
+        nameAr: 'حمض الفوليك',
+        nameEn: 'Folic Acid (Vitamin B9)',
+        dose: '400 mcg',
+        whatItDoesAr:
+          'يُسرّع نمو الشعر من الأساس.',
+        scienceSourceShort: 'EFSA: folate contributes to normal cell division.',
+        thumbImageUrl: null,
+      },
+    ],
+
+    reviews: [
+      {
+        authorFirstNameAr: 'رهف',
+        authorCityAr: 'الرياض',
+        rating: 5,
+        bodyAr:
+          'الشهر الثاني قارنت صورة من سنة — الكثافة واضحة والتساقط قلّ. مستخلص التفاح هذا شي ثاني.',
+      },
+      {
+        authorFirstNameAr: 'العنود',
+        authorCityAr: 'الرياض',
+        rating: 5,
+        bodyAr:
+          'الكوافيرة سألتني: إيش سرّ شعرك؟ الجواب حبّة فيها تفاح إيطالي. أحسست بالقيمة من الشهر الثاني.',
+      },
+      {
+        authorFirstNameAr: 'ريم',
+        authorCityAr: 'جدة',
+        rating: 5,
+        bodyAr:
+          'كنت أجمع شعر قبل الاستحمام حتى ما يسدّ الصرف. بعد شهرين — ما عاد احتاج.',
+      },
+    ],
+
+    faqs: [
+      {
+        questionAr: 'متى أشوف نتيجة؟',
+        answerAr:
+          'بعد ٤ أسابيع تساقط أقل. بعد شهرين كثافة واضحة. عشان كذا نوصي بـ ٣ علب.',
+      },
+      {
+        questionAr: 'إيش هو تفاح أنوركا؟',
+        answerAr:
+          'تفاح نادر من جنوب إيطاليا. باحثون اكتشفوا إنه يعيد نمو الشعر. مثبت في دراسة على ٢٥٠ شخص. غير موجود في أي منتج ثاني في السعودية.',
+      },
+      {
+        questionAr: 'جرّبت كل شي ومفيد اشتغل. ليش هذي مختلفة؟',
+        answerAr:
+          'لأن أغلب المكمّلات فيها بيوتين بس. جذر تجمع ٥ مكوّنات: تفاح أنوركا + بيوتين + زنك + فيتامين D3 + حمض فوليك. كل واحد يشتغل على جزء مختلف.',
+      },
+      {
+        questionAr: 'هل فيها جيلاتين؟',
+        answerAr:
+          'لا. الغلاف نباتي ١٠٠٪ وحلال.',
+      },
+      {
+        questionAr: 'آمنة وقت الحمل؟',
+        answerAr:
+          'لا يُنصح بها وقت الحمل والرضاعة. استشيري طبيبكِ.',
+      },
+    ],
+
+    seo: {
+      titleAr: 'حبّة جذر — مستخلص تفاح أنوركا + بيوتين لشعر أكثف وأقوى · رحيق',
+      descriptionAr:
+        'مكوّن إيطالي أعاد نمو الشعر في ٢٥٠ امرأة خلال ٦٠ يومًا + بيوتين ١٠,٠٠٠ مكغ. دفع عند الاستلام.',
     },
   },
 ];
@@ -431,77 +432,75 @@ export const PRODUCTS: Product[] = [
 ───────────────────────────────────────────────────────────── */
 
 export const PRODUCT_ONE_LINERS: Record<string, string> = {
-  'habba-jathr': 'أقل تساقط، أكثر كثافة — بيوتين + ساو بالميتو + كولاجين بحري.',
-  'habba-layali': 'تنامين قبل أن تلاحظي متى — ميلاتونين ذكي + أشواغاندا + ثيانين.',
-  'habba-noura': 'بريق من الداخل — كولاجين بحري ٢٥٠٠ ملغ + فيتامين سي + هيالورونيك.',
+  'habba-nadra': 'أستازانتين + كولاجين بحري — تجاعيد أقل ونضارة أكثر.',
+  'habba-bareeq': 'فيتامين سي + حديد + نياسيناميد — تهاجم الهالات مباشرة.',
+  'habba-jathr': 'تفاح أنوركا + بيوتين — شعر أكثف من الجذر.',
 };
 
-// Show-don't-tell benefits: each one is a scene, not a feature label
 export const PRODUCT_BENEFITS: Record<string, string[]> = {
+  'habba-nadra': [
+    'خطوط أقل حول العين خلال ٤ أسابيع',
+    'بشرة تلمع بدون فيلتر',
+    'ترطيب ومرونة من الداخل',
+    'حماية من الشمس أقوى ٦٠٠٠ مرة من فيتامين سي',
+  ],
+  'habba-bareeq': [
+    'هالات أفتح — تفتيح مباشر',
+    'ما حد يسألكِ "تعبانة؟"',
+    'حديد خفيف على المعدة',
+    'أقل كونسيلر — أكثر ثقة',
+  ],
   'habba-jathr': [
-    'أقل شعر على الفرشاة — أول مؤشر يظهر في ٣-٤ أسابيع',
-    'تجمعين شعركِ وتشعرين بكتلة أكثف — لا مجرد حبّات جديدة',
-    'لمعان تلاحظينه قبل أن يُعلّق عليه أحد',
-    'أظافر تكملين طولها بدون انكسار — مكافأة على الهامش',
-  ],
-  'habba-layali': [
-    'تنامين قبل أن تُنهي حساباتكِ الليلية في رأسكِ',
-    'تُصحين ولا تتذكّرين متى نمتِ — بدون دوخة',
-    'أقل تقلّب في الليل — نوم دورات كاملة',
-    'صباح أخفّ: تُفكّرين بوضوح من الدقيقة الأولى',
-  ],
-  'habba-noura': [
-    'بريق طبيعي يظهر في الصور — بدون فيلتر',
-    'بشرة تمسك الترطيب من الداخل طوال اليوم',
-    'مرونة تشعرين بها بيدكِ حين تلمسين خدّكِ',
-    'أظافر تكملين طولها بدون انكسار في منتصف الطريق',
+    'تساقط أقل خلال ٤ أسابيع',
+    'كثافة واضحة بعد شهرين',
+    'لمعان طبيعي',
+    'مكوّن إيطالي مثبت — غير موجود في السعودية',
   ],
 };
 
 export const PRODUCT_HOW_TO_USE: Record<string, string[]> = {
+  'habba-nadra': [
+    'حبّتين بعد الفطور مع كوب ماء.',
+    'خذيها مع الأكل — تُمتص أفضل.',
+    'استمري ٩٠ يوم للنتيجة الكاملة.',
+  ],
+  'habba-bareeq': [
+    'حبّتين بعد الفطور مع كوب ماء.',
+    'لا تأخذيها مع شاي أو قهوة — انتظري ساعة.',
+    'استمري ٩٠ يوم للنتيجة الكاملة.',
+  ],
   'habba-jathr': [
-    'حبّتان في الصباح بعد الفطور — مع كوب ماء.',
-    'الاستمرار ٩٠ يومًا يُعطيكِ النتيجة الكاملة — دورة نمو الشعر تحتاج هذا الوقت.',
-    'إذا نسيتِ يومًا، أكملي من اليوم التالي بدون تعويض الجرعة.',
-  ],
-  'habba-layali': [
-    'حبّتان قبل النوم بـ ٢٠-٣٠ دقيقة — مع كوب ماء.',
-    'أطفئي الشاشات بعد أخذها لتُعظّمي التأثير.',
-    'لا تتناوليها إذا لم تكوني ستنامين خلال ساعة.',
-  ],
-  'habba-noura': [
-    'حبّتان في الصباح بعد الفطور — مع كوب ماء.',
-    'فيتامين سي في التركيبة يعمل أفضل في الصباح مع وجبة.',
-    'الاستمرار ٩٠ يومًا يُعطيكِ الكولاجين الوقت الكافي لإعادة البناء.',
+    'حبّتين بعد الفطور مع كوب ماء.',
+    'استمري ٩٠ يوم للنتيجة الكاملة.',
+    'لو نسيتِ يوم — أكملي من بكرة بدون تعويض.',
   ],
 };
 
-// Why section — PAS / science narrative
 export const PRODUCT_WHY_HEADING: Record<string, string> = {
-  'habba-jathr': 'التساقط لا يبدأ فجأة — والعلاج الحقيقي لا يبدأ من الخارج.',
-  'habba-layali': 'مشكلتكِ ليست النوم — مشكلتكِ جهاز عصبي لا يعرف كيف يتوقّف.',
-  'habba-noura': 'الكريم يصل للشعرة الأولى من بشرتكِ. الكولاجين البحري يصل لما تحتها.',
+  'habba-nadra': 'ليش من الداخل؟',
+  'habba-bareeq': 'ليش مش حبّة نوم؟',
+  'habba-jathr': 'ليش من الجذر؟',
 };
 
 export const PRODUCT_WHY_BODY: Record<string, string> = {
+  'habba-nadra':
+    'بعد سن ٢٥ بشرتكِ تفقد الكولاجين كل سنة. الكريمات ما تدخل الجلد — جزيئاتها كبيرة. نضرة تشتغل من الداخل: أستازانتين يحمي خلايا بشرتكِ، وكولاجين بحري يبني. فيتامين سي يُضاعف البناء. النتيجة مثبتة في دراسات على أكثر من ٢٠٠٠ امرأة.',
+  'habba-bareeq':
+    'الهالات لها ٣ أسباب: تصبّغ، نقص حديد، وتراكم ميلانين. أغلب المنتجات تحسّن النوم بس وتتمنّى يروح السواد. بريق تهاجم الأسباب الثلاثة مباشرة. فيتامين سي يُفتّح. حديد يرفع الأكسجين. نياسيناميد يوقف التصبّغ.',
   'habba-jathr':
-    'كل شعرة تطيح لها قصّة. في الغالب، البصيلة كانت تعاني قبل ذلك بأشهر — جائعة، غير متوازنة، أو في طور الراحة الطويلة. الكريمات تصل للشعرة الظاهرة لا للجذر. حبّة جذر تعمل بأربعة محاور في آن واحد: البيوتين يغذّي الكيراتين في كل بصيلة، الساو بالميتو يوازن DHT الذي يُقلّص البصيلات مع الوقت، الكولاجين البحري يُزوّد الشعرة بالأحماض الأمينية التي تجعلها مرنة لا هشّة، والزنك يُدير دورة النموّ. هذه ليست قائمة مكوّنات — هذه خطّة مدروسة لمشكلة واحدة بأربعة وجوه.',
-  'habba-layali':
-    'في الماضي، الليل يعني الظلام والهدوء — وكان هذا كافيًا ليُطلق إنتاج الميلاتونين. اليوم، الشاشات والتوتر يُرسلان للدماغ: "النهار لم ينتهِ بعد." ليالي تُعيد هذه الإشارة بأربعة مكوّنات تعمل معًا: ميلاتونين ١ ملغ (جرعة الأبحاث لا التجارة) يُعلن للدماغ أن الليل بدأ، أشواغاندا KSM-66® تُخفّض الكورتيزول الذي يُبقيكِ مستيقظة، L-ثيانين يُعزّز موجات ألفا — الموجات التي تسبق النوم العميق مباشرة، وماغنيسيوم يُرخي العضلات ويُعمّق دورات النوم. لا تُخدّركِ. تُعلّم جسمكِ كيف يتوقّف بشكل طبيعي.',
-  'habba-noura':
-    'بعد سن ٢٥، جسمكِ يُقلّل إنتاج الكولاجين ١-٢٪ سنويًا. الكريمات لا تعوّض هذا — جزيئات الكولاجين فيها كبيرة جدًا لاختراق الجلد، تبقى على السطح وتُزال بالغسيل. حبّة نورة تُرسل ببتيدات كولاجين بحري صغيرة الجزيئات (أقل من ٥ كيلوداطون) مباشرة إلى مجرى الدم — تصل للأدمة وتُحفّز الخلايا على بناء كولاجين جديد. فيتامين سي يُضاعف هذا التأثير — بدونه الكولاجين لا يتشكّل. حمض الهيالورونيك يحجز الرطوبة داخل الطبقات بقوة ١٠٠٠ مرة وزنه. هذا إعادة بناء، لا ترطيب مؤقت.',
+    'الزيوت والكريمات توصل للشعرة بس — ما توصل للبصيلة. جذر تغذّي البصيلة من الداخل بمكوّن إيطالي (تفاح أنوركا) أعاد نمو الشعر في دراسة على ٢٥٠ شخص. مع بيوتين وزنك وفيتامين D3 وحمض فوليك — ٥ مكوّنات تشتغل مع بعض.',
 };
 
 export const PRODUCT_CROSS_SELLS: Record<string, string[]> = {
-  'habba-jathr': ['habba-noura', 'habba-layali'],
-  'habba-layali': ['habba-noura', 'habba-jathr'],
-  'habba-noura': ['habba-jathr', 'habba-layali'],
+  'habba-nadra': ['habba-bareeq', 'habba-jathr'],
+  'habba-bareeq': ['habba-nadra', 'habba-jathr'],
+  'habba-jathr': ['habba-nadra', 'habba-bareeq'],
 };
 
 export const UPSELL_SKU_MAP: Record<string, string> = {
-  'habba-jathr': 'habba-noura',
-  'habba-layali': 'habba-noura',
-  'habba-noura': 'habba-jathr',
+  'habba-nadra': 'habba-bareeq',
+  'habba-bareeq': 'habba-nadra',
+  'habba-jathr': 'habba-nadra',
 };
 
 export function getProductBySlug(slug: string): Product | undefined {

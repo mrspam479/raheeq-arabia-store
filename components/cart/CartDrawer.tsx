@@ -182,7 +182,7 @@ function CartLineItem({
     <li className="flex gap-3 p-3 bg-white rounded-xl border border-stone-200">
       <div className="w-16 h-16 rounded-lg bg-stone-100 overflow-hidden shrink-0 relative">
         <Image
-          src={line.imageUrl || `/images/products/${line.productId}/cover.svg`}
+          src={line.imageUrl || `/images/products/${line.productId}/cover.png`}
           alt={line.nameAr}
           fill
           className="object-cover"
@@ -249,7 +249,7 @@ function CrossSellItem({
       tier: 3,
       quantity: 3,
       unitPrice: 349 / 3,
-      imageUrl: `/images/products/${slug}/cover.svg`,
+      imageUrl: `/images/products/${slug}/cover.png`,
       offerCode: 'T3',
     });
   };
@@ -258,7 +258,7 @@ function CrossSellItem({
     <div className="flex items-center gap-3 p-2.5 bg-stone-50 rounded-lg border border-stone-200">
       <div className="w-10 h-10 rounded-md bg-stone-100 overflow-hidden relative shrink-0">
         <Image
-          src={`/images/products/${slug}/cover.svg`}
+          src={`/images/products/${slug}/cover.png`}
           alt={nameAr}
           fill
           className="object-cover"

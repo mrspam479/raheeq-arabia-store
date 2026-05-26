@@ -150,7 +150,7 @@ export function CheckoutModal() {
       if (isLocalPreview()) {
         const previewOrderId = `preview-${Date.now()}`;
         trackPurchase(previewOrderId, total, values.phone, values.name);
-        openUpsell(previewOrderId, 'preview-upsell-token', 'habba-noura');
+        openUpsell(previewOrderId, 'preview-upsell-token', 'habba-bareeq');
         return;
       }
 
