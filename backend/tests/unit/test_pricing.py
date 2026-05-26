@@ -16,22 +16,21 @@ def test_upsell_price():
     assert UPSELL_PRICE == Decimal("99")
 
 
-def test_upsell_jathr_gets_noura():
-    assert get_upsell_sku(["habba-jathr"]) == "habba-noura"
+def test_upsell_jathr_gets_nadra():
+    assert get_upsell_sku(["habba-jathr"]) == "habba-nadra"
 
 
-def test_upsell_layali_gets_noura():
-    assert get_upsell_sku(["habba-layali"]) == "habba-noura"
+def test_upsell_bareeq_gets_nadra():
+    assert get_upsell_sku(["habba-bareeq"]) == "habba-nadra"
 
 
-def test_upsell_noura_gets_jathr():
-    assert get_upsell_sku(["habba-noura"]) == "habba-jathr"
+def test_upsell_nadra_gets_bareeq():
+    assert get_upsell_sku(["habba-nadra"]) == "habba-bareeq"
 
 
 def test_upsell_all_in_cart_returns_none():
-    assert get_upsell_sku(["habba-jathr", "habba-layali", "habba-noura"]) is None
+    assert get_upsell_sku(["habba-nadra", "habba-bareeq", "habba-jathr"]) is None
 
 
-def test_upsell_priority_noura_first():
-    # If only noura is missing, prefer noura
-    assert get_upsell_sku(["habba-jathr", "habba-layali"]) == "habba-noura"
+def test_upsell_priority_nadra_first():
+    assert get_upsell_sku(["habba-bareeq", "habba-jathr"]) == "habba-nadra"

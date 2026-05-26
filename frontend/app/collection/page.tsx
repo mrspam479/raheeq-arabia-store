@@ -8,8 +8,8 @@ import { PRODUCTS } from '@/data/products';
 import { formatNumber, formatSar } from '@/lib/price';
 
 export const metadata: Metadata = {
-  title: 'المجموعة — حبّة جذر، حبّة ليالي، حبّة نورة · رحيق',
-  description: 'ثلاث حبّات — ثلاث طقوس. اختاري الباقة التي تليق بأهدافكِ.',
+  title: 'المجموعة — حبّة نضرة، حبّة بريق، حبّة جذر · رحيق',
+  description: 'ثلاث حبّات — ثلاث طقوس. تجاعيد، هالات، وشعر. اختاري الباقة التي تليق بكِ.',
 };
 
 export default function CollectionPage() {

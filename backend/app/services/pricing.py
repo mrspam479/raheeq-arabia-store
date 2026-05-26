@@ -11,12 +11,12 @@ TIER_MAP: dict[str, tuple[int, Decimal]] = {
 UPSELL_PRICE = Decimal("99")
 
 UPSELL_MAP: dict[str, str] = {
-    "habba-jathr": "habba-noura",
-    "habba-layali": "habba-noura",
-    "habba-noura": "habba-jathr",
+    "habba-nadra": "habba-bareeq",
+    "habba-bareeq": "habba-nadra",
+    "habba-jathr": "habba-nadra",
 }
 
-PRIORITY_UPSELL_ORDER = ["habba-noura", "habba-jathr", "habba-layali"]
+PRIORITY_UPSELL_ORDER = ["habba-nadra", "habba-bareeq", "habba-jathr"]
 
 
 def get_upsell_sku(cart_slugs: list[str]) -> str | None:

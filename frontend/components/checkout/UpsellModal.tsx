@@ -133,7 +133,7 @@ export function UpsellModal() {
           {/* Product image */}
           <div className="relative h-48 bg-stone-100">
             <Image
-              src="/images/products/habba-noura/cover.svg"
+              src="/images/products/habba-bareeq/cover.png"
               alt="حبّة نورة"
               fill
               className="object-cover"

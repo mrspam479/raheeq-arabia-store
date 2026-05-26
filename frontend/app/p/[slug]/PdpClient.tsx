@@ -154,13 +154,7 @@ export function PdpClient({
               </div>
 
               <div className="rounded-2xl border border-emerald/10 bg-ivory p-4">
-                <p className="mb-1 font-tajawal text-xs font-bold text-saffron">
-                  العرض واضح:
-                </p>
-                <p className="font-tajawal text-base font-bold leading-relaxed text-emerald">
-                  3 علب بسعر 349 SAR — الأفضل لدورة 90 يوم.
-                </p>
-                <p className="mt-1 font-tajawal text-sm leading-relaxed text-charcoal/75">
+                <p className="font-tajawal text-sm leading-relaxed text-charcoal/80">
                   {product.shortDescriptionAr}
                 </p>
               </div>
@@ -252,7 +246,7 @@ export function PdpClient({
                   })}
                 </div>
                 <p className="mt-2 text-center font-tajawal text-xs text-charcoal/55">
-                  استفيدي من العرض — الأكثر توفيرًا هو Glow Kit
+                  ٣ علب = ٩٠ يوم = أفضل نتيجة
                 </p>
               </div>
 

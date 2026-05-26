@@ -25,8 +25,8 @@ export function Footer() {
             </h3>
             <nav className="flex flex-col gap-2" aria-label="روابط المنتجات">
               <FooterLink href="/p/habba-jathr">حبّة جذر</FooterLink>
-              <FooterLink href="/p/habba-layali">حبّة ليالي</FooterLink>
-              <FooterLink href="/p/habba-noura">حبّة نورة</FooterLink>
+              <FooterLink href="/p/habba-nadra">حبّة نضرة</FooterLink>
+              <FooterLink href="/p/habba-bareeq">حبّة بريق</FooterLink>
               <FooterLink href="/collection">{COPY.NAV.COLLECTION}</FooterLink>
             </nav>
           </div>
