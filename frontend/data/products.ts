@@ -35,9 +35,9 @@ export const PRODUCTS: Product[] = [
     galleryImageUrls: ['/images/products/habba-nadra/cover.png'],
 
     offers: [
-      { code: 'T1', labelAr: 'علبة', quantity: 1, priceSar: 219, isRecommended: false },
-      { code: 'T2', labelAr: 'الزوجي', quantity: 2, priceSar: 319, isRecommended: false },
-      { code: 'T3', labelAr: 'Glow Kit (الأنصح)', quantity: 3, priceSar: 399, isRecommended: true },
+      { code: 'T1', labelAr: 'علبة', quantity: 1, priceSar: 199, isRecommended: false },
+      { code: 'T2', labelAr: 'الزوجي', quantity: 2, priceSar: 279, isRecommended: false },
+      { code: 'T3', labelAr: 'Glow Kit (الأنصح)', quantity: 3, priceSar: 349, isRecommended: true },
     ],
 
     ingredients: [
@@ -175,8 +175,8 @@ export const PRODUCTS: Product[] = [
 
     offers: [
       { code: 'T1', labelAr: 'علبة', quantity: 1, priceSar: 199, isRecommended: false },
-      { code: 'T2', labelAr: 'الزوجي', quantity: 2, priceSar: 289, isRecommended: false },
-      { code: 'T3', labelAr: 'Glow Kit (الأنصح)', quantity: 3, priceSar: 369, isRecommended: true },
+      { code: 'T2', labelAr: 'الزوجي', quantity: 2, priceSar: 279, isRecommended: false },
+      { code: 'T3', labelAr: 'Glow Kit (الأنصح)', quantity: 3, priceSar: 349, isRecommended: true },
     ],
 
     ingredients: [
@@ -314,9 +314,9 @@ export const PRODUCTS: Product[] = [
     galleryImageUrls: ['/images/products/habba-jathr/cover.png'],
 
     offers: [
-      { code: 'T1', labelAr: 'علبة', quantity: 1, priceSar: 229, isRecommended: false },
-      { code: 'T2', labelAr: 'الزوجي', quantity: 2, priceSar: 339, isRecommended: false },
-      { code: 'T3', labelAr: 'Glow Kit (الأنصح)', quantity: 3, priceSar: 419, isRecommended: true },
+      { code: 'T1', labelAr: 'علبة', quantity: 1, priceSar: 199, isRecommended: false },
+      { code: 'T2', labelAr: 'الزوجي', quantity: 2, priceSar: 279, isRecommended: false },
+      { code: 'T3', labelAr: 'Glow Kit (الأنصح)', quantity: 3, priceSar: 349, isRecommended: true },
     ],
 
     ingredients: [
