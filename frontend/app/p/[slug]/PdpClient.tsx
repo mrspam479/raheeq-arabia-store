@@ -373,14 +373,14 @@ export function PdpClient({
             <div className="relative aspect-square rounded-2xl border-2 border-dashed border-red-300 bg-red-50/40 flex items-center justify-center">
               <div className="text-center px-3">
                 <p className="text-2xl">📸</p>
-                <p className="mt-1 font-tajawal text-xs font-bold text-red-700">[صورة "قبل"]</p>
+                <p className="mt-1 font-tajawal text-xs font-bold text-red-700">[صورة «قبل»]</p>
                 <p className="font-tajawal text-[10px] text-charcoal/55">وجه طبيعي بدون فلتر</p>
               </div>
             </div>
             <div className="relative aspect-square rounded-2xl border-2 border-dashed border-emerald/40 bg-emerald/5 flex items-center justify-center">
               <div className="text-center px-3">
                 <p className="text-2xl">📸</p>
-                <p className="mt-1 font-tajawal text-xs font-bold text-emerald">[صورة "بعد ٩٠ يوم"]</p>
+                <p className="mt-1 font-tajawal text-xs font-bold text-emerald">[صورة «بعد ٩٠ يوم»]</p>
                 <p className="font-tajawal text-[10px] text-charcoal/55">نفس الإضاءة، نفس الزاوية</p>
               </div>
             </div>
