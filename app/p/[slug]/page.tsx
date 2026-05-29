@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { PRODUCTS, getProductBySlug, PRODUCT_BENEFITS, PRODUCT_HOW_TO_USE, PRODUCT_WHY_HEADING, PRODUCT_WHY_BODY, PRODUCT_CROSS_SELLS } from '@/data/products';
+import { PRODUCTS, getProductBySlug, PRODUCT_BENEFITS, PRODUCT_HOW_TO_USE, PRODUCT_TIMELINE } from '@/data/products';
 import { JsonLdProduct } from '@/components/brand/JsonLd';
 import { PdpClient } from './PdpClient';
 
@@ -33,11 +33,6 @@ export default async function PdpPage({ params }: Props) {
   const product = getProductBySlug(slug);
   if (!product) notFound();
 
-  const crossSellSlugs = PRODUCT_CROSS_SELLS[slug] ?? [];
-  const crossSellProducts = crossSellSlugs
-    .map((s) => PRODUCTS.find((p) => p.slug === s))
-    .filter(Boolean) as typeof PRODUCTS;
-
   return (
     <>
       <JsonLdProduct
@@ -51,10 +46,8 @@ export default async function PdpPage({ params }: Props) {
       <PdpClient
         product={product}
         benefits={PRODUCT_BENEFITS[slug] ?? []}
+        timeline={PRODUCT_TIMELINE[slug] ?? []}
         howToUse={PRODUCT_HOW_TO_USE[slug] ?? []}
-        whyHeading={PRODUCT_WHY_HEADING[slug] ?? ''}
-        whyBody={PRODUCT_WHY_BODY[slug] ?? ''}
-        crossSells={crossSellProducts}
       />
     </>
   );
