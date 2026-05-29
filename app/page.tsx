@@ -10,12 +10,12 @@ import { GLOBAL_FAQS } from '@/data/faqs';
 import { formatNumber } from '@/lib/price';
 
 export const metadata: Metadata = {
-  title: 'رحيق Raheeq Arabia — حلوى يومية تليق بكِ',
+  title: 'رحيق — حلوى للبشرة، الهالات، والشعر · دفع عند الاستلام',
   description:
-    'حبّة جذر، حبّة ليالي، حبّة نورة — مكمّلات بطعم حلوى، بمكوّنات عالمية، ودفع عند الاستلام داخل المملكة.',
+    'حبّتين بالصباح. نتيجة في ٣٠ يوم — أو نردّ فلوسكِ. مكمّلات للبشرة، الهالات، والشعر، بطعم حلوى لذيذة. دفع عند الاستلام داخل المملكة.',
   openGraph: {
-    title: 'رحيق Raheeq Arabia — حلوى يومية تليق بكِ',
-    description: 'مكمّلات بطعم حلوى، بمكوّنات عالمية، ودفع عند الاستلام.',
+    title: 'رحيق — حلوى للبشرة، الهالات، والشعر',
+    description: 'حبّتين بالصباح. نتيجة في ٣٠ يوم — أو نردّ فلوسكِ.',
     images: [{ url: '/images/hero/home-hero.svg', width: 1200, height: 630 }],
   },
 };
@@ -39,32 +39,46 @@ export default function HomePage() {
           <div className="text-center md:text-right">
 
             <p className="mb-4 inline-block font-tajawal text-sm font-bold text-saffron">
-              🇸🇦 صُنع في السعودية · مفحوص مخبريًا
+              🇸🇦 يُصنع للسعودية · فحص مخبري لكل دفعة
             </p>
 
             <h1
               className="font-tajawal font-black leading-[1.1] text-emerald"
-              style={{ fontSize: 'clamp(2.6rem, 6.5vw, 5rem)' }}
+              style={{ fontSize: 'clamp(2.4rem, 6vw, 4.8rem)' }}
             >
-              علمٌ بطعم الحلوى.
-              <span className="block text-saffron">نتيجة تُبهر المرآة.</span>
+              حبّتين بالصباح.
+              <span className="block text-saffron">ونتيجة تشوفينها بعينكِ.</span>
             </h1>
 
             <p className="mx-auto mt-6 max-w-lg font-tajawal text-lg font-semibold leading-relaxed text-charcoal md:mx-0 md:text-xl">
-              تركيبة علمية لشعركِ، نومكِ، أو بشرتكِ — بطعم حلوى تحبّينها.
+              حلوى لذيذة — تعمل من داخل بشرتكِ وشعركِ.
+              <span className="block mt-1 text-charcoal/70">
+                ٣٠ يوم — أو نردّ فلوسكِ كاملة.
+              </span>
             </p>
-            <p className="mx-auto mt-2 max-w-lg font-tajawal text-base text-charcoal/65 md:mx-0">
-              30 يومًا كافية — إن لم تشوفي فرق،{' '}
-              <span className="font-bold text-emerald">نردّ لكِ كل ريال.</span>
-            </p>
+
+            <div className="mt-6 grid grid-cols-3 gap-2 max-w-md mx-auto md:mx-0">
+              <div className="rounded-2xl border border-emerald/20 bg-[#F3FAF6] p-3 text-center">
+                <p className="text-2xl">✨</p>
+                <p className="mt-1 font-tajawal text-xs font-bold text-emerald">للبشرة</p>
+              </div>
+              <div className="rounded-2xl border border-emerald/20 bg-[#F3FAF6] p-3 text-center">
+                <p className="text-2xl">👁️</p>
+                <p className="mt-1 font-tajawal text-xs font-bold text-emerald">للهالات</p>
+              </div>
+              <div className="rounded-2xl border border-emerald/20 bg-[#F3FAF6] p-3 text-center">
+                <p className="text-2xl">💇‍♀️</p>
+                <p className="mt-1 font-tajawal text-xs font-bold text-emerald">للشعر</p>
+              </div>
+            </div>
 
             <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row md:justify-start">
               <Button size="lg" variant="primary" asChild className="h-16 px-10 text-xl font-black">
-                <Link href="/collection">اختاري حبّتكِ الآن</Link>
+                <Link href="/collection">اطلبي حبّتكِ — ١٩٩ ر.س</Link>
               </Button>
               <div className="text-center sm:text-right">
-                <p className="font-tajawal text-sm font-bold text-emerald">من 199 SAR · بدون بطاقة</p>
-                <p className="font-tajawal text-xs text-charcoal/50">دفع عند الاستلام · شحن 1–3 أيام</p>
+                <p className="font-tajawal text-sm font-bold text-emerald">💵 دفع عند الاستلام</p>
+                <p className="font-tajawal text-xs text-charcoal/55">ما تحتاجين بطاقة · شحن ١-٣ أيام</p>
               </div>
             </div>
 
@@ -162,19 +176,19 @@ export default function HomePage() {
       <section className="border-b border-[#EAE0D0] px-4 py-20">
         <div className="container mx-auto max-w-5xl">
           <div className="mx-auto mb-12 max-w-2xl text-center">
-            <p className="mb-2 font-tajawal text-sm font-bold text-saffron">طلب آمن وسهل</p>
+            <p className="mb-2 font-tajawal text-sm font-bold text-saffron">الطلب بـ ٣٠ ثانية</p>
             <h2 className="font-tajawal text-3xl font-black text-emerald md:text-4xl">
-              حبّتان في اليوم… والباقي علينا.
+              ٣ خطوات. بدون تعقيد.
             </h2>
             <p className="mt-3 font-tajawal text-base text-charcoal/65">
-              بدون بطاقة، بدون عنوان في الفورم. فريق سعودي يتصل للتأكيد قبل الشحن.
+              ما تحتاجين بطاقة. ما تحتاجين عنوان في الفورم. اسمكِ + جوالكِ فقط.
             </p>
           </div>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-            <TrustStep number="1" title="اختاري" body="جذر للشعر، ليالي للنوم، أو نورة للبشرة — كل منتج هدفه واحد وواضح." />
-            <TrustStep number="2" title="أكّدي" body="اكتبي اسمكِ ورقم جوالكِ فقط. ما نطلب بطاقة ولا عنوان الآن." featured />
-            <TrustStep number="3" title="استلمي" body="نتصل للتأكيد، نشحن خلال 1–3 أيام، والدفع عند الاستلام." />
+            <TrustStep number="1" title="اختاري المنتج" body="نضرة للبشرة · بريق للهالات · جذر للشعر. اختاري واحد أو الثلاثة." />
+            <TrustStep number="2" title="اكتبي اسمكِ وجوالكِ" body="فقط. ما نطلب بطاقة ولا عنوان في الفورم. ٣٠ ثانية وخلاص." featured />
+            <TrustStep number="3" title="نتصل ونوصّل" body="نتصل للتأكيد، نشحن خلال ١-٣ أيام، وتدفعين عند الاستلام." />
           </div>
 
           <div className="mt-6 grid grid-cols-1 gap-3 md:grid-cols-3">

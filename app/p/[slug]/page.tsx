@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { PRODUCTS, getProductBySlug, PRODUCT_BENEFITS, PRODUCT_HOW_TO_USE, PRODUCT_TIMELINE } from '@/data/products';
+import { PRODUCTS, getProductBySlug, PRODUCT_BENEFITS, PRODUCT_HOW_TO_USE, PRODUCT_TIMELINE, PRODUCT_BEFORE_AFTER, PRODUCT_WHY_US } from '@/data/products';
 import { JsonLdProduct } from '@/components/brand/JsonLd';
 import { PdpClient } from './PdpClient';
 
@@ -48,6 +48,8 @@ export default async function PdpPage({ params }: Props) {
         benefits={PRODUCT_BENEFITS[slug] ?? []}
         timeline={PRODUCT_TIMELINE[slug] ?? []}
         howToUse={PRODUCT_HOW_TO_USE[slug] ?? []}
+        beforeAfter={PRODUCT_BEFORE_AFTER[slug] ?? { before: [], after: [] }}
+        whyUs={PRODUCT_WHY_US[slug] ?? { logic: [], emotion: [] }}
       />
     </>
   );

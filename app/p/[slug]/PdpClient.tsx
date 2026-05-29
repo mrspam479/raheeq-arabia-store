@@ -23,11 +23,23 @@ interface TimelineStep {
   result: string;
 }
 
+interface BeforeAfter {
+  before: string[];
+  after: string[];
+}
+
+interface WhyUs {
+  logic: string[];
+  emotion: string[];
+}
+
 interface PdpClientProps {
   product: Product;
   benefits: Benefit[];
   timeline: TimelineStep[];
   howToUse: string[];
+  beforeAfter: BeforeAfter;
+  whyUs: WhyUs;
 }
 
 export function PdpClient({
@@ -35,6 +47,8 @@ export function PdpClient({
   benefits,
   timeline,
   howToUse,
+  beforeAfter,
+  whyUs,
 }: PdpClientProps) {
   const { addLine, openCart } = useCartStore();
   const [selectedTier, setSelectedTier] = useState<1 | 2 | 3>(3);
@@ -311,6 +325,101 @@ export function PdpClient({
           <p className="mt-8 text-center font-tajawal text-sm text-white/70">
             للنتيجة الكاملة — استمري ٩٠ يوم. عشان كذا ٣ علب هي الأنصح.
           </p>
+        </div>
+      </section>
+
+      {/* ════ BEFORE / AFTER — emotional contrast ════ */}
+      <section className="py-16 bg-ivory">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="text-center mb-10">
+            <p className="font-tajawal text-sm font-bold text-saffron mb-2">الفرق الحقيقي</p>
+            <h2 className="font-tajawal font-black text-3xl md:text-4xl text-emerald">
+              قبل {product.nameAr} · وبعدها
+            </h2>
+            <p className="mt-2 font-tajawal text-base text-charcoal/60">
+              [مكان لإضافة صورة Before / After لاحقًا]
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {/* BEFORE */}
+            <div className="rounded-3xl border-2 border-red-200 bg-red-50/40 p-6">
+              <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-red-100 px-3 py-1">
+                <span className="text-base">😔</span>
+                <p className="font-tajawal text-xs font-black text-red-700">قبل</p>
+              </div>
+              <ul className="flex flex-col gap-3">
+                {beforeAfter.before.map((item) => (
+                  <li key={item} className="flex items-start gap-3 font-tajawal text-sm text-charcoal/80">
+                    <span className="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-red-200 text-red-700 text-[11px] font-black">
+                      ✕
+                    </span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            {/* AFTER */}
+            <div className="rounded-3xl border-2 border-emerald/30 bg-[#F3FAF6] p-6 shadow-[0_18px_42px_rgba(18,107,82,0.10)]">
+              <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-emerald px-3 py-1">
+                <span className="text-base">✨</span>
+                <p className="font-tajawal text-xs font-black text-white">بعد ٣٠-٩٠ يوم</p>
+              </div>
+              <ul className="flex flex-col gap-3">
+                {beforeAfter.after.map((item) => (
+                  <li key={item} className="flex items-start gap-3 font-tajawal text-sm font-semibold text-charcoal">
+                    <span className="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald text-white text-[11px] font-black">
+                      ✓
+                    </span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ════ WHY US — logic + emotion ════ */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="text-center mb-10">
+            <p className="font-tajawal text-sm font-bold text-saffron mb-2">ليش رحيق؟</p>
+            <h2 className="font-tajawal font-black text-3xl md:text-4xl text-emerald">
+              لأن العلم والشعور — لازم يتقابلون.
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {/* LOGIC card */}
+            <div className="rounded-3xl border border-emerald/15 bg-[#FAFAF8] p-6">
+              <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-emerald px-3 py-1">
+                <span className="text-base">🔬</span>
+                <p className="font-tajawal text-xs font-black text-white">العقل · الحقائق</p>
+              </div>
+              <ul className="flex flex-col gap-3">
+                {whyUs.logic.map((item) => (
+                  <li key={item} className="flex items-start gap-3 font-tajawal text-sm text-charcoal/85 leading-relaxed">
+                    <span className="mt-0.5 text-emerald font-black">✓</span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            {/* EMOTION card */}
+            <div className="rounded-3xl border border-saffron/30 bg-saffron/5 p-6">
+              <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-saffron px-3 py-1">
+                <span className="text-base">💛</span>
+                <p className="font-tajawal text-xs font-black text-emerald">القلب · الشعور</p>
+              </div>
+              <ul className="flex flex-col gap-3">
+                {whyUs.emotion.map((item) => (
+                  <li key={item} className="flex items-start gap-3 font-tajawal text-sm text-charcoal/85 leading-relaxed">
+                    <span className="mt-0.5 text-saffron font-black">★</span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
       </section>
 
