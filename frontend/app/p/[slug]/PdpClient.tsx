@@ -295,57 +295,103 @@ export function PdpClient({
         </div>
       </section>
 
-      {/* ════ RESULT TIMELINE — answers "متى أشوف نتيجة؟" ════ */}
-      <section className="bg-emerald py-16 text-ivory">
+      {/* ════ IMAGE DIVIDER — lifestyle shot ════ */}
+      <section className="bg-gradient-to-b from-ivory to-[#faf5ec] py-10">
         <div className="container mx-auto px-4 max-w-5xl">
+          <div className="relative aspect-[21/9] rounded-3xl border-2 border-dashed border-emerald/25 bg-emerald/5 overflow-hidden flex items-center justify-center">
+            <div className="text-center px-4">
+              <p className="font-tajawal text-2xl">📸</p>
+              <p className="mt-2 font-tajawal text-sm font-bold text-emerald">
+                [مكان لإضافة صورة لايف ستايل — Lifestyle photo]
+              </p>
+              <p className="mt-1 font-tajawal text-xs text-charcoal/55">
+                صورة عريضة: العلبة على رخام كريمي مع قهوة الصباح
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ════ RESULT TIMELINE — high contrast cards on emerald bg ════ */}
+      <section className="bg-emerald py-16 text-ivory relative overflow-hidden">
+        {/* Soft saffron blob */}
+        <div className="absolute -top-20 -right-20 h-60 w-60 rounded-full bg-saffron/20 blur-3xl" />
+        <div className="container mx-auto px-4 max-w-5xl relative">
           <div className="text-center mb-10">
             <p className="font-tajawal text-sm font-bold text-saffron mb-2">السؤال اللي تسأله كل وحدة</p>
-            <h2 className="font-tajawal font-black text-3xl md:text-4xl">
+            <h2 className="font-tajawal font-black text-3xl md:text-4xl text-white">
               متى أشوف نتيجة؟
             </h2>
+            <p className="mt-3 font-tajawal text-base text-white/75 max-w-xl mx-auto">
+              مرحلة بمرحلة — هذا اللي راح يصير لكِ
+            </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {timeline.map((step, i) => (
               <div
                 key={step.when}
-                className="relative rounded-2xl bg-white/10 p-5 text-center backdrop-blur-sm border border-white/15"
+                className="relative rounded-2xl bg-white p-5 text-center shadow-[0_18px_42px_rgba(0,0,0,0.18)]"
               >
-                <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-saffron font-tajawal text-base font-black text-emerald">
+                <div className="mb-3 inline-flex h-12 w-12 items-center justify-center rounded-full bg-emerald font-tajawal text-lg font-black text-saffron shadow-md">
                   {i + 1}
                 </div>
-                <p className="font-tajawal text-sm font-bold text-saffron">
+                <p className="font-tajawal text-xs font-bold text-saffron uppercase tracking-wide">
                   {step.when}
                 </p>
-                <p className="mt-2 font-tajawal text-base font-bold text-white">
+                <p className="mt-2 font-tajawal text-base font-black text-emerald leading-tight">
                   {step.result}
                 </p>
               </div>
             ))}
           </div>
-          <p className="mt-8 text-center font-tajawal text-sm text-white/70">
-            للنتيجة الكاملة — استمري ٩٠ يوم. عشان كذا ٣ علب هي الأنصح.
-          </p>
+          <div className="mt-10 rounded-2xl bg-saffron/15 border border-saffron/30 p-5 text-center">
+            <p className="font-tajawal text-base font-bold text-saffron">
+              ⭐ للنتيجة الكاملة — استمري ٩٠ يوم
+            </p>
+            <p className="mt-1 font-tajawal text-sm text-white/80">
+              عشان كذا ٣ علب هي الأنصح — والأكثر توفيرًا.
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* ════ BEFORE / AFTER — emotional contrast ════ */}
+      {/* ════ BEFORE / AFTER — emotional contrast with side-by-side image placeholder ════ */}
       <section className="py-16 bg-ivory">
         <div className="container mx-auto px-4 max-w-5xl">
           <div className="text-center mb-10">
-            <p className="font-tajawal text-sm font-bold text-saffron mb-2">الفرق الحقيقي</p>
+            <p className="font-tajawal text-sm font-bold text-saffron mb-2">الفرق الحقيقي · ليس فيلتر</p>
             <h2 className="font-tajawal font-black text-3xl md:text-4xl text-emerald">
-              قبل {product.nameAr} · وبعدها
+              حياتكِ قبل {product.nameAr} وبعدها
             </h2>
-            <p className="mt-2 font-tajawal text-base text-charcoal/60">
-              [مكان لإضافة صورة Before / After لاحقًا]
+            <p className="mt-3 font-tajawal text-base text-charcoal/60 max-w-xl mx-auto">
+              نتائج حقيقية من نساء سعوديات — بعد ٦٠-٩٠ يوم استمرار
             </p>
           </div>
+
+          {/* IMAGE DIVIDER — before/after photo placeholder */}
+          <div className="mb-8 grid grid-cols-2 gap-3">
+            <div className="relative aspect-square rounded-2xl border-2 border-dashed border-red-300 bg-red-50/40 flex items-center justify-center">
+              <div className="text-center px-3">
+                <p className="text-2xl">📸</p>
+                <p className="mt-1 font-tajawal text-xs font-bold text-red-700">[صورة "قبل"]</p>
+                <p className="font-tajawal text-[10px] text-charcoal/55">وجه طبيعي بدون فلتر</p>
+              </div>
+            </div>
+            <div className="relative aspect-square rounded-2xl border-2 border-dashed border-emerald/40 bg-emerald/5 flex items-center justify-center">
+              <div className="text-center px-3">
+                <p className="text-2xl">📸</p>
+                <p className="mt-1 font-tajawal text-xs font-bold text-emerald">[صورة "بعد ٩٠ يوم"]</p>
+                <p className="font-tajawal text-[10px] text-charcoal/55">نفس الإضاءة، نفس الزاوية</p>
+              </div>
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {/* BEFORE */}
             <div className="rounded-3xl border-2 border-red-200 bg-red-50/40 p-6">
               <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-red-100 px-3 py-1">
                 <span className="text-base">😔</span>
-                <p className="font-tajawal text-xs font-black text-red-700">قبل</p>
+                <p className="font-tajawal text-xs font-black text-red-700">حياتكِ اليوم</p>
               </div>
               <ul className="flex flex-col gap-3">
                 {beforeAfter.before.map((item) => (
@@ -359,10 +405,13 @@ export function PdpClient({
               </ul>
             </div>
             {/* AFTER */}
-            <div className="rounded-3xl border-2 border-emerald/30 bg-[#F3FAF6] p-6 shadow-[0_18px_42px_rgba(18,107,82,0.10)]">
+            <div className="rounded-3xl border-2 border-emerald/40 bg-[#F3FAF6] p-6 shadow-[0_18px_42px_rgba(18,107,82,0.15)] relative">
+              <div className="absolute -top-3 right-6 rounded-full bg-saffron px-3 py-1 font-tajawal text-[10px] font-black text-emerald shadow">
+                ⭐ هدفكِ
+              </div>
               <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-emerald px-3 py-1">
                 <span className="text-base">✨</span>
-                <p className="font-tajawal text-xs font-black text-white">بعد ٣٠-٩٠ يوم</p>
+                <p className="font-tajawal text-xs font-black text-white">حياتكِ بعد ٩٠ يوم</p>
               </div>
               <ul className="flex flex-col gap-3">
                 {beforeAfter.after.map((item) => (
@@ -480,6 +529,23 @@ export function PdpClient({
         </div>
       </section>
 
+      {/* ════ IMAGE DIVIDER — happy customer / results montage ════ */}
+      <section className="bg-stone-50 py-10">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="relative aspect-[21/9] rounded-3xl border-2 border-dashed border-saffron/40 bg-saffron/5 overflow-hidden flex items-center justify-center">
+            <div className="text-center px-4">
+              <p className="font-tajawal text-2xl">📸</p>
+              <p className="mt-2 font-tajawal text-sm font-bold text-emerald">
+                [مكان لصورة عميلة سعيدة — Happy customer]
+              </p>
+              <p className="mt-1 font-tajawal text-xs text-charcoal/55">
+                أو كولاج صور قبل/بعد من عدة عميلات
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ════ REVIEWS ════ */}
       <section className="py-16 bg-ivory">
         <div className="container mx-auto px-4 max-w-3xl">
@@ -544,9 +610,94 @@ export function PdpClient({
         </div>
       </section>
 
+      {/* ════ HIGH-AOV BUNDLE — Beauty Ritual Box (3 products together) ════ */}
+      <section className="py-16 bg-gradient-to-br from-[#FFF7E6] via-ivory to-[#FFEFD9]">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="text-center mb-8">
+            <span className="inline-block rounded-full bg-emerald px-4 py-1.5 font-tajawal text-xs font-black text-saffron mb-3">
+              💎 الطقس الكامل
+            </span>
+            <h2 className="font-tajawal font-black text-3xl md:text-4xl text-emerald leading-tight">
+              صندوق الجمال الكامل
+            </h2>
+            <p className="mt-3 font-tajawal text-base text-charcoal/70 max-w-2xl mx-auto">
+              ٣ منتجات تشتغل سوا · بشرة + هالات + شعر · كأنها روتين سبا في علبة
+            </p>
+          </div>
+
+          <div className="rounded-3xl bg-white border-2 border-saffron/30 p-6 md:p-8 shadow-[0_24px_60px_rgba(18,107,82,0.15)]">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+              {/* Visual / image placeholder */}
+              <div className="relative aspect-square rounded-2xl border-2 border-dashed border-emerald/25 bg-emerald/5 flex items-center justify-center">
+                <div className="text-center px-4">
+                  <p className="text-4xl mb-2">🎁</p>
+                  <p className="font-tajawal text-sm font-bold text-emerald">
+                    [صورة الـ ٣ منتجات معًا]
+                  </p>
+                  <p className="mt-1 font-tajawal text-xs text-charcoal/55">
+                    حبّة نضرة + حبّة بريق + حبّة جذر — بكوكب موحّد
+                  </p>
+                </div>
+              </div>
+
+              {/* Copy + CTA */}
+              <div className="flex flex-col gap-4">
+                <ul className="flex flex-col gap-2.5">
+                  {[
+                    'بشرة مشدودة وأقل تجاعيد — حبّة نضرة',
+                    'هالات أفتح وعيون متحمّسة — حبّة بريق',
+                    'شعر أكثف ويوقف التساقط — حبّة جذر',
+                  ].map((item) => (
+                    <li key={item} className="flex items-start gap-2 font-tajawal text-sm text-charcoal">
+                      <span className="mt-0.5 text-emerald font-black">✓</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="rounded-2xl bg-emerald/5 border border-emerald/15 p-4">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="font-tajawal text-sm text-charcoal/60 line-through">
+                      ٥٩٧ ر.س
+                    </span>
+                    <span className="rounded-full bg-saffron px-2.5 py-0.5 font-tajawal text-[11px] font-black text-emerald">
+                      وفّري ١٠٠ ر.س
+                    </span>
+                  </div>
+                  <p className="font-tajawal text-3xl font-black text-emerald">
+                    ٤٩٩ ر.س
+                  </p>
+                  <p className="mt-1 font-tajawal text-xs text-charcoal/60">
+                    شامل الشحن · يكفي شهر كامل من الـ ٣ منتجات
+                  </p>
+                </div>
+
+                <a href="/collection">
+                  <Button
+                    variant="primary"
+                    size="lg"
+                    fullWidth
+                    className="h-14 text-base shadow-[0_18px_42px_rgba(18,107,82,0.30)]"
+                  >
+                    اطلبي الصندوق الكامل · ٤٩٩ ر.س
+                  </Button>
+                </a>
+
+                <p className="text-center font-tajawal text-[11px] text-charcoal/55">
+                  💵 دفع عند الاستلام · 🚚 شحن مجاني · ↩️ ضمان ١٤ يوم
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ════ FINAL CTA ════ */}
       <section className="py-16 bg-emerald text-ivory text-center">
         <div className="container mx-auto px-4 max-w-2xl">
+          <p className="font-tajawal text-sm font-bold text-saffron mb-3">
+            ⏰ آخر فرصة — السعر يرجع لـ ٢٤٩ ر.س قريبًا
+          </p>
           <h2 className="font-tajawal font-black text-3xl md:text-4xl mb-4">
             جاهزة تجرّبين {product.nameAr}؟
           </h2>

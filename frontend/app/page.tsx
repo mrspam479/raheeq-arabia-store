@@ -172,6 +172,96 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ══ HIGH-AOV BUNDLE — Beauty Ritual Box ═══════════ */}
+      <section className="border-b border-[#EAE0D0] bg-gradient-to-br from-[#FFF7E6] via-ivory to-[#FFEFD9] px-4 py-20">
+        <div className="container mx-auto max-w-5xl">
+          <div className="mb-8 text-center">
+            <span className="mb-3 inline-block rounded-full bg-emerald px-4 py-1.5 font-tajawal text-xs font-black text-saffron">
+              💎 العرض الأقوى
+            </span>
+            <h2 className="font-tajawal text-3xl font-black leading-tight text-emerald md:text-4xl">
+              صندوق الجمال الكامل
+            </h2>
+            <p className="mx-auto mt-3 max-w-2xl font-tajawal text-base text-charcoal/70">
+              الـ ٣ منتجات معًا — لأن جمالكِ ما هو جزء واحد
+            </p>
+          </div>
+
+          <div className="rounded-[28px] border-2 border-saffron/30 bg-white p-6 shadow-[0_24px_60px_rgba(18,107,82,0.15)] md:p-10">
+            <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-2">
+              {/* Image placeholder */}
+              <div className="relative flex aspect-square items-center justify-center rounded-3xl border-2 border-dashed border-emerald/25 bg-emerald/5">
+                <div className="px-4 text-center">
+                  <p className="mb-2 text-5xl">🎁</p>
+                  <p className="font-tajawal text-sm font-bold text-emerald">
+                    [صورة الـ ٣ منتجات معًا]
+                  </p>
+                  <p className="mt-1 font-tajawal text-xs text-charcoal/55">
+                    نضرة + بريق + جذر بتغليف فاخر
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-5">
+                <ul className="flex flex-col gap-3">
+                  {[
+                    { icon: '✨', label: 'حبّة نضرة', desc: 'بشرة مشدودة وأقل تجاعيد' },
+                    { icon: '👁️', label: 'حبّة بريق', desc: 'هالات أفتح وعيون متحمّسة' },
+                    { icon: '💇‍♀️', label: 'حبّة جذر', desc: 'شعر أكثف ويوقف التساقط' },
+                  ].map((item) => (
+                    <li key={item.label} className="flex items-start gap-3 rounded-2xl border border-emerald/15 bg-[#F3FAF6] p-3">
+                      <span className="text-2xl">{item.icon}</span>
+                      <div>
+                        <p className="font-tajawal text-sm font-black text-emerald">{item.label}</p>
+                        <p className="font-tajawal text-xs text-charcoal/70">{item.desc}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="rounded-2xl border border-emerald/15 bg-emerald/5 p-4">
+                  <div className="mb-1 flex items-center justify-between">
+                    <span className="font-tajawal text-sm text-charcoal/55 line-through">٥٩٧ ر.س</span>
+                    <span className="rounded-full bg-saffron px-2.5 py-0.5 font-tajawal text-[11px] font-black text-emerald">
+                      وفّري ١٠٠ ر.س
+                    </span>
+                  </div>
+                  <p className="font-tajawal text-3xl font-black text-emerald">٤٩٩ ر.س</p>
+                  <p className="mt-1 font-tajawal text-xs text-charcoal/60">
+                    شحن مجاني · يكفي شهر كامل من الـ ٣ منتجات
+                  </p>
+                </div>
+
+                <Button size="lg" variant="primary" asChild className="h-14 px-8 text-base font-black shadow-[0_18px_42px_rgba(18,107,82,0.30)]">
+                  <Link href="/collection">اطلبي الصندوق الكامل · ٤٩٩ ر.س</Link>
+                </Button>
+
+                <p className="text-center font-tajawal text-[11px] text-charcoal/55">
+                  💵 دفع عند الاستلام · 🚚 شحن مجاني · ↩️ ضمان ١٤ يوم
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ══ LIFESTYLE IMAGE DIVIDER ═══════════════════════ */}
+      <section className="border-b border-[#EAE0D0] bg-white px-4 py-12">
+        <div className="container mx-auto max-w-5xl">
+          <div className="relative flex aspect-[21/9] items-center justify-center overflow-hidden rounded-3xl border-2 border-dashed border-emerald/25 bg-emerald/5">
+            <div className="px-4 text-center">
+              <p className="font-tajawal text-2xl">📸</p>
+              <p className="mt-2 font-tajawal text-sm font-bold text-emerald">
+                [مكان لصورة لايف ستايل — Lifestyle banner]
+              </p>
+              <p className="mt-1 font-tajawal text-xs text-charcoal/55">
+                صورة عريضة: امرأة سعودية تستمتع بفطورها مع علب رحيق
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ══ HOW IT WORKS ══════════════════════════════════ */}
       <section className="border-b border-[#EAE0D0] px-4 py-20">
         <div className="container mx-auto max-w-5xl">
