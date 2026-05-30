@@ -66,14 +66,16 @@ async def create_order(
 
     client_ip = _get_client_ip(request)
 
-    # Fraud check — block TOR/hosting IPs only (VPN users in KSA are allowed)
+    # Strict KSA-only fraud check — blocks non-Saudi IPs, VPN, proxy, hosting, TOR.
+    # Whitelisted phones (e.g. 050000001) bypass for owner / QA testing.
+    from app.services.geocheck import GEO_BLOCK_MESSAGE
     geo_result = await geocheck_ip(client_ip, phone=payload.customer.phone)
     if not geo_result.allowed:
         raise HTTPException(
             status_code=403,
             detail={
                 "code": "GEO_BLOCKED",
-                "message": "عذرًا، لا يمكنك إتمام الطلب من هذا الاتصال. حاولي من شبكة أخرى.",
+                "message": GEO_BLOCK_MESSAGE,
                 "reason": geo_result.reason,
             },
         )

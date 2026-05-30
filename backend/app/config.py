@@ -51,12 +51,17 @@ class Settings(BaseSettings):
 
     SFDA_BADGE_ENABLED: bool = False
 
-    # MaxMind GeoIP2 — block non-KSA / VPN / suspicious IPs
+    # MaxMind GeoIP2 — STRICT KSA-only blocking + VPN/proxy detection.
+    # 1) Web service mode: set MAXMIND_ACCOUNT_ID + MAXMIND_LICENSE_KEY (recommended).
+    # 2) Local DB mode (optional, faster, cheaper at scale): set MAXMIND_DB_PATH to
+    #    a local GeoIP2-Country.mmdb / GeoIP2-Anonymous-IP.mmdb file.
     MAXMIND_ACCOUNT_ID: str = ""
     MAXMIND_LICENSE_KEY: str = ""
+    MAXMIND_DB_PATH: str = ""
     ENABLE_IP_FRAUD_CHECK: bool = True
-    # Comma-separated phones that bypass the IP fraud check (for testing)
-    WHITELISTED_PHONES: str = "050000007,055000000"
+    # Comma-separated phones that bypass the IP fraud check (owner / QA testing).
+    # 050000001 is the default test number — use it on the live site to make a fake order.
+    WHITELISTED_PHONES: str = "050000001,050000007,055000000"
 
 
 settings = Settings()
