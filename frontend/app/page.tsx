@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { StarRating } from '@/components/ui/StarRating';
 import { COPY } from '@/data/copy';
-import { PRODUCTS, MAIN_PRODUCTS } from '@/data/products';
+import { MAIN_PRODUCTS } from '@/data/products';
 import { formatSar } from '@/lib/price';
 import { GLOBAL_REVIEWS, REVIEW_AGGREGATE } from '@/data/reviews';
 import { GLOBAL_FAQS } from '@/data/faqs';
