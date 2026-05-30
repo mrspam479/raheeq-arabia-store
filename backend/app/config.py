@@ -61,7 +61,7 @@ class Settings(BaseSettings):
     ENABLE_IP_FRAUD_CHECK: bool = True
     # Comma-separated phones that bypass the IP fraud check (owner / QA testing).
     # 050000001 is the default test number — use it on the live site to make a fake order.
-    WHITELISTED_PHONES: str = "050000001,050000007,055000000"
+    WHITELISTED_PHONES: str = "0500000001,050000001,050000007,055000000"
 
 
 settings = Settings()
