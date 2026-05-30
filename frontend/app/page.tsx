@@ -4,7 +4,8 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { StarRating } from '@/components/ui/StarRating';
 import { COPY } from '@/data/copy';
-import { PRODUCTS } from '@/data/products';
+import { PRODUCTS, MAIN_PRODUCTS } from '@/data/products';
+import { formatSar } from '@/lib/price';
 import { GLOBAL_REVIEWS, REVIEW_AGGREGATE } from '@/data/reviews';
 import { GLOBAL_FAQS } from '@/data/faqs';
 import { formatNumber } from '@/lib/price';
@@ -74,7 +75,7 @@ export default function HomePage() {
 
             <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row md:justify-start">
               <Button size="lg" variant="primary" asChild className="h-16 px-10 text-xl font-black">
-                <Link href="/collection">اطلبي حبّتكِ — ١٩٩ ر.س</Link>
+                <Link href="/collection">اطلبي حبّتكِ — من {formatSar(199)}</Link>
               </Button>
               <div className="text-center sm:text-right">
                 <p className="font-tajawal text-sm font-bold text-emerald">💵 دفع عند الاستلام</p>
@@ -89,37 +90,35 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Product cards */}
+          {/* Hero visual — single image, no duplicate product names */}
           <div className="relative mx-auto w-full max-w-[460px]">
-            <div className="relative grid grid-cols-3 items-end gap-3">
-              {PRODUCTS.map((product, index) => (
-                <Link
-                  key={product.slug}
-                  href={`/p/${product.slug}`}
-                  className={`group rounded-[24px] border-2 border-[#E0D4C0] bg-[#FAFAF8] p-2 pb-3 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-emerald/40 hover:shadow-md ${
-                    index === 1 ? 'translate-y-6 md:translate-y-8' : ''
-                  }`}
-                >
-                  <div className="relative aspect-[3/4] overflow-hidden rounded-xl">
-                    <Image
-                      src={product.coverImageUrl}
-                      alt={product.nameAr}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      sizes="(max-width: 768px) 30vw, 160px"
-                    />
-                  </div>
-                  <p className="mt-2 text-center font-tajawal text-xs font-black leading-tight text-emerald md:text-sm">
-                    {product.nameAr}
-                  </p>
-                </Link>
-              ))}
-            </div>
-            <div className="mx-auto mt-10 max-w-xs rounded-2xl border-2 border-saffron/30 bg-[#FAFAF8] p-4 text-center shadow-sm">
-              <p className="font-tajawal text-xs font-bold text-saffron">⭐ الأكثر طلبًا</p>
-              <p className="mt-0.5 font-tajawal text-base font-black text-emerald">Glow Kit · 3 علب بـ 349 SAR</p>
-              <p className="mt-0.5 font-tajawal text-xs text-charcoal/50">وفّري 248 SAR مقارنة بالشراء منفرد</p>
-            </div>
+            <Link
+              href="/p/bundle-glow-trio"
+              prefetch
+              className="group block overflow-hidden rounded-[28px] border-2 border-[#E0D4C0] bg-[#FAFAF8] shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-emerald/40 hover:shadow-md"
+            >
+              <div className="relative aspect-square overflow-hidden">
+                <Image
+                  src="/images/products/habba-nadra/cover.png"
+                  alt="رحيق — صندوق الجمال الكامل"
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  sizes="(max-width: 768px) 80vw, 460px"
+                  priority
+                />
+                <span className="absolute top-3 right-3 rounded-full bg-saffron px-3 py-1 font-tajawal text-xs font-black text-emerald shadow">
+                  💎 الأكثر طلبًا
+                </span>
+              </div>
+              <div className="p-4 text-center">
+                <p className="font-tajawal text-base font-black text-emerald">
+                  صندوق الجمال الكامل
+                </p>
+                <p className="mt-1 font-tajawal text-xs text-charcoal/60">
+                  بشرة + هالات + شعر · {formatSar(499)} بدلًا من {formatSar(597)}
+                </p>
+              </div>
+            </Link>
           </div>
         </div>
       </section>
@@ -138,10 +137,11 @@ export default function HomePage() {
           </div>
 
           <div className="no-scrollbar -mx-4 flex snap-x snap-mandatory gap-5 overflow-x-auto px-4 pb-4 md:mx-0 md:grid md:grid-cols-3 md:overflow-visible md:px-0 md:pb-0">
-            {PRODUCTS.map((product) => (
+            {MAIN_PRODUCTS.map((product) => (
               <Link
                 key={product.slug}
                 href={`/p/${product.slug}`}
+                prefetch
                 className="group min-w-[82%] snap-center overflow-hidden rounded-[28px] border-2 border-[#E0D4C0] bg-[#FAFAF8] transition-all duration-300 hover:border-emerald/40 hover:shadow-lg md:min-w-0"
               >
                 <div className="relative aspect-square overflow-hidden">
@@ -158,7 +158,7 @@ export default function HomePage() {
                   <p className="mt-1 mb-3 font-tajawal text-sm text-charcoal/65 line-clamp-2">{product.heroTagAr}</p>
                   <div className="flex items-center justify-between">
                     <span className="font-tajawal font-bold text-emerald">
-                      {COPY.HOME.FROM_PRICE.replace('{price}', '199')}
+                      من {formatSar(199)}
                     </span>
                     <StarRating value={product.ratingValue} size="sm" />
                   </div>
@@ -219,25 +219,37 @@ export default function HomePage() {
                   ))}
                 </ul>
 
-                <div className="rounded-2xl border border-emerald/15 bg-emerald/5 p-4">
-                  <div className="mb-1 flex items-center justify-between">
-                    <span className="font-tajawal text-sm text-charcoal/55 line-through">٥٩٧ ر.س</span>
-                    <span className="rounded-full bg-saffron px-2.5 py-0.5 font-tajawal text-[11px] font-black text-emerald">
-                      وفّري ١٠٠ ر.س
+                <div className="rounded-2xl border border-emerald/15 bg-emerald/5 p-4 space-y-3">
+                  <div className="flex items-center justify-between border-b border-emerald/10 pb-2">
+                    <span className="font-tajawal text-sm text-charcoal/70">شراء فردي للـ 3</span>
+                    <span className="font-tajawal text-base text-charcoal/55 line-through">
+                      {formatSar(597)}
                     </span>
                   </div>
-                  <p className="font-tajawal text-3xl font-black text-emerald">٤٩٩ ر.س</p>
-                  <p className="mt-1 font-tajawal text-xs text-charcoal/60">
-                    شحن مجاني · يكفي شهر كامل من الـ ٣ منتجات
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-tajawal text-sm font-bold text-emerald">سعر الصندوق</p>
+                      <p className="font-tajawal text-[11px] font-bold text-saffron">
+                        ✨ توفّرين {formatSar(100)}
+                      </p>
+                    </div>
+                    <span className="font-tajawal text-3xl font-black text-emerald">
+                      {formatSar(499)}
+                    </span>
+                  </div>
+                  <p className="font-tajawal text-xs text-charcoal/60 border-t border-emerald/10 pt-2">
+                    🚚 شحن مجاني · يكفي شهر كامل
                   </p>
                 </div>
 
                 <Button size="lg" variant="primary" asChild className="h-14 px-8 text-base font-black shadow-[0_18px_42px_rgba(18,107,82,0.30)]">
-                  <Link href="/collection">اطلبي الصندوق الكامل · ٤٩٩ ر.س</Link>
+                  <Link href="/p/bundle-glow-trio" prefetch>
+                    اطلبي الصندوق · {formatSar(499)}
+                  </Link>
                 </Button>
 
                 <p className="text-center font-tajawal text-[11px] text-charcoal/55">
-                  💵 دفع عند الاستلام · 🚚 شحن مجاني · ↩️ ضمان ١٤ يوم
+                  💵 دفع عند الاستلام · 🚚 شحن مجاني · ↩️ ضمان 14 يوم
                 </p>
               </div>
             </div>

@@ -5,9 +5,11 @@ import Image from 'next/image';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { StarRating } from '@/components/ui/StarRating';
+import Link from 'next/link';
 import { COPY } from '@/data/copy';
 import { formatSar } from '@/lib/price';
 import { useCartStore } from '@/store/cart';
+import { PRODUCT_CROSS_SELLS, getProductBySlug } from '@/data/products';
 import { showToast } from '@/components/ui/Toast';
 import { trackAddToCart, trackViewContent } from '@/lib/analytics';
 import { cn } from '@/lib/cn';
@@ -610,37 +612,36 @@ export function PdpClient({
         </div>
       </section>
 
-      {/* ════ HIGH-AOV BUNDLE — Beauty Ritual Box (3 products together) ════ */}
+      {/* ════ HIGH-AOV BUNDLE — only on non-bundle PDPs ════ */}
+      {product.slug !== 'bundle-glow-trio' && (
       <section className="py-16 bg-gradient-to-br from-[#FFF7E6] via-ivory to-[#FFEFD9]">
         <div className="container mx-auto px-4 max-w-5xl">
           <div className="text-center mb-8">
             <span className="inline-block rounded-full bg-emerald px-4 py-1.5 font-tajawal text-xs font-black text-saffron mb-3">
-              💎 الطقس الكامل
+              💎 العرض الأقوى
             </span>
             <h2 className="font-tajawal font-black text-3xl md:text-4xl text-emerald leading-tight">
               صندوق الجمال الكامل
             </h2>
             <p className="mt-3 font-tajawal text-base text-charcoal/70 max-w-2xl mx-auto">
-              ٣ منتجات تشتغل سوا · بشرة + هالات + شعر · كأنها روتين سبا في علبة
+              خذي الـ 3 منتجات مع بعض ووفّري 100 ريال سعودي
             </p>
           </div>
 
           <div className="rounded-3xl bg-white border-2 border-saffron/30 p-6 md:p-8 shadow-[0_24px_60px_rgba(18,107,82,0.15)]">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-              {/* Visual / image placeholder */}
               <div className="relative aspect-square rounded-2xl border-2 border-dashed border-emerald/25 bg-emerald/5 flex items-center justify-center">
                 <div className="text-center px-4">
                   <p className="text-4xl mb-2">🎁</p>
                   <p className="font-tajawal text-sm font-bold text-emerald">
-                    [صورة الـ ٣ منتجات معًا]
+                    [صورة الـ 3 منتجات معًا]
                   </p>
                   <p className="mt-1 font-tajawal text-xs text-charcoal/55">
-                    حبّة نضرة + حبّة بريق + حبّة جذر — بكوكب موحّد
+                    نضرة + بريق + جذر — صندوق فاخر
                   </p>
                 </div>
               </div>
 
-              {/* Copy + CTA */}
               <div className="flex flex-col gap-4">
                 <ul className="flex flex-col gap-2.5">
                   {[
@@ -655,42 +656,107 @@ export function PdpClient({
                   ))}
                 </ul>
 
-                <div className="rounded-2xl bg-emerald/5 border border-emerald/15 p-4">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="font-tajawal text-sm text-charcoal/60 line-through">
-                      ٥٩٧ ر.س
-                    </span>
-                    <span className="rounded-full bg-saffron px-2.5 py-0.5 font-tajawal text-[11px] font-black text-emerald">
-                      وفّري ١٠٠ ر.س
+                {/* PRICE COMPARISON — clear "before vs after" */}
+                <div className="rounded-2xl bg-emerald/5 border border-emerald/15 p-4 space-y-3">
+                  <div className="flex items-center justify-between border-b border-emerald/10 pb-2">
+                    <span className="font-tajawal text-sm text-charcoal/70">شراء فردي للـ 3</span>
+                    <span className="font-tajawal text-base text-charcoal/55 line-through">
+                      {formatSar(597)}
                     </span>
                   </div>
-                  <p className="font-tajawal text-3xl font-black text-emerald">
-                    ٤٩٩ ر.س
-                  </p>
-                  <p className="mt-1 font-tajawal text-xs text-charcoal/60">
-                    شامل الشحن · يكفي شهر كامل من الـ ٣ منتجات
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-tajawal text-sm font-bold text-emerald">سعر الصندوق</p>
+                      <p className="font-tajawal text-[11px] text-saffron font-bold">
+                        ✨ توفّرين {formatSar(100)}
+                      </p>
+                    </div>
+                    <span className="font-tajawal text-3xl font-black text-emerald">
+                      {formatSar(499)}
+                    </span>
+                  </div>
+                  <p className="font-tajawal text-xs text-charcoal/60 border-t border-emerald/10 pt-2">
+                    🚚 شحن مجاني · يكفي شهر كامل
                   </p>
                 </div>
 
-                <a href="/collection">
+                <Link href="/p/bundle-glow-trio">
                   <Button
                     variant="primary"
                     size="lg"
                     fullWidth
                     className="h-14 text-base shadow-[0_18px_42px_rgba(18,107,82,0.30)]"
                   >
-                    اطلبي الصندوق الكامل · ٤٩٩ ر.س
+                    اطلبي الصندوق · {formatSar(499)}
                   </Button>
-                </a>
+                </Link>
 
                 <p className="text-center font-tajawal text-[11px] text-charcoal/55">
-                  💵 دفع عند الاستلام · 🚚 شحن مجاني · ↩️ ضمان ١٤ يوم
+                  💵 دفع عند الاستلام · 🚚 شحن مجاني · ↩️ ضمان 14 يوم
                 </p>
               </div>
             </div>
           </div>
         </div>
       </section>
+      )}
+
+      {/* ════ YOU MAY ALSO LIKE — cross-sell ════ */}
+      {(() => {
+        const crossSlugs = PRODUCT_CROSS_SELLS[product.slug] ?? [];
+        const crossProducts = crossSlugs
+          .map((s) => getProductBySlug(s))
+          .filter((p): p is NonNullable<typeof p> => Boolean(p));
+        if (crossProducts.length === 0) return null;
+        return (
+          <section className="py-16 bg-white">
+            <div className="container mx-auto px-4 max-w-5xl">
+              <div className="text-center mb-10">
+                <p className="font-tajawal text-sm font-bold text-saffron mb-2">يكمّل روتينكِ</p>
+                <h2 className="font-tajawal font-black text-3xl md:text-4xl text-emerald">
+                  ممكن تعجبكِ كمان
+                </h2>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                {crossProducts.map((cp) => (
+                  <Link
+                    key={cp.slug}
+                    href={`/p/${cp.slug}`}
+                    prefetch
+                    className="group flex gap-4 rounded-2xl border border-stone-200 bg-white p-4 hover:border-emerald/40 hover:shadow-lg transition-all"
+                  >
+                    <div className="relative w-28 h-28 shrink-0 rounded-xl overflow-hidden bg-stone-100">
+                      <Image
+                        src={cp.coverImageUrl}
+                        alt={cp.nameAr}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform"
+                        sizes="112px"
+                      />
+                    </div>
+                    <div className="flex-1 flex flex-col justify-between">
+                      <div>
+                        <h3 className="font-tajawal font-black text-lg text-emerald">{cp.nameAr}</h3>
+                        <p className="mt-1 font-tajawal text-xs text-charcoal/65 line-clamp-2">
+                          {cp.heroTagAr}
+                        </p>
+                      </div>
+                      <div className="flex items-center justify-between mt-2">
+                        <span className="font-tajawal text-sm font-bold text-emerald">
+                          من {formatSar(cp.offers[0]?.priceSar ?? 199)}
+                        </span>
+                        <span className="font-tajawal text-xs font-bold text-saffron group-hover:translate-x-1 transition-transform">
+                          شوفي ←
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      })()}
 
       {/* ════ FINAL CTA ════ */}
       <section className="py-16 bg-emerald text-ivory text-center">

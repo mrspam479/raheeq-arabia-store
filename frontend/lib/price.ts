@@ -28,7 +28,7 @@ export function recomputeLineForTier(line: CartLine, tier: 1 | 2 | 3): CartLine 
 }
 
 export function formatSar(amount: number): string {
-  return `${amount.toLocaleString('en-US')} SAR`;
+  return `${amount.toLocaleString('en-US')} ريال سعودي`;
 }
 
 export function formatSarLatin(amount: number): string {

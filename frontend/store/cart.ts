@@ -5,7 +5,8 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { recomputeLineForTier } from '@/lib/price';
-import type { CartLine } from '@/lib/types';
+import { PRODUCTS } from '@/data/products';
+import type { CartLine, OfferCode } from '@/lib/types';
 
 interface CartState {
   lines: CartLine[];
@@ -75,6 +76,20 @@ export const useCartStore = create<CartState>()(
         set((state) => ({
           lines: state.lines.map((l) => {
             if (l.productId !== productId) return l;
+            // Prefer the product's own offers (handles bundle SKU with custom prices)
+            const product = PRODUCTS.find((p) => p.slug === productId);
+            const offerCode = `T${tier}` as OfferCode;
+            const productOffer = product?.offers.find((o) => o.code === offerCode);
+            if (productOffer) {
+              return {
+                ...l,
+                tier,
+                offerCode: productOffer.code,
+                quantity: productOffer.quantity,
+                unitPrice: productOffer.priceSar / productOffer.quantity,
+                totalPrice: productOffer.priceSar,
+              };
+            }
             return recomputeLineForTier(l, tier);
           }),
         }));

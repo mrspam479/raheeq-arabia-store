@@ -66,6 +66,26 @@ PRODUCTS = [
         "seo_title_ar": "حبّة جذر — مستخلص تفاح أنوركا + بيوتين لشعر أكثف وأقوى · رحيق",
         "seo_description_ar": "مكوّن إيطالي أعاد نمو الشعر في ٢٥٠ امرأة خلال ٦٠ يومًا + بيوتين ١٠,٠٠٠ مكغ. الدفع عند الاستلام.",
     },
+    {
+        "slug": "bundle-glow-trio",
+        "name_ar": "صندوق الجمال الكامل",
+        "working_name": "Glow Trio Bundle",
+        "hero_tag_ar": "بشرة + هالات + شعر · الـ 3 منتجات بـ 499 ريال سعودي بدلًا من 597.",
+        "short_description_ar": "الـ 3 منتجات اللي تحتاجينها لجمالكِ الكامل، في صندوق واحد. سعر أقل من الشراء الفردي بـ 100 ريال سعودي.",
+        "long_description_ar": "بدل ما تطلبين كل منتج بـ 199 ريال سعودي (المجموع 597)، خذي الصندوق الكامل بـ 499 ريال سعودي. حبّة نضرة لبشرتكِ + حبّة بريق لهالاتكِ + حبّة جذر لشعركِ — كل شيء يشتغل سوا لمدة شهر كامل.",
+        "rating_value": Decimal("4.9"),
+        "review_count": 142,
+        "stock_label_ar": "بقي 12 صندوق من دفعة هذا الأسبوع.",
+        "cover_image_url": "/images/products/habba-nadra/cover.png",
+        "gallery_image_urls": [
+            "/images/products/habba-nadra/cover.png",
+            "/images/products/habba-bareeq/cover.png",
+            "/images/products/habba-jathr/cover.png",
+        ],
+        "sort_order": 3,
+        "seo_title_ar": "صندوق الجمال الكامل — بشرة + هالات + شعر بـ 499 ريال سعودي · رحيق",
+        "seo_description_ar": "الـ 3 منتجات في صندوق واحد بـ 499 ريال سعودي بدلًا من 597. شحن مجاني · دفع عند الاستلام.",
+    },
 ]
 
 INGREDIENTS: dict[str, list[dict]] = {
@@ -90,6 +110,11 @@ INGREDIENTS: dict[str, list[dict]] = {
         {"name_ar": "فيتامين D3", "name_en": "Vitamin D3 (cholecalciferol)", "dose": "20 mcg (800 IU)", "what_it_does_ar": "يدعم صحة البصيلات. ٨٠٪ من السعوديات عندهن نقص — وهذا مرتبط بالتساقط.", "science_source_short": "Rasheed et al., 2013, J Cosmet Dermatol.", "sort_order": 3, "thumb_image_url": None},
         {"name_ar": "حمض الفوليك", "name_en": "Folic Acid (Vitamin B9)", "dose": "400 mcg", "what_it_does_ar": "يُسرّع نمو الشعر من الأساس.", "science_source_short": "EFSA: folate contributes to normal cell division.", "sort_order": 4, "thumb_image_url": None},
     ],
+    "bundle-glow-trio": [
+        {"name_ar": "حبّة نضرة", "name_en": "Habba Nadra — Anti-Wrinkle", "dose": "علبة كاملة", "what_it_does_ar": "أستازانتين + كولاجين بحري + فيتامين سي + هيالورونيك. لبشرة أكثر نضارة وتجاعيد أقل.", "science_source_short": "Tominaga 2017, Choi 2014.", "sort_order": 0, "thumb_image_url": "/images/products/habba-nadra/cover.png"},
+        {"name_ar": "حبّة بريق", "name_en": "Habba Bareeq — Dark Circles", "dose": "علبة كاملة", "what_it_does_ar": "فيتامين سي + حديد bisglycinate + نياسيناميد. تهاجم الهالات من 3 جهات.", "science_source_short": "Pinnell 2003, Hallberg 1995.", "sort_order": 1, "thumb_image_url": "/images/products/habba-bareeq/cover.png"},
+        {"name_ar": "حبّة جذر", "name_en": "Habba Jathr — Hair Growth", "dose": "علبة كاملة", "what_it_does_ar": "مستخلص تفاح أنوركا + بيوتين + فيتامين D3 + زنك. لشعر أكثف من الجذر.", "science_source_short": "Tenore 2018.", "sort_order": 2, "thumb_image_url": "/images/products/habba-jathr/cover.png"},
+    ],
 }
 
 OFFERS_TEMPLATE = [
@@ -97,6 +122,15 @@ OFFERS_TEMPLATE = [
     {"code": "T2", "label_ar": "الزوجي", "quantity": 2, "price_sar": Decimal("279"), "is_recommended": False, "sort_order": 1},
     {"code": "T3", "label_ar": "Glow Kit (الأنصح)", "quantity": 3, "price_sar": Decimal("349"), "is_recommended": True, "sort_order": 2},
 ]
+
+# Per-product offer overrides (slug -> offers). Falls back to OFFERS_TEMPLATE.
+OFFERS_BY_SLUG: dict[str, list[dict]] = {
+    "bundle-glow-trio": [
+        {"code": "T1", "label_ar": "صندوق شهر", "quantity": 1, "price_sar": Decimal("499"), "is_recommended": False, "sort_order": 0},
+        {"code": "T2", "label_ar": "صندوقين (شهرين)", "quantity": 2, "price_sar": Decimal("899"), "is_recommended": False, "sort_order": 1},
+        {"code": "T3", "label_ar": "3 صناديق (الأنصح)", "quantity": 3, "price_sar": Decimal("1299"), "is_recommended": True, "sort_order": 2},
+    ],
+}
 
 REVIEWS: dict[str, list[dict]] = {
     "global": [
@@ -152,7 +186,20 @@ FAQS: dict[str, list[dict]] = {
         {"question_ar": "متى يتحسّن اللون؟", "answer_ar": "أفتح قليلًا بعد ٣-٤ أسابيع. فرق واضح بعد ٦٠ يومًا.", "sort_order": 2},
         {"question_ar": "هل آمنة مع الحمل؟", "answer_ar": "لا يُنصح بها — خاصة مع وجود الحديد. استشيري طبيبكِ.", "sort_order": 3},
     ],
+    "bundle-glow-trio": [
+        {"question_ar": "كم يكفي الصندوق؟", "answer_ar": "الصندوق يكفي شهر كامل من الـ 3 منتجات. حبّتين بالصباح من كل واحدة.", "sort_order": 0},
+        {"question_ar": "هل أقدر آخذ الـ 3 مع بعض؟", "answer_ar": "نعم بدون أي مشكلة. كل المكوّنات آمنة مع بعض، وحلال 100%.", "sort_order": 1},
+        {"question_ar": "كم أوفّر مقارنة بالشراء الفردي؟", "answer_ar": "كل منتج بـ 199 ريال سعودي = المجموع 597. الصندوق بـ 499 ريال سعودي. توفير 100 + شحن مجاني.", "sort_order": 2},
+        {"question_ar": "هل الدفع عند الاستلام؟", "answer_ar": "نعم. تدفعين كاش لمندوب التوصيل لما يوصلكِ الصندوق.", "sort_order": 3},
+    ],
 }
+
+BUNDLE_REVIEWS = [
+    {"author_first_name_ar": "نوف", "author_city_ar": "الرياض", "rating": 5, "body_ar": "أخذت الصندوق الكامل أرخص بكثير من الشراء الفردي. بعد شهرين فرق ملحوظ في وجهي وشعري.", "sort_order": 0},
+    {"author_first_name_ar": "دانة", "author_city_ar": "جدة", "rating": 5, "body_ar": "أحلى استثمار سويته لنفسي. الـ 3 منتجات مع بعض = نتيجة شاملة. وفّرت 100 ريال على الصندوق.", "sort_order": 1},
+    {"author_first_name_ar": "ريم", "author_city_ar": "الخبر", "rating": 5, "body_ar": "البكج رهيب جدًا. كل شيء يجي مع بعض، طبّقت الروتين بسهولة. شكرًا رحيق.", "sort_order": 2},
+]
+REVIEWS["bundle-glow-trio"] = BUNDLE_REVIEWS
 
 
 async def run_seed(session: AsyncSession) -> None:
@@ -183,7 +230,8 @@ async def run_seed(session: AsyncSession) -> None:
                 ingredient = Ingredient(product_id=product.id, **ing_data)  # type: ignore[arg-type]
                 session.add(ingredient)
 
-            for offer_data in OFFERS_TEMPLATE:
+            offers_to_create = OFFERS_BY_SLUG.get(slug, OFFERS_TEMPLATE)
+            for offer_data in offers_to_create:
                 offer = Offer(product_id=product.id, **offer_data)
                 session.add(offer)
 

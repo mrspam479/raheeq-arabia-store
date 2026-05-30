@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Badge } from '@/components/ui/Badge';
 import { StarRating } from '@/components/ui/StarRating';
 import { COPY } from '@/data/copy';
-import { PRODUCTS } from '@/data/products';
+import { MAIN_PRODUCTS, BUNDLE_PRODUCT } from '@/data/products';
 import { formatNumber, formatSar } from '@/lib/price';
 
 export const metadata: Metadata = {
@@ -29,13 +29,56 @@ export default function CollectionPage() {
       {/* Product grid */}
       <section className="py-16 bg-ivory">
         <div className="container mx-auto px-4">
+          {/* Bundle hero card — always at the top */}
+          <Link
+            href={`/p/${BUNDLE_PRODUCT.slug}`}
+            prefetch
+            className="group block max-w-5xl mx-auto mb-10 rounded-3xl border-2 border-saffron/40 bg-white p-6 md:p-8 shadow-[0_24px_60px_rgba(18,107,82,0.12)] hover:border-saffron transition-all"
+          >
+            <div className="grid grid-cols-1 md:grid-cols-[1fr_1.4fr] gap-6 items-center">
+              <div className="relative aspect-square rounded-2xl overflow-hidden bg-stone-100">
+                <Image
+                  src={BUNDLE_PRODUCT.coverImageUrl}
+                  alt={BUNDLE_PRODUCT.nameAr}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  sizes="(max-width: 768px) 100vw, 40vw"
+                />
+                <span className="absolute top-3 right-3 rounded-full bg-saffron px-3 py-1 font-tajawal text-xs font-black text-emerald shadow">
+                  💎 الأكثر طلبًا
+                </span>
+              </div>
+              <div>
+                <h2 className="font-tajawal font-black text-3xl text-emerald">{BUNDLE_PRODUCT.nameAr}</h2>
+                <p className="mt-2 font-tajawal text-base text-charcoal/70">{BUNDLE_PRODUCT.heroTagAr}</p>
+                <div className="mt-4 flex items-center gap-3">
+                  <span className="font-tajawal text-2xl font-black text-emerald">{formatSar(499)}</span>
+                  <span className="font-tajawal text-sm text-charcoal/55 line-through">{formatSar(597)}</span>
+                  <span className="rounded-full bg-emerald/10 px-2.5 py-0.5 font-tajawal text-[11px] font-bold text-emerald">
+                    وفّري {formatSar(100)}
+                  </span>
+                </div>
+                <span className="mt-5 inline-flex h-12 items-center justify-center rounded-xl bg-emerald px-6 font-tajawal text-sm font-bold text-white group-hover:bg-emerald/90 transition">
+                  شوفي الصندوق ←
+                </span>
+              </div>
+            </div>
+          </Link>
+
+          {/* OR — divider */}
+          <div className="max-w-5xl mx-auto mb-8 flex items-center gap-3">
+            <div className="flex-1 h-px bg-stone-200" />
+            <span className="font-tajawal text-xs font-bold text-charcoal/50">أو اختاري منتج فردي</span>
+            <div className="flex-1 h-px bg-stone-200" />
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {PRODUCTS.map((product) => (
+            {MAIN_PRODUCTS.map((product) => (
               <article
                 key={product.slug}
                 className="group rounded-2xl border border-stone-200 overflow-hidden hover:shadow-xl hover:border-emerald/30 transition-all duration-300 bg-white flex flex-col"
               >
-                <Link href={`/p/${product.slug}`} className="block relative aspect-square overflow-hidden">
+                <Link href={`/p/${product.slug}`} prefetch className="block relative aspect-square overflow-hidden">
                   <Image
                     src={product.coverImageUrl}
                     alt={product.nameAr}
@@ -46,12 +89,12 @@ export default function CollectionPage() {
                 </Link>
                 <div className="p-6 flex flex-col flex-1 gap-3">
                   <div>
-                    <Link href={`/p/${product.slug}`}>
+                    <Link href={`/p/${product.slug}`} prefetch>
                       <h2 className="font-tajawal font-bold text-2xl text-emerald hover:text-emerald/80 transition-colors">
                         {product.nameAr}
                       </h2>
                     </Link>
-                    <p className="font-cormorant italic text-charcoal/60 mt-0.5">{product.heroTagAr}</p>
+                    <p className="font-tajawal text-sm text-charcoal/60 mt-1 line-clamp-1">{product.heroTagAr}</p>
                   </div>
 
                   <p className="font-tajawal text-sm text-charcoal/70 line-clamp-2 flex-1">
@@ -86,6 +129,7 @@ export default function CollectionPage() {
 
                   <Link
                     href={`/p/${product.slug}`}
+                    prefetch
                     className="mt-1 block w-full py-3 px-4 bg-emerald text-ivory font-tajawal font-semibold text-center rounded-xl hover:bg-emerald/90 transition-colors"
                   >
                     {COPY.CTA.SHOP_NOW}
