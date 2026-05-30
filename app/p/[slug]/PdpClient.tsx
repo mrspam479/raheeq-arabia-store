@@ -53,7 +53,7 @@ export function PdpClient({
   whyUs,
 }: PdpClientProps) {
   const { addLine, openCart } = useCartStore();
-  const [selectedTier, setSelectedTier] = useState<1 | 2 | 3>(3);
+  const [selectedTier, setSelectedTier] = useState<1 | 2 | 3>(2);
   const [activeImage, setActiveImage] = useState(0);
 
   const selectedOffer = product.offers.find((o) => o.code === `T${selectedTier}`)!;
@@ -64,7 +64,7 @@ export function PdpClient({
   }, [product.slug, product.nameAr]);
 
   useEffect(() => {
-    setSelectedTier(3);
+    setSelectedTier(2);
     setActiveImage(0);
   }, [product.slug]);
 
@@ -208,17 +208,20 @@ export function PdpClient({
                           </span>
                         )}
 
-                        {/* Radio circle */}
-                        <span className={cn(
-                          'flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 transition-all',
-                          isActive ? 'border-[#00C97A] bg-[#00C97A]' : 'border-[#ccc4b8] bg-white',
-                        )}>
-                          {isActive && (
-                            <svg className="h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3.5}>
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                            </svg>
-                          )}
-                        </span>
+                        {/* Product image + quantity visual */}
+                        <div className="flex shrink-0 items-center gap-1">
+                          {Array.from({ length: offer.quantity }, (_, idx) => (
+                            <div key={idx} className="relative h-12 w-10 overflow-hidden rounded-lg bg-stone-100">
+                              <Image
+                                src={product.coverImageUrl}
+                                alt={product.nameAr}
+                                fill
+                                className="object-cover"
+                                sizes="40px"
+                              />
+                            </div>
+                          ))}
+                        </div>
 
                         {/* Title + duration */}
                         <div className="mx-3 flex-1">
@@ -314,17 +317,16 @@ export function PdpClient({
         </div>
       </section>
 
-      {/* ════ RESULT TIMELINE — high contrast cards on emerald bg ════ */}
-      <section className="bg-emerald py-16 text-ivory relative overflow-hidden">
-        {/* Soft saffron blob */}
-        <div className="absolute -top-20 -right-20 h-60 w-60 rounded-full bg-saffron/20 blur-3xl" />
+      {/* ════ RESULT TIMELINE — saffron text on emerald bg for high contrast ════ */}
+      <section className="bg-emerald py-16 relative overflow-hidden">
+        <div className="absolute -top-20 -right-20 h-60 w-60 rounded-full bg-saffron/15 blur-3xl" />
         <div className="container mx-auto px-4 max-w-5xl relative">
           <div className="text-center mb-10">
             <p className="font-tajawal text-sm font-bold text-saffron mb-2">السؤال اللي تسأله كل وحدة</p>
-            <h2 className="font-tajawal font-black text-3xl md:text-4xl text-white">
+            <h2 className="font-tajawal font-black text-3xl md:text-4xl text-saffron">
               متى أشوف نتيجة؟
             </h2>
-            <p className="mt-3 font-tajawal text-base text-white/75 max-w-xl mx-auto">
+            <p className="mt-3 font-tajawal text-base text-saffron/80 max-w-xl mx-auto">
               مرحلة بمرحلة — هذا اللي راح يصير لكِ
             </p>
           </div>
@@ -346,85 +348,75 @@ export function PdpClient({
               </div>
             ))}
           </div>
-          <div className="mt-10 rounded-2xl bg-saffron/15 border border-saffron/30 p-5 text-center">
+          <div className="mt-10 rounded-2xl bg-white/10 border border-saffron/40 p-5 text-center backdrop-blur-sm">
             <p className="font-tajawal text-base font-bold text-saffron">
               ⭐ للنتيجة الكاملة — استمري ٩٠ يوم
             </p>
-            <p className="mt-1 font-tajawal text-sm text-white/80">
-              عشان كذا ٣ علب هي الأنصح — والأكثر توفيرًا.
+            <p className="mt-1 font-tajawal text-sm text-saffron/70">
+              عشان كذا العلبتين هي الأنصح — والأكثر توفيرًا.
             </p>
           </div>
         </div>
       </section>
 
-      {/* ════ BEFORE / AFTER — emotional contrast with side-by-side image placeholder ════ */}
-      <section className="py-16 bg-ivory">
+      {/* ════ BEFORE / AFTER — premium split layout ════ */}
+      <section className="py-16 bg-[#FAFAF8]">
         <div className="container mx-auto px-4 max-w-5xl">
-          <div className="text-center mb-10">
-            <p className="font-tajawal text-sm font-bold text-saffron mb-2">الفرق الحقيقي · ليس فيلتر</p>
-            <h2 className="font-tajawal font-black text-3xl md:text-4xl text-emerald">
-              حياتكِ قبل {product.nameAr} وبعدها
+          <div className="text-center mb-12">
+            <span className="inline-block rounded-full bg-emerald/10 px-4 py-1.5 font-tajawal text-xs font-black text-emerald mb-3">
+              التحوّل الحقيقي
+            </span>
+            <h2 className="font-tajawal font-black text-3xl md:text-4xl text-charcoal leading-tight">
+              قبل <span className="text-emerald">{product.nameAr}</span> وبعدها
             </h2>
-            <p className="mt-3 font-tajawal text-base text-charcoal/60 max-w-xl mx-auto">
-              نتائج حقيقية من نساء سعوديات — بعد ٦٠-٩٠ يوم استمرار
-            </p>
           </div>
 
-          {/* IMAGE DIVIDER — before/after photo placeholder */}
-          <div className="mb-8 grid grid-cols-2 gap-3">
-            <div className="relative aspect-square rounded-2xl border-2 border-dashed border-red-300 bg-red-50/40 flex items-center justify-center">
-              <div className="text-center px-3">
-                <p className="text-2xl">📸</p>
-                <p className="mt-1 font-tajawal text-xs font-bold text-red-700">[صورة «قبل»]</p>
-                <p className="font-tajawal text-[10px] text-charcoal/55">وجه طبيعي بدون فلتر</p>
+          <div className="rounded-[32px] overflow-hidden border border-stone-200 bg-white shadow-[0_24px_60px_rgba(0,0,0,0.08)]">
+            <div className="grid grid-cols-1 md:grid-cols-2">
+              {/* BEFORE — dark muted side */}
+              <div className="bg-[#2C2C2C] p-8 md:p-10">
+                <div className="mb-5 flex items-center gap-3">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-red-500/20 text-lg">😔</span>
+                  <div>
+                    <p className="font-tajawal text-lg font-black text-white">حياتكِ اليوم</p>
+                    <p className="font-tajawal text-[11px] text-white/50">بدون {product.nameAr}</p>
+                  </div>
+                </div>
+                <ul className="flex flex-col gap-4">
+                  {beforeAfter.before.map((item) => (
+                    <li key={item} className="flex items-start gap-3">
+                      <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-red-500/20 text-red-400 text-xs font-black">
+                        ✕
+                      </span>
+                      <span className="font-tajawal text-sm leading-relaxed text-white/80">{item}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-            </div>
-            <div className="relative aspect-square rounded-2xl border-2 border-dashed border-emerald/40 bg-emerald/5 flex items-center justify-center">
-              <div className="text-center px-3">
-                <p className="text-2xl">📸</p>
-                <p className="mt-1 font-tajawal text-xs font-bold text-emerald">[صورة «بعد ٩٠ يوم»]</p>
-                <p className="font-tajawal text-[10px] text-charcoal/55">نفس الإضاءة، نفس الزاوية</p>
-              </div>
-            </div>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {/* BEFORE */}
-            <div className="rounded-3xl border-2 border-red-200 bg-red-50/40 p-6">
-              <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-red-100 px-3 py-1">
-                <span className="text-base">😔</span>
-                <p className="font-tajawal text-xs font-black text-red-700">حياتكِ اليوم</p>
+              {/* AFTER — bright emerald side */}
+              <div className="bg-gradient-to-br from-emerald to-[#00A85A] p-8 md:p-10 relative">
+                <div className="absolute top-4 left-4 rounded-full bg-saffron px-3 py-1 font-tajawal text-[10px] font-black text-emerald shadow-lg">
+                  ⭐ هدفكِ
+                </div>
+                <div className="mb-5 flex items-center gap-3">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/20 text-lg">✨</span>
+                  <div>
+                    <p className="font-tajawal text-lg font-black text-white">حياتكِ بعد ٩٠ يوم</p>
+                    <p className="font-tajawal text-[11px] text-saffron/90">مع {product.nameAr}</p>
+                  </div>
+                </div>
+                <ul className="flex flex-col gap-4">
+                  {beforeAfter.after.map((item) => (
+                    <li key={item} className="flex items-start gap-3">
+                      <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-white/25 text-white text-xs font-black">
+                        ✓
+                      </span>
+                      <span className="font-tajawal text-sm leading-relaxed text-white font-semibold">{item}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <ul className="flex flex-col gap-3">
-                {beforeAfter.before.map((item) => (
-                  <li key={item} className="flex items-start gap-3 font-tajawal text-sm text-charcoal/80">
-                    <span className="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-red-200 text-red-700 text-[11px] font-black">
-                      ✕
-                    </span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            {/* AFTER */}
-            <div className="rounded-3xl border-2 border-emerald/40 bg-[#F3FAF6] p-6 shadow-[0_18px_42px_rgba(18,107,82,0.15)] relative">
-              <div className="absolute -top-3 right-6 rounded-full bg-saffron px-3 py-1 font-tajawal text-[10px] font-black text-emerald shadow">
-                ⭐ هدفكِ
-              </div>
-              <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-emerald px-3 py-1">
-                <span className="text-base">✨</span>
-                <p className="font-tajawal text-xs font-black text-white">حياتكِ بعد ٩٠ يوم</p>
-              </div>
-              <ul className="flex flex-col gap-3">
-                {beforeAfter.after.map((item) => (
-                  <li key={item} className="flex items-start gap-3 font-tajawal text-sm font-semibold text-charcoal">
-                    <span className="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald text-white text-[11px] font-black">
-                      ✓
-                    </span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
             </div>
           </div>
         </div>

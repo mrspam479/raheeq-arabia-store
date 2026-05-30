@@ -123,6 +123,28 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ══ MISSION STATEMENT ═════════════════════════════ */}
+      <section className="border-b border-[#EAE0D0] bg-emerald px-4 py-16 md:py-20">
+        <div className="container mx-auto max-w-3xl text-center">
+          <span className="mb-4 inline-block rounded-full bg-saffron/20 px-4 py-1.5 font-tajawal text-xs font-black text-saffron">
+            رسالة رحيق
+          </span>
+          <h2 className="font-tajawal text-2xl font-black leading-snug text-saffron md:text-3xl">
+            نؤمن أن الجمال الحقيقي يبدأ من الداخل.
+          </h2>
+          <p className="mx-auto mt-5 max-w-2xl font-tajawal text-base leading-relaxed text-white/80">
+            في رحيق، ما نبيع وعود فارغة. نبيع مكوّنات مثبتة علميًا، بجرعات فعّالة، في حلوى تحبّينها. كل علبة تمرّ بفحص مخبري، وكل تركيبة حلال ١٠٠٪. هدفنا بسيط — إن حبّتين بالصباح تخلّي بشرتكِ وشعركِ وعيونكِ أحلى من أمس.
+          </p>
+          <div className="mx-auto mt-8 flex flex-wrap justify-center gap-4">
+            {['🧪 مكوّنات مثبتة', '🔬 فحص مخبري كل دفعة', '☪️ حلال ١٠٠٪', '💵 دفع عند الاستلام'].map((badge) => (
+              <span key={badge} className="rounded-full border border-saffron/30 bg-white/10 px-4 py-2 font-tajawal text-xs font-bold text-saffron backdrop-blur-sm">
+                {badge}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ══ PRODUCTS ══════════════════════════════════════ */}
       <section className="border-b border-[#EAE0D0] px-4 py-20">
         <div className="container mx-auto max-w-5xl">
