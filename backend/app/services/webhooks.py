@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import hashlib
 import json
 from datetime import datetime, timezone
 from decimal import Decimal
@@ -20,12 +19,6 @@ PRODUCT_SKU_MAP: dict[str, str] = {
     "habba-jathr": "RHQ-JTR-001",
     "bundle-glow-trio": "RHQ-BND-001",
 }
-
-
-def _generate_order_display_id(order_uuid: str) -> str:
-    """Deterministic short order ID from UUID: RAHEEQ-XXXXXXXX"""
-    digest = hashlib.sha256(order_uuid.encode()).hexdigest()[:8].upper()
-    return f"RAHEEQ-{digest}"
 
 
 def _decimal_default(obj: object) -> str:
@@ -95,7 +88,6 @@ def build_order_payload_from_out(order_out: object, payload: object) -> dict:
 
     return {
         "date": now.strftime("%d/%m/%Y"),
-        "order_id": _generate_order_display_id(str(o.id)),
         "country": "KSA",
         "name": p.customer.full_name,
         "phone": phone,
@@ -121,7 +113,6 @@ def build_order_payload(order: Order) -> dict:
 
     return {
         "date": order.created_at.strftime("%d/%m/%Y"),
-        "order_id": _generate_order_display_id(str(order.id)),
         "country": "KSA",
         "name": order.full_name,
         "phone": _format_phone(order.phone_e164),

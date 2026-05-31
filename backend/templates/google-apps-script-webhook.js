@@ -1,39 +1,16 @@
 /**
  * Raheeq Arabia — Google Sheets Apps Script Webhook
  * ---------------------------------------------------
- * Paste this file's contents into Extensions → Apps Script (replace Code.gs).
+ * Paste this into Extensions → Apps Script (replace Code.gs).
  *
  * Setup:
- *  1) Create a Google Sheet.
- *  2) Rename the first tab to "orders".
- *  3) Go to Extensions → Apps Script.
- *  4) Delete existing Code.gs content and paste this entire file.
- *  5) Click Deploy → New deployment.
- *  6) Type: Web app
- *     Execute as: Me
- *     Who has access: Anyone
- *  7) Click Deploy → Copy the Web App URL.
- *  8) Paste that URL into your backend env var: SHEET_WEBHOOK_URL=https://script.google.com/macros/s/xxxx/exec
+ *  1) Sheet must have a tab called "orders" (auto-created if missing).
+ *  2) Deploy → New deployment → Web app:
+ *       Execute as: Me
+ *       Who has access: Anyone
+ *     Copy the Web App URL into backend env var SHEET_WEBHOOK_URL.
  *
- * No secret needed — the URL itself is the auth (only you have it).
- *
- * Expected payload (POST application/json):
- *   {
- *     "kind": "order",
- *     "payload": {
- *       "date": "01/06/2026",
- *       "order_id": "RAHEEQ-A1B2C3D4",
- *       "country": "KSA",
- *       "name": "فاطمة أحمد",
- *       "phone": "+966504752330",
- *       "product": "حبّة نضرة/حبّة بريق",
- *       "sku": "RHQ-NDR-001/RHQ-BRQ-001",
- *       "quantity": "2/1",
- *       "totalprice": 478,
- *       "currency": "SAR",
- *       "status": ""
- *     }
- *   }
+ * Order IDs are auto-generated: RAHEEQ001, RAHEEQ002, RAHEEQ003, ...
  */
 
 var SHEET_NAME = 'orders';
@@ -66,8 +43,6 @@ function doPost(e) {
 
     if (kind === 'order') {
       appendOrder_(payload);
-    } else if (kind === 'upsell') {
-      appendUpsell_(payload);
     } else {
       return respond_({ ok: false, error: 'unknown_kind' });
     }
@@ -94,35 +69,26 @@ function ensureHeader_() {
   }
 }
 
+function nextOrderId_(sheet) {
+  var lastRow = sheet.getLastRow();
+  var orderNum = lastRow; // row 1 = header, row 2 = order #1, etc.
+  var padded = String(orderNum);
+  while (padded.length < 3) padded = '0' + padded;
+  return 'RAHEEQ' + padded;
+}
+
 function appendOrder_(payload) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = ss.getSheetByName(SHEET_NAME);
+
+  var orderId = nextOrderId_(sheet);
+
   var row = HEADER.map(function (key) {
+    if (key === 'order_id') return orderId;
     if (key === 'status') return '';
     return payload[key] !== undefined ? payload[key] : '';
   });
   sheet.appendRow(row);
-}
-
-function appendUpsell_(payload) {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheet = ss.getSheetByName(SHEET_NAME);
-  var lastRow = sheet.getLastRow();
-  for (var i = lastRow; i >= 2; i--) {
-    var rowOrderId = sheet.getRange(i, 2).getValue();
-    if (String(rowOrderId) === String(payload.order_id)) {
-      var existingProduct = sheet.getRange(i, 6).getValue();
-      var existingSkus = sheet.getRange(i, 7).getValue();
-      var existingQty = sheet.getRange(i, 8).getValue();
-      var existingTotal = sheet.getRange(i, 9).getValue();
-
-      sheet.getRange(i, 6).setValue(existingProduct + '/' + (payload.product_name || payload.sku));
-      sheet.getRange(i, 7).setValue(existingSkus + '/' + payload.sku);
-      sheet.getRange(i, 8).setValue(existingQty + '/1');
-      sheet.getRange(i, 9).setValue(Number(existingTotal) + Number(payload.price_sar || 99));
-      return;
-    }
-  }
 }
 
 function respond_(obj) {
