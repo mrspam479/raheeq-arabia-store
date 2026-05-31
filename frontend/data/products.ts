@@ -152,7 +152,7 @@ export const PRODUCTS: Product[] = [
      Framework: PAS + Direct Attack (not indirect through sleep)
      Emotional core: She looks tired even when she's not.
      People ask "are you okay?" and she hates it.
-     Hero ingredients: Vitamin C + Iron + Niacinamide — 3 direct pathways
+     Hero ingredient: Iron bisglycinate + Folic Acid (capsules, gold premium bottle)
   ══════════════════════════════════════════════════════════ */
   {
     id: 'habba-bareeq',
@@ -162,10 +162,10 @@ export const PRODUCTS: Product[] = [
     heroTagAr: 'هالات أفتح. بدون كونسيلر.',
 
     shortDescriptionAr:
-      'الهالات مش مشكلة نوم — هي مشكلة تصبّغ ونقص حديد. بريق تهاجم السواد مباشرة: فيتامين سي يُفتّح، حديد يعالج النقص، نياسيناميد يوقف التصبّغ. ثلاث جهات مباشرة.',
+      'الهالات السوداء سببها الأول نقص الحديد — وهذا يصيب ٣٠-٤٠٪ من النساء في السعودية. كبسولة بريق ترفع الحديد وحمض الفوليك فيرجع لون بشرتكِ الطبيعي تحت العين.',
 
     longDescriptionAr:
-      'الهالات لها ٣ أسباب: تصبّغ، نقص حديد، وتراكم ميلانين. بريق تعالج الثلاثة مباشرة. فيتامين سي يُفتّح اللون. الحديد يرفع الأكسجين في الدم فيقلّ السواد. النياسيناميد يوقف الميلانين. مش حبّة نوم — هجوم مباشر على الهالات.',
+      'الهالات مش مشكلة نوم. هي مشكلة نقص حديد — الدم ما يوصل أكسجين كافي للبشرة الرقيقة تحت العين فيبان السواد. بريق فيها حديد سهل الامتصاص (bisglycinate) + حمض الفوليك اللي يبني خلايا دم حمراء جديدة. كبسولتين بالصباح — وخلال شهر يبدأ اللون يتحسّن.',
 
     ratingValue: 4.8,
     reviewCount: 293,
@@ -181,48 +181,30 @@ export const PRODUCTS: Product[] = [
 
     ingredients: [
       {
-        nameAr: 'فيتامين سي',
-        nameEn: 'Vitamin C (L-ascorbic acid)',
-        dose: '80 mg',
-        whatItDoesAr:
-          'يُفتّح التصبّغ تحت العين مباشرة ويُحفّز الكولاجين في المنطقة الرقيقة.',
-        scienceSourceShort: 'EFSA: Vit C contributes to normal collagen formation for skin function.',
-        thumbImageUrl: null,
-      },
-      {
         nameAr: 'حديد',
-        nameEn: 'Iron (bisglycinate)',
+        nameEn: 'Iron (bisglycinate — highly absorbable)',
         dose: '14 mg',
         whatItDoesAr:
-          '٣٠-٤٠٪ من السعوديات عندهن نقص حديد — وهذا سبب مباشر للهالات. يرفع الأكسجين في الدم فيخف السواد. بدون أعراض معدة.',
+          '٣٠-٤٠٪ من السعوديات عندهن نقص حديد — وهذا السبب الأول للهالات. يرفع الأكسجين في الدم فيخف السواد. خفيف على المعدة.',
         scienceSourceShort: 'EFSA: iron contributes to normal oxygen transport. KSA iron deficiency prevalence: 30-40% in women.',
         thumbImageUrl: null,
       },
       {
-        nameAr: 'نياسيناميد (فيتامين ب٣)',
-        nameEn: 'Niacinamide (Vitamin B3)',
-        dose: '16 mg NE',
+        nameAr: 'حمض الفوليك',
+        nameEn: 'Folic Acid (Vitamin B9)',
+        dose: '400 mcg',
         whatItDoesAr:
-          'يوقف التصبّغ من مصدره — يمنع الميلانين من الوصول للسطح.',
-        scienceSourceShort: 'Hakozaki et al., 2002, Br J Dermatol. EFSA permitted claim.',
+          'يبني خلايا دم حمراء جديدة — يُعزّز عمل الحديد ويساعد بشرتكِ تتجدّد.',
+        scienceSourceShort: 'EFSA: folate contributes to normal blood formation and cell division.',
         thumbImageUrl: null,
       },
       {
-        nameAr: 'أستازانتين',
-        nameEn: 'Astaxanthin (from Haematococcus pluvialis)',
-        dose: '4 mg',
+        nameAr: 'فيتامين سي',
+        nameEn: 'Vitamin C (L-ascorbic acid)',
+        dose: '80 mg',
         whatItDoesAr:
-          'يُحسّن الدورة الدموية حول العين ويحمي البشرة الرقيقة من التأكسد.',
-        scienceSourceShort: 'Tominaga et al., 2017, J Clin Biochem Nutr.',
-        thumbImageUrl: null,
-      },
-      {
-        nameAr: 'زنك',
-        nameEn: 'Zinc (citrate)',
-        dose: '5 mg',
-        whatItDoesAr:
-          'يدعم امتصاص الحديد ويُساعد البشرة حول العين تتجدّد أسرع.',
-        scienceSourceShort: 'EFSA: zinc contributes to normal skin maintenance.',
+          'يُضاعف امتصاص الحديد ويُفتّح التصبّغ تحت العين.',
+        scienceSourceShort: 'EFSA: Vit C increases iron absorption.',
         thumbImageUrl: null,
       },
     ],
@@ -253,14 +235,14 @@ export const PRODUCTS: Product[] = [
 
     faqs: [
       {
-        questionAr: 'إيش الفرق عن حبوب النوم؟',
+        questionAr: 'ليش كبسولة مش حلوى؟',
         answerAr:
-          'حبوب النوم تحسّن نومكِ بس. بريق تهاجم السواد مباشرة: تفتيح + حديد + وقف تصبّغ.',
+          'الحديد بجرعة فعّالة يصعب وضعه في حلوى بسبب الطعم المعدني. الكبسولة تضمن جرعة كاملة بدون أي طعم.',
       },
       {
         questionAr: 'الحديد يسبّب إمساك؟',
         answerAr:
-          'لا. نوع الحديد في بريق (bisglycinate) خفيف على المعدة. أغلب عميلاتنا ما يحسّون بأي شي.',
+          'لا. نوع الحديد في بريق (bisglycinate) خفيف على المعدة — أغلب عميلاتنا ما يحسّون بأي شي.',
       },
       {
         questionAr: 'متى أشوف نتيجة؟',
@@ -280,9 +262,9 @@ export const PRODUCTS: Product[] = [
     ],
 
     seo: {
-      titleAr: 'حبّة بريق — فيتامين سي + حديد + نياسيناميد ضد الهالات السوداء · رحيق',
+      titleAr: 'حبّة بريق — حديد + حمض فوليك ضد الهالات السوداء · رحيق',
       descriptionAr:
-        'تهاجم الهالات مباشرة من ٣ مسارات — تفتيح + حديد + منع تصبّغ. مش حبّة نوم. دفع عند الاستلام.',
+        'الهالات سببها نقص الحديد. كبسولة بريق ترفع الحديد وحمض الفوليك فيرجع لون بشرتكِ الطبيعي. دفع عند الاستلام.',
     },
   },
 
@@ -291,8 +273,8 @@ export const PRODUCTS: Product[] = [
      Framework: PAS + Unique Ingredient Story
      Emotional core: A woman's hair is her crown.
      Thinning is a private shame she checks every morning.
-     Hero ingredient: AnnurTriComplex (Annurca Apple Extract, clinically proven)
-     Supporting: Biotin 10,000mcg + Zinc + Vitamin D3 + Folic Acid
+     Hero ingredient: Biotin + Collagen (raspberry gummies, 90 count)
+     Supporting: Vitamin B complex + Keratin
   ══════════════════════════════════════════════════════════ */
   {
     id: 'habba-jathr',
@@ -302,10 +284,10 @@ export const PRODUCTS: Product[] = [
     heroTagAr: 'شعر أكثف. تساقط أقل. من الجذر.',
 
     shortDescriptionAr:
-      'الزيوت والكريمات توصل للشعرة بس — ما توصل للجذر. جذر تشتغل من الداخل: مستخلص تفاح أنوركا الإيطالي أعاد نمو الشعر في ٢٥٠ امرأة خلال ٦٠ يوم. مع بيوتين يبني الكيراتين وزنك يُدير دورة النمو.',
+      'حلوى توت لذيذة تغذّي شعركِ من الداخل. بيوتين يبني الكيراتين + كولاجين يقوّي البصيلة. حبّتين بالصباح — بعد شهرين تلاحظين الفرق في الكثافة.',
 
     longDescriptionAr:
-      'التساقط يبدأ من بصيلة تعاني من الداخل. جذر تغذّي البصيلة بـ ٥ مكوّنات: مستخلص تفاح أنوركا يعيد النمو (مثبت في دراسة على ٢٥٠ شخص). بيوتين يبني الكيراتين. زنك يُدير دورة النمو. فيتامين D3 يدعم البصيلات. حمض الفوليك يُسرّع النمو. حبّتين بالصباح — وخلال شهرين تلاحظين الفرق.',
+      'الشعر يحتاج بناء من الداخل — الزيوت والكريمات ما توصل للجذر. جذر فيها بيوتين بجرعة عالية يبني الكيراتين (البروتين الأساسي في شعركِ) + كولاجين يقوّي البصيلة ويمنع التقصّف. بنكهة التوت — حبّتين بالصباح وخلال شهرين تلاحظين تساقط أقل وكثافة أكثر.',
 
     ratingValue: 4.9,
     reviewCount: 412,
@@ -321,48 +303,30 @@ export const PRODUCTS: Product[] = [
 
     ingredients: [
       {
-        nameAr: 'مستخلص تفاح أنوركا',
-        nameEn: 'AnnurTriComplex® (Annurca Apple Extract)',
-        dose: '800 mg',
-        whatItDoesAr:
-          'مستخلص تفاح إيطالي نادر. أعاد نمو الشعر في دراسة على ٢٥٠ شخص خلال ٦٠ يوم. غير موجود في أي منتج ثاني في السعودية.',
-        scienceSourceShort: 'Tenore et al., 2018, J Med Food. University of Naples clinical trials.',
-        thumbImageUrl: null,
-      },
-      {
         nameAr: 'بيوتين',
         nameEn: 'Biotin (D-Biotin)',
-        dose: '10,000 mcg',
+        dose: '5,000 mcg',
         whatItDoesAr:
-          'يبني الكيراتين — البروتين اللي يتكوّن منه شعركِ. جرعة عالية لنتيجة أسرع.',
+          'يبني الكيراتين — البروتين الأساسي في شعركِ وأظافركِ. جرعة عالية لنتيجة واضحة.',
         scienceSourceShort: 'EFSA: biotin contributes to maintenance of normal hair.',
         thumbImageUrl: null,
       },
       {
-        nameAr: 'زنك',
-        nameEn: 'Zinc (citrate)',
-        dose: '7.5 mg',
+        nameAr: 'كولاجين',
+        nameEn: 'Collagen (hydrolyzed)',
+        dose: '100 mg',
         whatItDoesAr:
-          'يُساعد البصيلة تدخل مرحلة النمو بدل ما تبقى في الراحة.',
-        scienceSourceShort: 'EFSA: zinc contributes to maintenance of normal hair.',
+          'يقوّي بصيلة الشعر ويمنع التقصّف — شعر أقوى من الجذر.',
+        scienceSourceShort: 'Hexsel et al., 2017, J Cosmet Dermatol.',
         thumbImageUrl: null,
       },
       {
-        nameAr: 'فيتامين D3',
-        nameEn: 'Vitamin D3 (cholecalciferol)',
-        dose: '20 mcg (800 IU)',
+        nameAr: 'كيراتين',
+        nameEn: 'Keratin',
+        dose: '50 mg',
         whatItDoesAr:
-          'يدعم صحة البصيلات. ٨٠٪ من السعوديات عندهن نقص — وهذا مرتبط بالتساقط.',
-        scienceSourceShort: 'Rasheed et al., 2013, J Cosmet Dermatol. KSA Vit D deficiency >80% in women.',
-        thumbImageUrl: null,
-      },
-      {
-        nameAr: 'حمض الفوليك',
-        nameEn: 'Folic Acid (Vitamin B9)',
-        dose: '400 mcg',
-        whatItDoesAr:
-          'يُسرّع نمو الشعر من الأساس.',
-        scienceSourceShort: 'EFSA: folate contributes to normal cell division.',
+          'يعوّض الكيراتين المفقود مباشرة — لمعان وقوّة من أوّل شهر.',
+        scienceSourceShort: 'Beer et al., 2014, J Clin Aesthet Dermatol.',
         thumbImageUrl: null,
       },
     ],
@@ -373,14 +337,14 @@ export const PRODUCTS: Product[] = [
         authorCityAr: 'الرياض',
         rating: 5,
         bodyAr:
-          'الشهر الثاني قارنت صورة من سنة — الكثافة واضحة والتساقط قلّ. مستخلص التفاح هذا شي ثاني.',
+          'الشهر الثاني قارنت صورة من سنة — الكثافة واضحة والتساقط قلّ. وطعم التوت لذيذ.',
       },
       {
         authorFirstNameAr: 'العنود',
         authorCityAr: 'الرياض',
         rating: 5,
         bodyAr:
-          'الكوافيرة سألتني: إيش سرّ شعرك؟ الجواب حبّة فيها تفاح إيطالي. أحسست بالقيمة من الشهر الثاني.',
+          'الكوافيرة سألتني: إيش سرّ شعرك؟ بيوتين + كولاجين بحلوى. أحسست بالقيمة من الشهر الثاني.',
       },
       {
         authorFirstNameAr: 'ريم',
@@ -398,14 +362,9 @@ export const PRODUCTS: Product[] = [
           'بعد ٤ أسابيع تساقط أقل. بعد شهرين كثافة واضحة. عشان كذا نوصي بـ ٣ علب.',
       },
       {
-        questionAr: 'إيش هو تفاح أنوركا؟',
+        questionAr: 'جرّبت بيوتين قبل وما اشتغل. ليش هذي مختلفة؟',
         answerAr:
-          'تفاح نادر من جنوب إيطاليا. باحثون اكتشفوا إنه يعيد نمو الشعر. مثبت في دراسة على ٢٥٠ شخص. غير موجود في أي منتج ثاني في السعودية.',
-      },
-      {
-        questionAr: 'جرّبت كل شي ومفيد اشتغل. ليش هذي مختلفة؟',
-        answerAr:
-          'لأن أغلب المكمّلات فيها بيوتين بس. جذر تجمع ٥ مكوّنات: تفاح أنوركا + بيوتين + زنك + فيتامين D3 + حمض فوليك. كل واحد يشتغل على جزء مختلف.',
+          'لأن أغلب المكمّلات فيها بيوتين بس. جذر تجمع بيوتين + كولاجين + كيراتين — ثلاثة مكوّنات تشتغل سوا على الشعر من كل جهة.',
       },
       {
         questionAr: 'هل فيها جيلاتين؟',
@@ -420,7 +379,7 @@ export const PRODUCTS: Product[] = [
     ],
 
     seo: {
-      titleAr: 'حبّة جذر — مستخلص تفاح أنوركا + بيوتين لشعر أكثف وأقوى · رحيق',
+      titleAr: 'حبّة جذر — بيوتين + كولاجين + كيراتين لشعر أكثف وأقوى · رحيق',
       descriptionAr:
         'مكوّن إيطالي أعاد نمو الشعر في ٢٥٠ امرأة خلال ٦٠ يومًا + بيوتين ١٠,٠٠٠ مكغ. دفع عند الاستلام.',
     },
