@@ -24,7 +24,6 @@ class Settings(BaseSettings):
     LOG_LEVEL: str = "INFO"
 
     SHEET_WEBHOOK_URL: str | None = None
-    SHEET_WEBHOOK_SECRET: str | None = None
 
     # Meta CAPI
     META_PIXEL_ID: str | None = None

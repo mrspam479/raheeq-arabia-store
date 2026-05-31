@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import hashlib
 import json
+from datetime import datetime, timezone
 from decimal import Decimal
 
 import httpx
@@ -11,6 +13,19 @@ from app.config import settings
 from app.db.models import Order, WebhookLog
 
 logger = structlog.get_logger()
+
+PRODUCT_SKU_MAP: dict[str, str] = {
+    "habba-nadra": "RHQ-NDR-001",
+    "habba-bareeq": "RHQ-BRQ-001",
+    "habba-jathr": "RHQ-JTR-001",
+    "bundle-glow-trio": "RHQ-BND-001",
+}
+
+
+def _generate_order_display_id(order_uuid: str) -> str:
+    """Deterministic short order ID from UUID: RAHEEQ-XXXXXXXX"""
+    digest = hashlib.sha256(order_uuid.encode()).hexdigest()[:8].upper()
+    return f"RAHEEQ-{digest}"
 
 
 def _decimal_default(obj: object) -> str:
@@ -30,7 +45,6 @@ async def post_to_sheet(kind: str, payload: dict) -> None:
     if not settings.SHEET_WEBHOOK_URL:
         return
     body = {
-        "secret": settings.SHEET_WEBHOOK_SECRET,
         "kind": kind,
         "payload": payload,
     }
@@ -41,100 +55,80 @@ async def post_to_sheet(kind: str, payload: dict) -> None:
         logger.exception("webhook.sheet.failed", kind=kind)
 
 
+def _format_phone(phone_e164: str) -> str:
+    """Ensure phone is in +966XXXXXXXXX format."""
+    phone = phone_e164.strip()
+    if phone.startswith("+"):
+        return phone
+    if phone.startswith("966"):
+        return f"+{phone}"
+    if phone.startswith("05") or phone.startswith("5"):
+        digits = phone.lstrip("0")
+        return f"+966{digits}"
+    return phone
+
+
 def build_order_payload_from_out(order_out: object, payload: object) -> dict:
-    """Build sheet payload from Pydantic output objects (used in router after order creation)."""
-    from app.schemas.orders import OrderCreateIn, OrderOut
+    """Build sheet payload matching the sheet columns:
+    date, order_id, country, name, phone, product, sku, quantity, totalprice, currency, status
+    """
+    from app.utils.ksa_phone import KsaPhone
 
     o = order_out  # type: ignore[assignment]
     p = payload  # type: ignore[assignment]
-    items_summary_parts = []
-    items_json_list = []
+
+    products = []
+    skus = []
+    quantities = []
     for item in o.lines:
         if not item.is_upsell:
-            items_summary_parts.append(f"{item.product_name_ar} × {item.offer_label_ar} ({item.quantity})")
-            items_json_list.append({
-                "sku": item.product_slug,
-                "offer": item.offer_code,
-                "qty": item.quantity,
-                "unit_price": float(item.unit_price_sar),
-            })
+            products.append(item.product_name_ar)
+            skus.append(PRODUCT_SKU_MAP.get(item.product_slug, item.product_slug))
+            quantities.append(str(item.quantity))
 
-    tracking = p.tracking
-    utm = tracking.utm
+    now = o.created_at if hasattr(o, "created_at") and o.created_at else datetime.now(timezone.utc)
+
+    try:
+        phone = KsaPhone(p.customer.phone).e164
+    except ValueError:
+        phone = _format_phone(p.customer.phone)
+
     return {
-        "created_at": o.created_at.isoformat(),
-        "order_id": str(o.id),
-        "status": o.status,
-        "full_name": p.customer.full_name,
-        "phone_e164": "",  # normalized e164 not available here; use order db record
-        "address_line": "",
-        "city": "",
-        "notes": "",
-        "items_summary": " + ".join(items_summary_parts),
-        "items_json": json.dumps(items_json_list, ensure_ascii=False),
-        "subtotal_sar": float(o.subtotal_sar),
-        "upsell_added_sar": float(o.upsell_added_sar),
-        "total_sar": float(o.total_sar),
-        "currency": o.currency,
-        "utm_source": utm.source if utm else "",
-        "utm_medium": utm.medium if utm else "",
-        "utm_campaign": utm.campaign if utm else "",
-        "utm_content": utm.content if utm else "",
-        "landing_url": tracking.landing_url or "",
-        "referrer": tracking.referrer or "",
-        "client_ip": "",
-        "client_user_agent": tracking.client_user_agent or "",
-        "fbp": tracking.fbp or "",
-        "fbc": tracking.fbc or "",
-        "ttp": tracking.ttp or "",
-        "ttclid": tracking.ttclid or "",
-        "sc_click_id": tracking.sc_click_id or "",
-        "event_id": str(tracking.event_id),
-        "idempotency_key": str(tracking.event_id),
+        "date": now.strftime("%d/%m/%Y"),
+        "order_id": _generate_order_display_id(str(o.id)),
+        "country": "KSA",
+        "name": p.customer.full_name,
+        "phone": phone,
+        "product": "/".join(products),
+        "sku": "/".join(skus),
+        "quantity": "/".join(quantities),
+        "totalprice": float(o.total_sar),
+        "currency": "SAR",
+        "status": "",
     }
 
 
 def build_order_payload(order: Order) -> dict:
-    items_summary_parts = []
-    items_json_list = []
+    """Build sheet payload from DB Order model."""
+    products = []
+    skus = []
+    quantities = []
     for item in order.items:
         if not item.is_upsell:
-            items_summary_parts.append(f"{item.product_name_ar} × {item.offer_label_ar} ({item.quantity})")
-            items_json_list.append({
-                "sku": item.product_slug,
-                "offer": item.offer_code,
-                "qty": item.quantity,
-                "unit_price": float(item.unit_price_sar),
-            })
+            products.append(item.product_name_ar)
+            skus.append(PRODUCT_SKU_MAP.get(item.product_slug, item.product_slug))
+            quantities.append(str(item.quantity))
 
     return {
-        "created_at": order.created_at.isoformat(),
-        "order_id": str(order.id),
-        "status": order.status,
-        "full_name": order.full_name,
-        "phone_e164": order.phone_e164,
-        "address_line": order.address_line or "",
-        "city": order.city or "",
-        "notes": order.notes or "",
-        "items_summary": " + ".join(items_summary_parts),
-        "items_json": json.dumps(items_json_list, ensure_ascii=False),
-        "subtotal_sar": float(order.subtotal_sar),
-        "upsell_added_sar": float(order.upsell_added_sar),
-        "total_sar": float(order.total_sar),
-        "currency": order.currency,
-        "utm_source": order.utm_source or "",
-        "utm_medium": order.utm_medium or "",
-        "utm_campaign": order.utm_campaign or "",
-        "utm_content": order.utm_content or "",
-        "landing_url": order.landing_url or "",
-        "referrer": order.referrer or "",
-        "client_ip": str(order.client_ip) if order.client_ip else "",
-        "client_user_agent": order.client_user_agent or "",
-        "fbp": order.fbp or "",
-        "fbc": order.fbc or "",
-        "ttp": order.ttp or "",
-        "ttclid": order.ttclid or "",
-        "sc_click_id": order.sc_click_id or "",
-        "event_id": str(order.event_id),
-        "idempotency_key": str(order.idempotency_key),
+        "date": order.created_at.strftime("%d/%m/%Y"),
+        "order_id": _generate_order_display_id(str(order.id)),
+        "country": "KSA",
+        "name": order.full_name,
+        "phone": _format_phone(order.phone_e164),
+        "product": "/".join(products),
+        "sku": "/".join(skus),
+        "quantity": "/".join(quantities),
+        "totalprice": float(order.total_sar),
+        "currency": "SAR",
+        "status": "",
     }

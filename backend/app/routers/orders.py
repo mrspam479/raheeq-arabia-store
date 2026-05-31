@@ -176,9 +176,16 @@ async def _upsell_fanout(order_out, sku: str, order_id: str) -> None:
     event_id = new_uuid_str()
     event_time = arrow.utcnow().int_timestamp
 
+    # Find product name for the upsell SKU
+    upsell_product_name = ""
+    for line in order_out.lines:
+        if line.is_upsell and line.product_slug == sku:
+            upsell_product_name = line.product_name_ar
+            break
+
     await webhooks.post_to_sheet("upsell", {
-        "created_at": arrow.utcnow().isoformat(),
-        "order_id": order_id,
-        "sku": sku,
+        "order_id": webhooks._generate_order_display_id(order_id),
+        "sku": webhooks.PRODUCT_SKU_MAP.get(sku, sku),
+        "product_name": upsell_product_name,
         "price_sar": 99,
     })
