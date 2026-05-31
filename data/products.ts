@@ -32,7 +32,7 @@ export const PRODUCTS: Product[] = [
     reviewCount: 387,
     stockLabelAr: 'بقي 24 علبة فقط من دفعة هذا الأسبوع.',
     coverImageUrl: '/images/products/habba-nadra/cover.png',
-    galleryImageUrls: ['/images/products/habba-nadra/cover.png'],
+    galleryImageUrls: ['/images/products/habba-nadra/cover.png', '/images/products/habba-nadra/gallery-1.png'],
 
     offers: [
       { code: 'T1', labelAr: 'علبة', quantity: 1, priceSar: 199, isRecommended: false },
@@ -171,7 +171,7 @@ export const PRODUCTS: Product[] = [
     reviewCount: 293,
     stockLabelAr: 'بقي 18 علبة فقط من دفعة هذا الأسبوع.',
     coverImageUrl: '/images/products/habba-bareeq/cover.png',
-    galleryImageUrls: ['/images/products/habba-bareeq/cover.png'],
+    galleryImageUrls: ['/images/products/habba-bareeq/cover.png', '/images/products/habba-bareeq/gallery-1.png'],
 
     offers: [
       { code: 'T1', labelAr: 'علبة', quantity: 1, priceSar: 199, isRecommended: false },
@@ -293,7 +293,7 @@ export const PRODUCTS: Product[] = [
     reviewCount: 412,
     stockLabelAr: 'بقي 32 علبة فقط من دفعة هذا الأسبوع.',
     coverImageUrl: '/images/products/habba-jathr/cover.png',
-    galleryImageUrls: ['/images/products/habba-jathr/cover.png'],
+    galleryImageUrls: ['/images/products/habba-jathr/cover.png', '/images/products/habba-jathr/gallery-1.png'],
 
     offers: [
       { code: 'T1', labelAr: 'علبة', quantity: 1, priceSar: 199, isRecommended: false },
