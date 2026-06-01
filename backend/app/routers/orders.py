@@ -159,6 +159,8 @@ async def _fanout(order_out, payload: OrderCreateIn, client_ip: str, event_id: s
 
     event_source_url = tracking.landing_url or "https://raheeqarabia.com"
 
+    await webhooks.post_to_sheet("order", webhooks.build_order_payload_from_out(order_out, payload))
+
     await asyncio.gather(
         meta_capi.send_event(event_name="Purchase", event_id=event_id, event_time=event_time, event_source_url=event_source_url, user_data=ud, custom_data=custom_data),
         tiktok_capi.send_event(event_name="Purchase", event_id=event_id, event_time=event_time, event_source_url=event_source_url, user_data=ud, custom_data={"currency": "SAR", "value": float(order_out.total_sar), "contents": [{"content_id": l.product_slug, "quantity": l.quantity, "price": float(l.unit_price_sar)} for l in order_out.lines if not l.is_upsell], "content_type": "product", "order_id": str(order_out.id)}, referrer=tracking.referrer),
