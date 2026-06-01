@@ -71,17 +71,89 @@ function ensureHeader_() {
 
 function nextOrderId_(sheet) {
   var lastRow = sheet.getLastRow();
-  var orderNum = lastRow; // row 1 = header, row 2 = order #1, etc.
+  var orderNum = lastRow;
   var padded = String(orderNum);
   while (padded.length < 3) padded = '0' + padded;
   return 'RAHEEQ' + padded;
 }
 
-function appendOrder_(payload) {
+function normalizePayload_(raw) {
+  var p = {};
+
+  // date — accept "date" or "created_at", format to DD/MM/YYYY
+  if (raw.date) {
+    p.date = raw.date;
+  } else if (raw.created_at) {
+    var d = new Date(raw.created_at);
+    if (!isNaN(d.getTime())) {
+      var dd = ('0' + d.getDate()).slice(-2);
+      var mm = ('0' + (d.getMonth() + 1)).slice(-2);
+      var yyyy = d.getFullYear();
+      p.date = dd + '/' + mm + '/' + yyyy;
+    } else {
+      p.date = raw.created_at;
+    }
+  } else {
+    var now = new Date();
+    var dd2 = ('0' + now.getDate()).slice(-2);
+    var mm2 = ('0' + (now.getMonth() + 1)).slice(-2);
+    p.date = dd2 + '/' + mm2 + '/' + now.getFullYear();
+  }
+
+  p.country = raw.country || 'KSA';
+
+  // name — accept "name" or "full_name"
+  p.name = raw.name || raw.full_name || '';
+
+  // phone — accept "phone" or "phone_e164"
+  p.phone = raw.phone || raw.phone_e164 || '';
+
+  // product — accept "product" or build from "items_summary" or "items_json"
+  if (raw.product) {
+    p.product = raw.product;
+  } else if (raw.items_json) {
+    try {
+      var items = typeof raw.items_json === 'string' ? JSON.parse(raw.items_json) : raw.items_json;
+      var names = [];
+      var skus = [];
+      var qtys = [];
+      for (var i = 0; i < items.length; i++) {
+        names.push(items[i].sku || '');
+        skus.push(items[i].sku || '');
+        qtys.push(String(items[i].qty || 1));
+      }
+      p.product = names.join('/');
+      p.sku = skus.join('/');
+      p.quantity = qtys.join('/');
+    } catch (ex) {
+      p.product = raw.items_summary || '';
+    }
+  } else {
+    p.product = raw.items_summary || '';
+  }
+
+  // sku
+  if (!p.sku) p.sku = raw.sku || '';
+
+  // quantity
+  if (!p.quantity) p.quantity = raw.quantity || '';
+
+  // totalprice — accept "totalprice" or "total_sar"
+  p.totalprice = raw.totalprice !== undefined ? raw.totalprice : (raw.total_sar !== undefined ? raw.total_sar : '');
+
+  p.currency = raw.currency || 'SAR';
+
+  p.status = '';
+
+  return p;
+}
+
+function appendOrder_(rawPayload) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = ss.getSheetByName(SHEET_NAME);
 
   var orderId = nextOrderId_(sheet);
+  var payload = normalizePayload_(rawPayload);
 
   var row = HEADER.map(function (key) {
     if (key === 'order_id') return orderId;
