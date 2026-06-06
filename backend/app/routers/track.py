@@ -2,10 +2,16 @@ from __future__ import annotations
 
 import asyncio
 
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, Request, BackgroundTasks
+from sqlalchemy.ext.asyncio import AsyncSession
+import uuid
+import datetime
 
 from app.deps import get_db, require_api_key
+from app.db.base import AsyncSessionLocal
+from app.db.models import TrackingEvent
 from app.schemas.tracking import TrackEventIn, TrackEventOut
+from app.services.geocheck import check_ip
 from app.services.capi import meta as meta_capi
 from app.services.capi import snap as snap_capi
 from app.services.capi import tiktok as tiktok_capi
@@ -23,8 +29,33 @@ def _get_client_ip(request: Request) -> str:
     return ""
 
 
+async def _save_event_db(
+    payload: TrackEventIn,
+    client_ip: str,
+):
+    try:
+        geo_res = await check_ip(client_ip)
+        is_valid_ksa = geo_res.allowed
+
+        async with AsyncSessionLocal() as session:
+            db_event = TrackingEvent(
+                event_id=payload.event_id,
+                event_name=payload.event_name,
+                platform="web",
+                client_ip=client_ip,
+                client_user_agent=payload.client.user_agent,
+                payload=payload.model_dump(),
+                is_valid_ksa=is_valid_ksa,
+                created_at=datetime.datetime.fromtimestamp(payload.event_time, tz=datetime.timezone.utc).replace(tzinfo=None)
+            )
+            session.add(db_event)
+            await session.commit()
+    except Exception as e:
+        import logging
+        logging.getLogger(__name__).error(f"Error saving tracking event to DB: {e}")
+
 @router.post("", response_model=TrackEventOut, status_code=202, dependencies=[Depends(require_api_key)])
-async def track_event(payload: TrackEventIn, request: Request) -> TrackEventOut:
+async def track_event(payload: TrackEventIn, request: Request, background_tasks: BackgroundTasks) -> TrackEventOut:
     client_ip = _get_client_ip(request) or payload.client.ip or ""
 
     ud = UserData(
@@ -77,5 +108,7 @@ async def track_event(payload: TrackEventIn, request: Request) -> TrackEventOut:
         snap_capi.send_event(event_name=payload.event_name, event_id=event_id, event_time=event_time, event_source_url=event_source_url, user_data=ud, custom_data=snap_custom),
         return_exceptions=True,
     ))
+
+    background_tasks.add_task(_save_event_db, payload, client_ip)
 
     return TrackEventOut(queued=True)

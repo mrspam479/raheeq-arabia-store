@@ -15,6 +15,9 @@ class Settings(BaseSettings):
     SECRET_KEY: str = "change-me-in-production"
     BACKEND_API_KEY: str = "change-me-in-production"
 
+    ADMIN_LOGIN: str = "admin"
+    ADMIN_PASSWORD: str = "raheeq123"
+
     CORS_ORIGINS: str = "https://raheeqarabia.com,http://localhost:3000"
 
     @property

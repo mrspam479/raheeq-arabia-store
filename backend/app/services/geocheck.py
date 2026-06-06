@@ -15,7 +15,9 @@ from __future__ import annotations
 
 import ipaddress
 import logging
+import time
 from typing import NamedTuple
+import asyncio
 
 import httpx
 
@@ -30,6 +32,9 @@ GEO_BLOCK_MESSAGE = "عذرًا، الطلبات متاحة فقط من داخل
 
 # Required country ISO code for orders
 REQUIRED_COUNTRY_ISO = "SA"
+
+_ip_cache: dict[str, tuple[GeoCheckResult, float]] = {}
+_ip_cache_lock = asyncio.Lock()
 
 
 class GeoCheckResult(NamedTuple):
@@ -94,6 +99,13 @@ async def check_ip(ip: str, phone: str | None = None) -> GeoCheckResult:
     except ValueError:
         return GeoCheckResult(allowed=False, reason="invalid_ip_format")
 
+    # Check cache (1 hour TTL)
+    async with _ip_cache_lock:
+        if ip in _ip_cache:
+            res, timestamp = _ip_cache[ip]
+            if time.time() - timestamp < 3600:
+                return res
+
     # 6. Call MaxMind Insights — strict KSA + anti-VPN
     url = MAXMIND_INSIGHTS_URL.format(ip=ip)
 
@@ -118,30 +130,48 @@ async def check_ip(ip: str, phone: str | None = None) -> GeoCheckResult:
         # 6a. Block anonymizers (VPN / proxy / TOR / hosting)
         if traits.get("is_tor_exit_node"):
             logger.info("Blocked TOR exit node: %s", ip)
-            return GeoCheckResult(allowed=False, reason="tor_exit_node")
+            res = GeoCheckResult(allowed=False, reason="tor_exit_node")
+            async with _ip_cache_lock: _ip_cache[ip] = (res, time.time())
+            return res
         if traits.get("is_anonymous_vpn"):
             logger.info("Blocked anonymous VPN: %s (claimed country %s)", ip, country_iso)
-            return GeoCheckResult(allowed=False, reason="anonymous_vpn")
+            res = GeoCheckResult(allowed=False, reason="anonymous_vpn")
+            async with _ip_cache_lock: _ip_cache[ip] = (res, time.time())
+            return res
         if traits.get("is_public_proxy"):
             logger.info("Blocked public proxy: %s", ip)
-            return GeoCheckResult(allowed=False, reason="public_proxy")
+            res = GeoCheckResult(allowed=False, reason="public_proxy")
+            async with _ip_cache_lock: _ip_cache[ip] = (res, time.time())
+            return res
         if traits.get("is_residential_proxy"):
             logger.info("Blocked residential proxy: %s", ip)
-            return GeoCheckResult(allowed=False, reason="residential_proxy")
+            res = GeoCheckResult(allowed=False, reason="residential_proxy")
+            async with _ip_cache_lock: _ip_cache[ip] = (res, time.time())
+            return res
         if traits.get("is_hosting_provider"):
             logger.info("Blocked hosting/data-center IP: %s", ip)
-            return GeoCheckResult(allowed=False, reason="hosting_provider")
+            res = GeoCheckResult(allowed=False, reason="hosting_provider")
+            async with _ip_cache_lock: _ip_cache[ip] = (res, time.time())
+            return res
         if traits.get("is_anonymous"):
             logger.info("Blocked anonymous network: %s", ip)
-            return GeoCheckResult(allowed=False, reason="anonymous_network")
+            res = GeoCheckResult(allowed=False, reason="anonymous_network")
+            async with _ip_cache_lock: _ip_cache[ip] = (res, time.time())
+            return res
 
         # 6b. Strict country check — must be Saudi Arabia
         if country_iso != REQUIRED_COUNTRY_ISO:
             logger.info("Blocked non-KSA IP %s (country=%s)", ip, country_iso or "unknown")
-            return GeoCheckResult(allowed=False, reason=f"country_not_ksa:{country_iso or 'unknown'}")
+            res = GeoCheckResult(allowed=False, reason=f"country_not_ksa:{country_iso or 'unknown'}")
+            async with _ip_cache_lock:
+                _ip_cache[ip] = (res, time.time())
+            return res
 
         logger.info("Allowed KSA IP %s", ip)
-        return GeoCheckResult(allowed=True, reason="allowed_ksa")
+        res = GeoCheckResult(allowed=True, reason="allowed_ksa")
+        async with _ip_cache_lock:
+            _ip_cache[ip] = (res, time.time())
+        return res
 
     except httpx.TimeoutException:
         # Fail-CLOSED on timeout to prevent fraud bypass

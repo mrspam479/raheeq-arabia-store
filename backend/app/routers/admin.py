@@ -1,19 +1,69 @@
 from __future__ import annotations
 
 import uuid
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import select
+from pydantic import BaseModel
+from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
+from app.config import settings
 from app.deps import get_db, require_api_key
-from app.db.models import Order
+from app.db.models import Order, TrackingEvent
 from app.schemas.orders import AdminOrderUpdateIn, OrderItemOut, OrderOut
 
 router = APIRouter(prefix="/api/admin", tags=["admin"])
 
+class LoginIn(BaseModel):
+    username: str
+    password: str
+
+@router.post("/login")
+async def admin_login(payload: LoginIn) -> dict:
+    if payload.username == settings.ADMIN_LOGIN and payload.password == settings.ADMIN_PASSWORD:
+        return {"token": settings.BACKEND_API_KEY}
+    raise HTTPException(status_code=401, detail={"code": "UNAUTHORIZED", "message": "Invalid credentials"})
+
+@router.get("/metrics", dependencies=[Depends(require_api_key)])
+async def get_metrics(
+    start_date: str | None = None,
+    end_date: str | None = None,
+    db: AsyncSession = Depends(get_db)
+) -> dict:
+    now = datetime.utcnow()
+    # Default to last 30 days if not provided
+    try:
+        start_dt = datetime.fromisoformat(start_date.replace('Z', '+00:00')).replace(tzinfo=None) if start_date else now - timedelta(days=30)
+        end_dt = datetime.fromisoformat(end_date.replace('Z', '+00:00')).replace(tzinfo=None) if end_date else now
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid date format. Use ISO format.")
+
+    # Total Valid Clicks (page views from KSA non-VPN)
+    clicks_stmt = select(func.count(TrackingEvent.id)).where(
+        TrackingEvent.event_name == "ViewContent",
+        TrackingEvent.is_valid_ksa == True,
+        TrackingEvent.created_at >= start_dt,
+        TrackingEvent.created_at <= end_dt
+    )
+    clicks = (await db.execute(clicks_stmt)).scalar() or 0
+
+    # Total Orders
+    orders_stmt = select(func.count(Order.id)).where(
+        Order.created_at >= start_dt,
+        Order.created_at <= end_dt
+    )
+    orders = (await db.execute(orders_stmt)).scalar() or 0
+
+    # Conversion Rate
+    conversion_rate = (orders / clicks * 100) if clicks > 0 else 0.0
+
+    return {
+        "clicks": clicks,
+        "orders": orders,
+        "conversion_rate": round(conversion_rate, 2),
+    }
 
 @router.get("/orders", dependencies=[Depends(require_api_key)])
 async def list_orders(

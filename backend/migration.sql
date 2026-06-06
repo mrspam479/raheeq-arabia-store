@@ -1,0 +1,1 @@
+ALTER TABLE tracking_events ADD COLUMN is_valid_ksa BOOLEAN NOT NULL DEFAULT FALSE;

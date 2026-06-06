@@ -300,6 +300,7 @@ class TrackingEvent(Base):
     client_ip: Mapped[str | None] = mapped_column(INET, nullable=True)
     client_user_agent: Mapped[str | None] = mapped_column(Text, nullable=True)
     payload: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
+    is_valid_ksa: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     created_at: Mapped[datetime] = mapped_column(
         server_default=func.now(), nullable=False
     )
