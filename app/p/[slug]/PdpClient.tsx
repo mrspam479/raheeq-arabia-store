@@ -353,7 +353,7 @@ export function PdpClient({
           </div>
           <div className="mt-10 rounded-2xl bg-white/10 border border-saffron/40 p-5 text-center backdrop-blur-sm">
             <p className="font-tajawal text-base font-bold text-saffron">
-              ⭐ للنتيجة الكاملة — استمري ٩٠ يوم
+              ⭐ للنتيجة الكاملة — استمري 60 يوم
             </p>
             <p className="mt-1 font-tajawal text-sm text-saffron/70">
               عشان كذا العلبتين هي الأنصح — والأكثر توفيرًا.

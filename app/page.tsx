@@ -47,8 +47,8 @@ export default function HomePage() {
               className="font-tajawal font-black leading-[1.1] text-emerald"
               style={{ fontSize: 'clamp(2.4rem, 6vw, 4.8rem)' }}
             >
-              حبّتين بالصباح.
-              <span className="block text-saffron">ونتيجة تشوفينها بعينكِ.</span>
+              تعبتي من الكريمات اللي ما تجيب نتيجة؟
+              <span className="block text-saffron">الحل يبدأ من الداخل.</span>
             </h1>
 
             <p className="mx-auto mt-6 max-w-lg font-tajawal text-lg font-semibold leading-relaxed text-charcoal md:mx-0 md:text-xl">
