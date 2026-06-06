@@ -129,13 +129,13 @@ export function PdpClient({
                 <Badge variant="ivory">{COPY.BADGES.VEGAN}</Badge>
               </div>
 
-              {/* Title + ONE-LINE tagline */}
+              {/* Title + Pain Point Subheading */}
               <div>
-                <h1 className="font-tajawal font-black text-3xl md:text-4xl text-emerald">
-                  {product.nameAr}
-                </h1>
-                <p className="font-tajawal text-base text-charcoal/75 mt-2 leading-relaxed">
+                <h1 className="font-tajawal font-black text-2xl md:text-3xl text-emerald leading-snug">
                   {product.heroTagAr}
+                </h1>
+                <p className="font-tajawal text-sm md:text-base text-charcoal/80 mt-3 leading-relaxed font-medium">
+                  {product.shortDescriptionAr}
                 </p>
               </div>
 
@@ -164,13 +164,13 @@ export function PdpClient({
                 ))}
               </div>
 
-              {/* WHAT THIS IS — one clear sentence */}
-              <div className="rounded-2xl border border-saffron/30 bg-saffron/5 p-4">
+              {/* WHAT THIS IS — Solution */}
+              <div className="rounded-2xl border border-saffron/30 bg-saffron/5 p-4 mt-2">
                 <p className="mb-1 font-tajawal text-xs font-bold text-saffron">
-                  ما هي هذه الحبّة؟
+                  الحل الجذري: {product.nameAr}
                 </p>
                 <p className="font-tajawal text-sm font-medium leading-relaxed text-charcoal">
-                  {product.shortDescriptionAr}
+                  {product.longDescriptionAr}
                 </p>
               </div>
 
