@@ -35,9 +35,9 @@ export const PRODUCTS: Product[] = [
     galleryImageUrls: ['/images/products/habba-nadra/cover.png'],
 
     offers: [
-      { code: 'T1', labelAr: 'علبة', quantity: 1, priceSar: 199, isRecommended: false },
-      { code: 'T2', labelAr: 'الزوجي', quantity: 2, priceSar: 279, isRecommended: false },
-      { code: 'T3', labelAr: 'Glow Kit (الأنصح)', quantity: 3, priceSar: 349, isRecommended: true },
+      { code: 'T1', labelAr: 'علبة واحدة', quantity: 1, priceSar: 199, isRecommended: false },
+      { code: 'T2', labelAr: 'علبتين', quantity: 2, priceSar: 279, isRecommended: false },
+      { code: 'T3', labelAr: '٣ علب (الأوفر)', quantity: 3, priceSar: 349, isRecommended: true },
     ],
 
     ingredients: [
@@ -174,9 +174,9 @@ export const PRODUCTS: Product[] = [
     galleryImageUrls: ['/images/products/habba-bareeq/cover.png'],
 
     offers: [
-      { code: 'T1', labelAr: 'علبة', quantity: 1, priceSar: 199, isRecommended: false },
-      { code: 'T2', labelAr: 'الزوجي', quantity: 2, priceSar: 279, isRecommended: false },
-      { code: 'T3', labelAr: 'Glow Kit (الأنصح)', quantity: 3, priceSar: 349, isRecommended: true },
+      { code: 'T1', labelAr: 'علبة واحدة', quantity: 1, priceSar: 199, isRecommended: false },
+      { code: 'T2', labelAr: 'علبتين', quantity: 2, priceSar: 279, isRecommended: false },
+      { code: 'T3', labelAr: '٣ علب (الأوفر)', quantity: 3, priceSar: 349, isRecommended: true },
     ],
 
     ingredients: [
@@ -296,9 +296,9 @@ export const PRODUCTS: Product[] = [
     galleryImageUrls: ['/images/products/habba-jathr/cover.png'],
 
     offers: [
-      { code: 'T1', labelAr: 'علبة', quantity: 1, priceSar: 199, isRecommended: false },
-      { code: 'T2', labelAr: 'الزوجي', quantity: 2, priceSar: 279, isRecommended: false },
-      { code: 'T3', labelAr: 'Glow Kit (الأنصح)', quantity: 3, priceSar: 349, isRecommended: true },
+      { code: 'T1', labelAr: 'علبة واحدة', quantity: 1, priceSar: 199, isRecommended: false },
+      { code: 'T2', labelAr: 'علبتين', quantity: 2, priceSar: 279, isRecommended: false },
+      { code: 'T3', labelAr: '٣ علب (الأوفر)', quantity: 3, priceSar: 349, isRecommended: true },
     ],
 
     ingredients: [
@@ -418,7 +418,7 @@ export const PRODUCTS: Product[] = [
     offers: [
       { code: 'T1', labelAr: 'صندوق شهر', quantity: 1, priceSar: 499, isRecommended: false },
       { code: 'T2', labelAr: 'صندوقين (شهرين)', quantity: 2, priceSar: 899, isRecommended: false },
-      { code: 'T3', labelAr: '3 صناديق (الأنصح)', quantity: 3, priceSar: 1299, isRecommended: true },
+      { code: 'T3', labelAr: '3 صناديق (الأوفر)', quantity: 3, priceSar: 1299, isRecommended: true },
     ],
 
     ingredients: [
