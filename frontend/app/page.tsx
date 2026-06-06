@@ -90,7 +90,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Hero visual — single image, no duplicate product names */}
+          {/* Hero visual — bundle image */}
           <div className="relative mx-auto w-full max-w-[460px]">
             <Link
               href="/p/bundle-glow-trio"
@@ -99,7 +99,7 @@ export default function HomePage() {
             >
               <div className="relative aspect-square overflow-hidden">
                 <Image
-                  src="/images/products/habba-nadra/cover.png"
+                  src="/images/products/bundle-glow-trio/cover.png"
                   alt="رحيق — صندوق الجمال الكامل"
                   fill
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -211,17 +211,14 @@ export default function HomePage() {
 
           <div className="rounded-[28px] border-2 border-saffron/30 bg-white p-6 shadow-[0_24px_60px_rgba(18,107,82,0.15)] md:p-10">
             <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-2">
-              {/* Image placeholder */}
-              <div className="relative flex aspect-square items-center justify-center rounded-3xl border-2 border-dashed border-emerald/25 bg-emerald/5">
-                <div className="px-4 text-center">
-                  <p className="mb-2 text-5xl">🎁</p>
-                  <p className="font-tajawal text-sm font-bold text-emerald">
-                    [صورة الـ ٣ منتجات معًا]
-                  </p>
-                  <p className="mt-1 font-tajawal text-xs text-charcoal/55">
-                    نضرة + بريق + جذر بتغليف فاخر
-                  </p>
-                </div>
+              <div className="relative aspect-square overflow-hidden rounded-3xl bg-stone-100">
+                <Image
+                  src="/images/products/bundle-glow-trio/cover.png"
+                  alt="صندوق الجمال الكامل — نضرة + بريق + جذر"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
               </div>
 
               <div className="flex flex-col gap-5">
@@ -279,19 +276,30 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ══ LIFESTYLE IMAGE DIVIDER ═══════════════════════ */}
+      {/* ══ PRODUCT HIGHLIGHTS STRIP ═══════════════════════ */}
       <section className="border-b border-[#EAE0D0] bg-white px-4 py-12">
         <div className="container mx-auto max-w-5xl">
-          <div className="relative flex aspect-[21/9] items-center justify-center overflow-hidden rounded-3xl border-2 border-dashed border-emerald/25 bg-emerald/5">
-            <div className="px-4 text-center">
-              <p className="font-tajawal text-2xl">📸</p>
-              <p className="mt-2 font-tajawal text-sm font-bold text-emerald">
-                [مكان لصورة لايف ستايل — Lifestyle banner]
-              </p>
-              <p className="mt-1 font-tajawal text-xs text-charcoal/55">
-                صورة عريضة: امرأة سعودية تستمتع بفطورها مع علب رحيق
-              </p>
-            </div>
+          <div className="grid grid-cols-3 gap-4">
+            {MAIN_PRODUCTS.map((product) => (
+              <Link
+                key={product.slug}
+                href={`/p/${product.slug}`}
+                prefetch
+                className="group relative aspect-square overflow-hidden rounded-3xl bg-stone-100"
+              >
+                <Image
+                  src={product.coverImageUrl}
+                  alt={product.nameAr}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  sizes="(max-width: 768px) 33vw, 300px"
+                />
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-4">
+                  <p className="font-tajawal text-sm font-black text-white">{product.nameAr}</p>
+                  <p className="font-tajawal text-[11px] text-white/80">{product.heroTagAr}</p>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </section>

@@ -76,8 +76,9 @@ PRODUCTS = [
         "rating_value": Decimal("4.9"),
         "review_count": 142,
         "stock_label_ar": "بقي 12 صندوق من دفعة هذا الأسبوع.",
-        "cover_image_url": "/images/products/habba-nadra/cover.png",
+        "cover_image_url": "/images/products/bundle-glow-trio/cover.png",
         "gallery_image_urls": [
+            "/images/products/bundle-glow-trio/cover.png",
             "/images/products/habba-nadra/cover.png",
             "/images/products/habba-bareeq/cover.png",
             "/images/products/habba-jathr/cover.png",

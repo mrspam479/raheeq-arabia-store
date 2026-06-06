@@ -300,18 +300,21 @@ export function PdpClient({
         </div>
       </section>
 
-      {/* ════ IMAGE DIVIDER — lifestyle shot ════ */}
+      {/* ════ PRODUCT SHOWCASE DIVIDER ════ */}
       <section className="bg-gradient-to-b from-ivory to-[#faf5ec] py-10">
         <div className="container mx-auto px-4 max-w-5xl">
-          <div className="relative aspect-[21/9] rounded-3xl border-2 border-dashed border-emerald/25 bg-emerald/5 overflow-hidden flex items-center justify-center">
-            <div className="text-center px-4">
-              <p className="font-tajawal text-2xl">📸</p>
-              <p className="mt-2 font-tajawal text-sm font-bold text-emerald">
-                [مكان لإضافة صورة لايف ستايل — Lifestyle photo]
-              </p>
-              <p className="mt-1 font-tajawal text-xs text-charcoal/55">
-                صورة عريضة: العلبة على رخام كريمي مع قهوة الصباح
-              </p>
+          <div className="relative aspect-[21/9] rounded-3xl overflow-hidden bg-stone-100">
+            <Image
+              src={product.coverImageUrl}
+              alt={product.nameAr}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 1200px"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+            <div className="absolute bottom-6 right-6 text-right">
+              <p className="font-tajawal text-lg font-black text-white md:text-2xl">{product.nameAr}</p>
+              <p className="font-tajawal text-sm text-white/80">{product.heroTagAr}</p>
             </div>
           </div>
         </div>
@@ -523,19 +526,21 @@ export function PdpClient({
         </div>
       </section>
 
-      {/* ════ IMAGE DIVIDER — happy customer / results montage ════ */}
+      {/* ════ TRUST STRIP ════ */}
       <section className="bg-stone-50 py-10">
         <div className="container mx-auto px-4 max-w-5xl">
-          <div className="relative aspect-[21/9] rounded-3xl border-2 border-dashed border-saffron/40 bg-saffron/5 overflow-hidden flex items-center justify-center">
-            <div className="text-center px-4">
-              <p className="font-tajawal text-2xl">📸</p>
-              <p className="mt-2 font-tajawal text-sm font-bold text-emerald">
-                [مكان لصورة عميلة سعيدة — Happy customer]
-              </p>
-              <p className="mt-1 font-tajawal text-xs text-charcoal/55">
-                أو كولاج صور قبل/بعد من عدة عميلات
-              </p>
-            </div>
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+            {[
+              { icon: '🧪', text: 'مكوّنات مثبتة علميًا' },
+              { icon: '🔬', text: 'فحص مخبري كل دفعة' },
+              { icon: '☪️', text: 'حلال ١٠٠٪' },
+              { icon: '💵', text: 'دفع عند الاستلام' },
+            ].map((item) => (
+              <div key={item.text} className="flex flex-col items-center gap-2 rounded-2xl border border-emerald/15 bg-white p-4 text-center">
+                <span className="text-2xl">{item.icon}</span>
+                <p className="font-tajawal text-xs font-bold text-emerald">{item.text}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -622,16 +627,14 @@ export function PdpClient({
 
           <div className="rounded-3xl bg-white border-2 border-saffron/30 p-6 md:p-8 shadow-[0_24px_60px_rgba(18,107,82,0.15)]">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-              <div className="relative aspect-square rounded-2xl border-2 border-dashed border-emerald/25 bg-emerald/5 flex items-center justify-center">
-                <div className="text-center px-4">
-                  <p className="text-4xl mb-2">🎁</p>
-                  <p className="font-tajawal text-sm font-bold text-emerald">
-                    [صورة الـ 3 منتجات معًا]
-                  </p>
-                  <p className="mt-1 font-tajawal text-xs text-charcoal/55">
-                    نضرة + بريق + جذر — صندوق فاخر
-                  </p>
-                </div>
+              <div className="relative aspect-square rounded-2xl overflow-hidden bg-stone-100">
+                <Image
+                  src="/images/products/bundle-glow-trio/cover.png"
+                  alt="صندوق الجمال الكامل — نضرة + بريق + جذر"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
               </div>
 
               <div className="flex flex-col gap-4">

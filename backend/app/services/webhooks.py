@@ -48,14 +48,16 @@ async def post_to_sheet(kind: str, payload: dict) -> None:
         logger.exception("webhook.sheet.failed", kind=kind)
 
 
-def _format_phone(raw: str) -> str:
-    """Return phone as 966XXXXXXXXX (no + prefix)."""
-    phone = raw.strip().lstrip("+")
-    if phone.startswith("966"):
+def _format_phone(phone_e164: str) -> str:
+    """Ensure phone is in +966XXXXXXXXX format."""
+    phone = phone_e164.strip()
+    if phone.startswith("+"):
         return phone
+    if phone.startswith("966"):
+        return f"+{phone}"
     if phone.startswith("05") or phone.startswith("5"):
         digits = phone.lstrip("0")
-        return f"966{digits}"
+        return f"+966{digits}"
     return phone
 
 
@@ -80,7 +82,7 @@ def build_order_payload_from_out(order_out: object, payload: object) -> dict:
     now = o.created_at if hasattr(o, "created_at") and o.created_at else datetime.now(timezone.utc)
 
     try:
-        phone = KsaPhone(p.customer.phone).digits
+        phone = KsaPhone(p.customer.phone).e164
     except ValueError:
         phone = _format_phone(p.customer.phone)
 

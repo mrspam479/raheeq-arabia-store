@@ -32,7 +32,7 @@ export const PRODUCTS: Product[] = [
     reviewCount: 387,
     stockLabelAr: 'بقي 24 علبة فقط من دفعة هذا الأسبوع.',
     coverImageUrl: '/images/products/habba-nadra/cover.png',
-    galleryImageUrls: ['/images/products/habba-nadra/cover.png', '/images/products/habba-nadra/gallery-1.png'],
+    galleryImageUrls: ['/images/products/habba-nadra/cover.png'],
 
     offers: [
       { code: 'T1', labelAr: 'علبة', quantity: 1, priceSar: 199, isRecommended: false },
@@ -171,7 +171,7 @@ export const PRODUCTS: Product[] = [
     reviewCount: 293,
     stockLabelAr: 'بقي 18 علبة فقط من دفعة هذا الأسبوع.',
     coverImageUrl: '/images/products/habba-bareeq/cover.png',
-    galleryImageUrls: ['/images/products/habba-bareeq/cover.png', '/images/products/habba-bareeq/gallery-1.png'],
+    galleryImageUrls: ['/images/products/habba-bareeq/cover.png'],
 
     offers: [
       { code: 'T1', labelAr: 'علبة', quantity: 1, priceSar: 199, isRecommended: false },
@@ -293,7 +293,7 @@ export const PRODUCTS: Product[] = [
     reviewCount: 412,
     stockLabelAr: 'بقي 32 علبة فقط من دفعة هذا الأسبوع.',
     coverImageUrl: '/images/products/habba-jathr/cover.png',
-    galleryImageUrls: ['/images/products/habba-jathr/cover.png', '/images/products/habba-jathr/gallery-1.png'],
+    galleryImageUrls: ['/images/products/habba-jathr/cover.png'],
 
     offers: [
       { code: 'T1', labelAr: 'علبة', quantity: 1, priceSar: 199, isRecommended: false },
@@ -407,8 +407,9 @@ export const PRODUCTS: Product[] = [
     ratingValue: 4.9,
     reviewCount: 142,
     stockLabelAr: 'بقي 12 صندوق فقط من دفعة هذا الأسبوع.',
-    coverImageUrl: '/images/products/habba-nadra/cover.png',
+    coverImageUrl: '/images/products/bundle-glow-trio/cover.png',
     galleryImageUrls: [
+      '/images/products/bundle-glow-trio/cover.png',
       '/images/products/habba-nadra/cover.png',
       '/images/products/habba-bareeq/cover.png',
       '/images/products/habba-jathr/cover.png',
@@ -513,8 +514,8 @@ export const BUNDLE_PRODUCT: Product = PRODUCTS.find((p) => p.slug === 'bundle-g
 
 export const PRODUCT_ONE_LINERS: Record<string, string> = {
   'habba-nadra': 'أستازانتين + كولاجين بحري — تجاعيد أقل ونضارة أكثر.',
-  'habba-bareeq': 'فيتامين سي + حديد + نياسيناميد — تهاجم الهالات مباشرة.',
-  'habba-jathr': 'تفاح أنوركا + بيوتين — شعر أكثف من الجذر.',
+  'habba-bareeq': 'حديد + حمض فوليك + فيتامين سي — هالات أفتح من الداخل.',
+  'habba-jathr': 'بيوتين + كولاجين + كيراتين — شعر أكثف من الجذر.',
   'bundle-glow-trio': 'الـ 3 منتجات معًا — توفير 100 ريال سعودي + شحن مجاني.',
 };
 
