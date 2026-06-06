@@ -16,7 +16,7 @@ PRODUCTS = [
         "slug": "habba-nadra",
         "name_ar": "حبّة نضرة",
         "working_name": "Anti-Wrinkle Gummy",
-        "hero_tag_ar": "تجاعيد أقل. إشراقة أكثر. من الداخل.",
+        "hero_tag_ar": "تعبتي من خطوط وجهك اللي تزيد كل يوم؟",
         "short_description_ar": "الكريمات تبقى على السطح. نضرة تشتغل من الداخل. أستازانتين يحمي بشرتكِ + كولاجين بحري يبنيها من جديد. النتيجة تبدأ من الأسبوع الرابع.",
         "long_description_ar": "بعد سن ٢٥، بشرتكِ تفقد الكولاجين كل سنة. الكريمات ما تعوّض هذا — جزيئاتها كبيرة ما تدخل الجلد. نضرة تشتغل من الداخل: أستازانتين يحمي خلايا بشرتكِ من الشمس والتأكسد. كولاجين بحري يبني كولاجين جديد. فيتامين سي يُضاعف البناء. هيالورونيك يحبس الرطوبة. حبّتين بالصباح — وخلال شهر تلاحظين الفرق.",
         "rating_value": Decimal("4.9"),
@@ -34,7 +34,7 @@ PRODUCTS = [
         "slug": "habba-bareeq",
         "name_ar": "حبّة بريق",
         "working_name": "Dark Circle Gummy",
-        "hero_tag_ar": "هالات أفتح. بدون كونسيلر.",
+        "hero_tag_ar": "ودّك تطلعين بدون كونسيلر وكل من شافك قال وجهك منور؟",
         "short_description_ar": "الهالات مش مشكلة نوم — هي مشكلة تصبّغ ونقص حديد. بريق تهاجم السواد مباشرة: فيتامين سي يُفتّح، حديد يعالج النقص، نياسيناميد يوقف التصبّغ. ثلاث جهات مباشرة.",
         "long_description_ar": "الهالات لها ٣ أسباب: تصبّغ، نقص حديد، وتراكم ميلانين. بريق تعالج الثلاثة مباشرة. فيتامين سي يُفتّح اللون. الحديد يرفع الأكسجين في الدم فيقلّ السواد. النياسيناميد يوقف الميلانين. مش حبّة نوم — هجوم مباشر على الهالات.",
         "rating_value": Decimal("4.8"),
@@ -52,7 +52,7 @@ PRODUCTS = [
         "slug": "habba-jathr",
         "name_ar": "حبّة جذر",
         "working_name": "Hair Growth Gummy",
-        "hero_tag_ar": "شعر أكثف. تساقط أقل. من الجذر.",
+        "hero_tag_ar": "شعرك يطيح وتعبتي من الفراغات؟",
         "short_description_ar": "الزيوت والكريمات توصل للشعرة بس — ما توصل للجذر. جذر تشتغل من الداخل: مستخلص تفاح أنوركا الإيطالي أعاد نمو الشعر في ٢٥٠ امرأة خلال ٦٠ يوم. مع بيوتين يبني الكيراتين وزنك يُدير دورة النمو.",
         "long_description_ar": "التساقط يبدأ من بصيلة تعاني من الداخل. جذر تغذّي البصيلة بـ ٥ مكوّنات: مستخلص تفاح أنوركا يعيد النمو (مثبت في دراسة على ٢٥٠ شخص). بيوتين يبني الكيراتين. زنك يُدير دورة النمو. فيتامين D3 يدعم البصيلات. حمض الفوليك يُسرّع النمو. حبّتين بالصباح — وخلال شهرين تلاحظين الفرق.",
         "rating_value": Decimal("4.9"),
@@ -70,7 +70,7 @@ PRODUCTS = [
         "slug": "bundle-glow-trio",
         "name_ar": "صندوق الجمال الكامل",
         "working_name": "Glow Trio Bundle",
-        "hero_tag_ar": "بشرة + هالات + شعر · الـ 3 منتجات بـ 499 ريال سعودي بدلًا من 597.",
+        "hero_tag_ar": "تعبتي تدورين حلول لكل مشكلة لحالها؟",
         "short_description_ar": "الـ 3 منتجات اللي تحتاجينها لجمالكِ الكامل، في صندوق واحد. سعر أقل من الشراء الفردي بـ 100 ريال سعودي.",
         "long_description_ar": "بدل ما تطلبين كل منتج بـ 199 ريال سعودي (المجموع 597)، خذي الصندوق الكامل بـ 499 ريال سعودي. حبّة نضرة لبشرتكِ + حبّة بريق لهالاتكِ + حبّة جذر لشعركِ — كل شيء يشتغل سوا لمدة شهر كامل.",
         "rating_value": Decimal("4.9"),
@@ -119,9 +119,9 @@ INGREDIENTS: dict[str, list[dict]] = {
 }
 
 OFFERS_TEMPLATE = [
-    {"code": "T1", "label_ar": "علبة", "quantity": 1, "price_sar": Decimal("199"), "is_recommended": False, "sort_order": 0},
-    {"code": "T2", "label_ar": "الزوجي", "quantity": 2, "price_sar": Decimal("279"), "is_recommended": False, "sort_order": 1},
-    {"code": "T3", "label_ar": "Glow Kit (الأنصح)", "quantity": 3, "price_sar": Decimal("349"), "is_recommended": True, "sort_order": 2},
+    {"code": "T1", "label_ar": "علبة واحدة", "quantity": 1, "price_sar": Decimal("199"), "is_recommended": False, "sort_order": 0},
+    {"code": "T2", "label_ar": "علبتين", "quantity": 2, "price_sar": Decimal("279"), "is_recommended": False, "sort_order": 1},
+    {"code": "T3", "label_ar": "٣ علب (الأوفر)", "quantity": 3, "price_sar": Decimal("349"), "is_recommended": True, "sort_order": 2},
 ]
 
 # Per-product offer overrides (slug -> offers). Falls back to OFFERS_TEMPLATE.
@@ -129,7 +129,7 @@ OFFERS_BY_SLUG: dict[str, list[dict]] = {
     "bundle-glow-trio": [
         {"code": "T1", "label_ar": "صندوق شهر", "quantity": 1, "price_sar": Decimal("499"), "is_recommended": False, "sort_order": 0},
         {"code": "T2", "label_ar": "صندوقين (شهرين)", "quantity": 2, "price_sar": Decimal("899"), "is_recommended": False, "sort_order": 1},
-        {"code": "T3", "label_ar": "3 صناديق (الأنصح)", "quantity": 3, "price_sar": Decimal("1299"), "is_recommended": True, "sort_order": 2},
+        {"code": "T3", "label_ar": "3 صناديق (الأوفر)", "quantity": 3, "price_sar": Decimal("1299"), "is_recommended": True, "sort_order": 2},
     ],
 }
 
