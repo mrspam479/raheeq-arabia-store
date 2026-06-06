@@ -33,8 +33,12 @@ export default function AdminDashboard() {
       
       const data = await res.json();
       setMetrics(data);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('حدث خطأ غير متوقع');
+      }
     } finally {
       setLoading(false);
     }
