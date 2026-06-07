@@ -35,6 +35,11 @@ export default function AdminOrders() {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/admin/orders?limit=100`, {
           headers: { 'x-api-key': token || '' }
         });
+        if (res.status === 401) {
+          localStorage.removeItem('admin_token');
+          window.location.href = '/admin/login';
+          return;
+        }
         if (!res.ok) throw new Error('Failed to fetch orders');
         const data = await res.json();
         setOrders(data.items);

@@ -29,6 +29,11 @@ export default function AdminDashboard() {
           'x-api-key': token || '',
         }
       });
+      if (res.status === 401) {
+        localStorage.removeItem('admin_token');
+        window.location.href = '/admin/login';
+        return;
+      }
       if (!res.ok) throw new Error('Failed to fetch metrics');
       
       const data = await res.json();
