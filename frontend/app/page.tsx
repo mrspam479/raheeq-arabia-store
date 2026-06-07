@@ -123,6 +123,69 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ══ PICK YOUR ISSUE — products front and center ═════ */}
+      <section className="border-b border-[#EAE0D0] bg-white px-4 py-16 md:py-20">
+        <div className="container mx-auto max-w-6xl">
+          <div className="mb-10 text-center">
+            <span className="mb-3 inline-block rounded-full bg-saffron/15 px-4 py-1.5 font-tajawal text-xs font-black text-saffron">
+              ✨ اختاري مشكلتكِ — نعطيكِ الحل
+            </span>
+            <h2 className="font-tajawal text-4xl font-black leading-tight text-emerald md:text-5xl">
+              ٣ منتجات. ٣ مشاكل. حلّ من الداخل.
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl font-tajawal text-base text-charcoal/65 md:text-lg">
+              كل منتج صُمّم لمشكلة واحدة — بمكوّنات مثبتة علميًا وجرعات فعّالة.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+            {MAIN_PRODUCTS.map((product, idx) => {
+              const icons = ['✨', '👁️', '💇‍♀️'];
+              const issues = ['تجاعيد وبشرة باهتة', 'هالات سوداء وتعب', 'تساقط وفراغات'];
+              return (
+                <Link
+                  key={product.slug}
+                  href={`/p/${product.slug}`}
+                  prefetch
+                  className="group flex flex-col overflow-hidden rounded-[32px] border-2 border-[#E0D4C0] bg-white transition-all duration-300 hover:-translate-y-2 hover:border-emerald hover:shadow-[0_24px_60px_rgba(18,107,82,0.18)]"
+                >
+                  <div className="relative aspect-[4/3] overflow-hidden bg-[#FAFAF8]">
+                    <Image
+                      src={product.coverImageUrl}
+                      alt={product.nameAr}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      priority={idx === 0}
+                    />
+                    <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 font-tajawal text-xs font-bold text-charcoal shadow-md">
+                      <span className="text-base">{icons[idx]}</span>
+                      <span>{issues[idx]}</span>
+                    </span>
+                  </div>
+                  <div className="flex flex-1 flex-col p-6">
+                    <h3 className="font-tajawal text-2xl font-black text-emerald">{product.nameAr}</h3>
+                    <p className="mt-2 font-tajawal text-sm leading-relaxed text-charcoal/70 line-clamp-2">
+                      {product.heroTagAr}
+                    </p>
+                    <div className="mt-4 flex items-center justify-between">
+                      <div>
+                        <p className="font-tajawal text-[11px] text-charcoal/55">يبدأ من</p>
+                        <p className="font-tajawal text-2xl font-black text-emerald">{formatSar(199)}</p>
+                      </div>
+                      <StarRating value={product.ratingValue} size="sm" />
+                    </div>
+                    <span className="mt-5 flex h-12 items-center justify-center gap-2 rounded-xl bg-[#00C97A] font-tajawal text-base font-black text-[#082a1c] transition-all group-hover:scale-[1.02]">
+                      اطلبيها الآن ←
+                    </span>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
       {/* ══ MISSION STATEMENT ═════════════════════════════ */}
       <section className="border-b border-[#EAE0D0] bg-emerald px-4 py-16 md:py-20">
         <div className="container mx-auto max-w-3xl text-center">
@@ -140,55 +203,6 @@ export default function HomePage() {
               <span key={badge} className="rounded-full border border-saffron/30 bg-white/10 px-4 py-2 font-tajawal text-xs font-bold text-saffron backdrop-blur-sm">
                 {badge}
               </span>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ══ PRODUCTS ══════════════════════════════════════ */}
-      <section className="border-b border-[#EAE0D0] px-4 py-20">
-        <div className="container mx-auto max-w-5xl">
-          <div className="mb-12 text-center">
-            <p className="mb-2 font-tajawal text-sm font-bold text-saffron">{COPY.HOME.PRODUCTS_BADGE}</p>
-            <h2 className="font-tajawal text-3xl font-black text-emerald md:text-4xl">
-              {COPY.HOME.PRODUCTS_HEADING}
-            </h2>
-            <p className="mx-auto mt-3 max-w-xl font-tajawal text-base text-charcoal/65">
-              {COPY.HOME.PRODUCTS_SUBHEADING}
-            </p>
-          </div>
-
-          <div className="no-scrollbar -mx-4 flex snap-x snap-mandatory gap-5 overflow-x-auto px-4 pb-4 md:mx-0 md:grid md:grid-cols-3 md:overflow-visible md:px-0 md:pb-0">
-            {MAIN_PRODUCTS.map((product) => (
-              <Link
-                key={product.slug}
-                href={`/p/${product.slug}`}
-                prefetch
-                className="group min-w-[82%] snap-center overflow-hidden rounded-[28px] border-2 border-[#E0D4C0] bg-[#FAFAF8] transition-all duration-300 hover:border-emerald/40 hover:shadow-lg md:min-w-0"
-              >
-                <div className="relative aspect-square overflow-hidden">
-                  <Image
-                    src={product.coverImageUrl}
-                    alt={product.nameAr}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                  />
-                </div>
-                <div className="p-5">
-                  <h3 className="font-tajawal text-xl font-black text-emerald">{product.nameAr}</h3>
-                  <p className="mt-1 mb-3 font-tajawal text-sm text-charcoal/65 line-clamp-2">{product.heroTagAr}</p>
-                  <div className="flex items-center justify-between">
-                    <span className="font-tajawal font-bold text-emerald">
-                      من {formatSar(199)}
-                    </span>
-                    <StarRating value={product.ratingValue} size="sm" />
-                  </div>
-                  <span className="mt-4 flex h-11 items-center justify-center rounded-xl bg-emerald font-tajawal text-sm font-bold text-white">
-                    شوفي التفاصيل
-                  </span>
-                </div>
-              </Link>
             ))}
           </div>
         </div>
@@ -272,34 +286,6 @@ export default function HomePage() {
                 </p>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ══ PRODUCT HIGHLIGHTS STRIP ═══════════════════════ */}
-      <section className="border-b border-[#EAE0D0] bg-white px-4 py-12">
-        <div className="container mx-auto max-w-5xl">
-          <div className="grid grid-cols-3 gap-4">
-            {MAIN_PRODUCTS.map((product) => (
-              <Link
-                key={product.slug}
-                href={`/p/${product.slug}`}
-                prefetch
-                className="group relative aspect-square overflow-hidden rounded-3xl bg-stone-100"
-              >
-                <Image
-                  src={product.coverImageUrl}
-                  alt={product.nameAr}
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  sizes="(max-width: 768px) 33vw, 300px"
-                />
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-4">
-                  <p className="font-tajawal text-sm font-black text-white">{product.nameAr}</p>
-                  <p className="font-tajawal text-[11px] text-white/80">{product.heroTagAr}</p>
-                </div>
-              </Link>
-            ))}
           </div>
         </div>
       </section>

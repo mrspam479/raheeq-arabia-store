@@ -10,11 +10,14 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from app.config import settings
-from app.deps import get_db, require_api_key
+from app.deps import get_db, require_api_key, bearer_scheme
 from app.db.models import Order, TrackingEvent
 from app.schemas.orders import AdminOrderUpdateIn, OrderItemOut, OrderOut
 
 router = APIRouter(prefix="/api/admin", tags=["admin"])
+
+import secrets
+from fastapi.security import HTTPAuthorizationCredentials
 
 class LoginIn(BaseModel):
     username: str
@@ -23,10 +26,17 @@ class LoginIn(BaseModel):
 @router.post("/login")
 async def admin_login(payload: LoginIn) -> dict:
     if payload.username == settings.ADMIN_LOGIN and payload.password == settings.ADMIN_PASSWORD:
-        return {"token": settings.BACKEND_API_KEY}
+        # Use the admin password as the bearer token so auth is fully self-contained
+        return {"token": settings.ADMIN_PASSWORD}
     raise HTTPException(status_code=401, detail={"code": "UNAUTHORIZED", "message": "Invalid credentials"})
 
-@router.get("/metrics", dependencies=[Depends(require_api_key)])
+
+def _verify_admin_token(cred: HTTPAuthorizationCredentials | None = Depends(bearer_scheme)) -> None:
+    if not cred or not secrets.compare_digest(cred.credentials, settings.ADMIN_PASSWORD):
+        raise HTTPException(status_code=401, detail={"code": "UNAUTHORIZED", "message": "Invalid admin token"})
+
+
+@router.get("/metrics", dependencies=[Depends(_verify_admin_token)])
 async def get_metrics(
     start_date: str | None = None,
     end_date: str | None = None,
@@ -65,7 +75,7 @@ async def get_metrics(
         "conversion_rate": round(conversion_rate, 2),
     }
 
-@router.get("/orders", dependencies=[Depends(require_api_key)])
+@router.get("/orders", dependencies=[Depends(_verify_admin_token)])
 async def list_orders(
     status: str | None = None,
     q: str | None = None,
@@ -105,7 +115,7 @@ async def list_orders(
     }
 
 
-@router.patch("/orders/{order_id}", status_code=204, response_model=None, dependencies=[Depends(require_api_key)])
+@router.patch("/orders/{order_id}", status_code=204, response_model=None, dependencies=[Depends(_verify_admin_token)])
 async def update_order(
     order_id: uuid.UUID,
     payload: AdminOrderUpdateIn,
