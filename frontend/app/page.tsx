@@ -29,6 +29,30 @@ export const metadata: Metadata = {
 ───────────────────────────────────────────────────── */
 
 export default function HomePage() {
+  const issueCards = [
+    {
+      icon: '✨',
+      issue: 'تجاعيد + بهتان',
+      product: 'حبّة نضرة',
+      solution: 'كولاجين + أستازانتين',
+      outcome: 'لبشرة أصفى ومشدودة من الداخل',
+    },
+    {
+      icon: '👁️',
+      issue: 'هالات سوداء',
+      product: 'حبّة بريق',
+      solution: 'حديد + حمض فوليك',
+      outcome: 'لوجه أفتح بدون كونسيلر يومي',
+    },
+    {
+      icon: '💇‍♀️',
+      issue: 'تساقط وفراغات',
+      product: 'حبّة جذر',
+      solution: 'بيوتين + كولاجين + كيراتين',
+      outcome: 'لشعر أقوى وأكثف من الجذر',
+    },
+  ];
+
   return (
     <div className="bg-white">
 
@@ -134,17 +158,22 @@ export default function HomePage() {
               ✨ اختاري مشكلتكِ — نعطيكِ الحل
             </span>
             <h2 className="font-tajawal text-4xl font-black leading-tight text-emerald md:text-5xl">
-              ٣ منتجات. ٣ مشاكل. حلّ من الداخل.
+              شوفي مشكلتكِ. اختاري الحل فورًا.
             </h2>
             <p className="mx-auto mt-4 max-w-2xl font-tajawal text-base text-charcoal/65 md:text-lg">
-              كل منتج صُمّم لمشكلة واحدة — بمكوّنات مثبتة علميًا وجرعات فعّالة.
+              بدون قراءة طويلة: كل بطاقة تقول لكِ المشكلة، المنتج، والمكوّن الأساسي.
             </p>
           </div>
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
             {MAIN_PRODUCTS.map((product, idx) => {
-              const icons = ['✨', '👁️', '💇‍♀️'];
-              const issues = ['تجاعيد وبشرة باهتة', 'هالات سوداء وتعب', 'تساقط وفراغات'];
+              const card = issueCards[idx] ?? {
+                icon: '✨',
+                issue: product.nameAr,
+                product: product.nameAr,
+                solution: 'حل من الداخل',
+                outcome: product.heroTagAr,
+              };
               return (
                 <Link
                   key={product.slug}
@@ -161,15 +190,24 @@ export default function HomePage() {
                       sizes="(max-width: 768px) 100vw, 33vw"
                       priority={idx === 0}
                     />
-                    <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-white px-3 py-1.5 font-tajawal text-xs font-bold text-charcoal shadow-md">
-                      <span className="text-base">{icons[idx]}</span>
-                      <span>{issues[idx]}</span>
-                    </span>
+                    <div className="absolute inset-x-3 bottom-3 rounded-2xl border border-white/60 bg-white/92 p-3 text-right shadow-lg backdrop-blur">
+                      <p className="font-tajawal text-[11px] font-black text-red-600">
+                        المشكلة: {card.issue}
+                      </p>
+                      <div className="mt-1 flex items-center justify-between gap-2">
+                        <p className="font-tajawal text-sm font-black text-emerald">
+                          {card.icon} الحل: {card.product}
+                        </p>
+                        <span className="rounded-full bg-emerald/10 px-2 py-1 font-tajawal text-[9px] font-black text-emerald">
+                          {card.solution}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                   <div className="flex flex-1 flex-col p-6">
-                    <h3 className="font-tajawal text-2xl font-black text-emerald">{product.nameAr}</h3>
+                    <h3 className="font-tajawal text-2xl font-black text-emerald">{card.issue}</h3>
                     <p className="mt-2 font-tajawal text-sm leading-relaxed text-charcoal/70 line-clamp-2">
-                      {product.heroTagAr}
+                      {card.outcome}
                     </p>
                     <div className="mt-4 flex items-center justify-between">
                       <div>

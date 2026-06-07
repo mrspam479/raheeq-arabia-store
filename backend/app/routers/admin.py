@@ -322,3 +322,17 @@ async def update_order(
         order.notes = payload.notes
 
     await db.commit()
+
+
+@router.delete("/orders/{order_id}", status_code=204, response_model=None, dependencies=[Depends(_verify_admin_token)])
+async def delete_order(
+    order_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+) -> None:
+    result = await db.execute(select(Order).where(Order.id == order_id))
+    order = result.scalar_one_or_none()
+    if order is None:
+        raise HTTPException(status_code=404, detail={"code": "NOT_FOUND", "message": "Order not found"})
+
+    await db.delete(order)
+    await db.commit()
