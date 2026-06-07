@@ -50,7 +50,6 @@ export function PdpClient({
   timeline,
   howToUse,
   beforeAfter,
-  whyUs,
 }: PdpClientProps) {
   const { addLine, openCart } = useCartStore();
   const [selectedTier, setSelectedTier] = useState<1 | 2 | 3>(2);
@@ -127,10 +126,10 @@ export function PdpClient({
               <div className="flex flex-wrap gap-2">
                 <Badge variant="ivory">{COPY.BADGES.COD}</Badge>
                 <Badge variant="ivory">{COPY.BADGES.HALAL}</Badge>
-                <Badge variant="ivory">{COPY.BADGES.VEGAN}</Badge>
+                <Badge variant="ivory">🛡️ ضمان ١٤ يوم</Badge>
               </div>
 
-              {/* Title + Pain Point Subheading */}
+              {/* Title + Pain Point */}
               <div>
                 <h1 className="font-tajawal font-black text-2xl md:text-3xl text-emerald leading-snug">
                   {product.heroTagAr}
@@ -150,7 +149,7 @@ export function PdpClient({
                 />
               </div>
 
-              {/* 3 BIG benefits — visual */}
+              {/* 3 BIG benefits */}
               <div className="grid grid-cols-3 gap-2">
                 {benefits.map((b) => (
                   <div
@@ -165,7 +164,7 @@ export function PdpClient({
                 ))}
               </div>
 
-              {/* WHAT THIS IS — Solution */}
+              {/* Solution box */}
               <div className="rounded-2xl border border-saffron/30 bg-saffron/5 p-4 mt-2">
                 <p className="mb-1 font-tajawal text-xs font-bold text-saffron">
                   الحل الجذري: {product.nameAr}
@@ -175,7 +174,7 @@ export function PdpClient({
                 </p>
               </div>
 
-              {/* OFFER SELECTOR — savings clearly shown */}
+              {/* OFFER SELECTOR */}
               <div>
                 <div className="mb-3 flex items-center justify-between">
                   <p className="font-tajawal font-bold text-base text-emerald">
@@ -209,7 +208,6 @@ export function PdpClient({
                           </span>
                         )}
 
-                        {/* Product image + quantity visual */}
                         <div className="flex shrink-0 items-center gap-1">
                           {Array.from({ length: offer.quantity }, (_, idx) => (
                             <div
@@ -230,7 +228,6 @@ export function PdpClient({
                           ))}
                         </div>
 
-                        {/* Title + duration */}
                         <div className="mx-3 flex-1">
                           <p className="font-tajawal text-base font-black text-charcoal">
                             {getOfferTitle(tier, isBundle)}
@@ -248,7 +245,6 @@ export function PdpClient({
                           )}
                         </div>
 
-                        {/* Price */}
                         <div className="text-left">
                           <p className={cn(
                             'font-tajawal text-lg font-black leading-none',
@@ -287,18 +283,18 @@ export function PdpClient({
               {/* Reassurance */}
               <div className="rounded-xl bg-saffron/10 px-4 py-3 text-center">
                 <p className="font-tajawal text-sm font-bold text-emerald">
-                  💵 الدفع عند الاستلام
+                  💵 الدفع عند الاستلام — بدون بطاقة
                 </p>
                 <p className="mt-1 font-tajawal text-xs text-charcoal/70">
-                  ما تحتاجين بطاقة. نتّصل بكِ ونوصّل لبابكِ خلال ١-٣ أيام.
+                  نتّصل بكِ نأكد الطلب · نوصّل خلال ١-٣ أيام · ادفعي كاش للمندوب
                 </p>
               </div>
 
               {/* Trust row */}
               <div className="flex flex-wrap justify-center gap-3 border-t border-stone-100 pt-3">
-                {[COPY.BADGES.COD, COPY.BADGES.FAST_SHIP, COPY.BADGES.HALAL].map((badge) => (
-                  <span key={badge} className="flex items-center gap-1 font-tajawal text-xs text-charcoal/60">
-                    ✓ {badge}
+                {['💵 دفع عند الاستلام', '🚚 شحن سريع', '☪️ حلال ١٠٠٪', '🛡️ ضمان ١٤ يوم'].map((badge) => (
+                  <span key={badge} className="font-tajawal text-[11px] font-bold text-charcoal/60">
+                    {badge}
                   </span>
                 ))}
               </div>
@@ -307,27 +303,41 @@ export function PdpClient({
         </div>
       </section>
 
-      {/* ════ PRODUCT SHOWCASE DIVIDER ════ */}
-      <section className="bg-gradient-to-b from-ivory to-[#faf5ec] py-10">
-        <div className="container mx-auto px-4 max-w-5xl">
-          <div className="relative aspect-[21/9] rounded-3xl overflow-hidden bg-stone-100">
-            <Image
-              src={product.coverImageUrl}
-              alt={product.nameAr}
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 1200px"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-            <div className="absolute bottom-6 right-6 text-right">
-              <p className="font-tajawal text-lg font-black text-white md:text-2xl">{product.nameAr}</p>
-              <p className="font-tajawal text-sm text-white/80">{product.heroTagAr}</p>
-            </div>
+      {/* ════ "DO YOU SUFFER FROM..." — Pain identification ════ */}
+      <section className="py-14 bg-[#FFF9F5]">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <div className="text-center mb-8">
+            <h2 className="font-tajawal font-black text-3xl md:text-4xl text-charcoal">
+              هل تعانين من هذي الأعراض؟
+            </h2>
+            <p className="mt-2 font-tajawal text-sm text-charcoal/60">
+              إذا قلتي &ldquo;أيوه&rdquo; على واحدة — {product.nameAr} صُنعت لكِ
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {beforeAfter.before.map((item) => (
+              <div
+                key={item}
+                className="flex items-start gap-3 rounded-2xl border border-red-100 bg-white p-4 shadow-sm"
+              >
+                <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-red-50 text-xs font-black text-red-500">
+                  ✓
+                </span>
+                <p className="font-tajawal text-sm font-medium leading-relaxed text-charcoal/85">{item}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-8 rounded-3xl border-2 border-emerald/20 bg-emerald/5 p-6 text-center">
+            <p className="font-tajawal text-base font-black text-emerald">
+              ✨ {product.nameAr} تعالج هذي المشاكل من جذورها — من الداخل.
+            </p>
           </div>
         </div>
       </section>
 
-      {/* ════ RESULT TIMELINE — saffron text on emerald bg for high contrast ════ */}
+      {/* ════ RESULT TIMELINE ════ */}
       <section className="bg-emerald py-16 relative overflow-hidden">
         <div className="absolute -top-20 -right-20 h-60 w-60 rounded-full bg-saffron/15 blur-3xl" />
         <div className="container mx-auto px-4 max-w-5xl relative">
@@ -369,7 +379,7 @@ export function PdpClient({
         </div>
       </section>
 
-      {/* ════ BEFORE / AFTER — premium split layout ════ */}
+      {/* ════ BEFORE / AFTER ════ */}
       <section className="py-16 bg-[#FAFAF8]">
         <div className="container mx-auto px-4 max-w-5xl">
           <div className="text-center mb-12">
@@ -377,13 +387,13 @@ export function PdpClient({
               التحوّل الحقيقي
             </span>
             <h2 className="font-tajawal font-black text-3xl md:text-4xl text-charcoal leading-tight">
-              قبل <span className="text-emerald">{product.nameAr}</span> وبعدها
+              حياتكِ <span className="text-red-500">قبل</span> و<span className="text-emerald">بعد</span> {product.nameAr}
             </h2>
           </div>
 
           <div className="rounded-[32px] overflow-hidden border border-stone-200 bg-white shadow-[0_24px_60px_rgba(0,0,0,0.08)]">
             <div className="grid grid-cols-1 md:grid-cols-2">
-              {/* BEFORE — dark muted side */}
+              {/* BEFORE */}
               <div className="bg-[#2C2C2C] p-8 md:p-10">
                 <div className="mb-5 flex items-center gap-3">
                   <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-red-500/20 text-lg">😔</span>
@@ -404,7 +414,7 @@ export function PdpClient({
                 </ul>
               </div>
 
-              {/* AFTER — bright emerald side */}
+              {/* AFTER */}
               <div className="bg-gradient-to-br from-emerald to-[#00A85A] p-8 md:p-10 relative">
                 <div className="absolute top-4 left-4 rounded-full bg-saffron px-3 py-1 font-tajawal text-[10px] font-black text-emerald shadow-lg">
                   ⭐ هدفكِ
@@ -412,7 +422,7 @@ export function PdpClient({
                 <div className="mb-5 flex items-center gap-3">
                   <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/20 text-lg">✨</span>
                   <div>
-                    <p className="font-tajawal text-lg font-black text-white">حياتكِ بعد ٩٠ يوم</p>
+                    <p className="font-tajawal text-lg font-black text-white">حياتكِ بعد ٦٠ يوم</p>
                     <p className="font-tajawal text-[11px] text-saffron/90">مع {product.nameAr}</p>
                   </div>
                 </div>
@@ -432,58 +442,95 @@ export function PdpClient({
         </div>
       </section>
 
-      {/* ════ WHY US — logic + emotion ════ */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4 max-w-5xl">
-          <div className="text-center mb-10">
-            <p className="font-tajawal text-sm font-bold text-saffron mb-2">ليش رحيق؟</p>
-            <h2 className="font-tajawal font-black text-3xl md:text-4xl text-emerald">
-              لأن العلم والشعور — لازم يتقابلون.
+      {/* ════ GUARANTEE SECTION — Dedicated, visual, bold ════ */}
+      <section className="py-16 bg-gradient-to-br from-[#F0FFF7] to-white">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <div className="rounded-[32px] border-2 border-emerald/20 bg-white p-8 text-center shadow-[0_24px_60px_rgba(18,107,82,0.08)] md:p-12">
+            <div className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-emerald/10">
+              <span className="text-4xl">🛡️</span>
+            </div>
+            <h2 className="font-tajawal text-2xl font-black text-emerald md:text-3xl">
+              ضمان رضا ١٤ يوم كامل
             </h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {/* LOGIC card */}
-            <div className="rounded-3xl border border-emerald/15 bg-[#FAFAF8] p-6">
-              <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-emerald px-3 py-1">
-                <span className="text-base">🔬</span>
-                <p className="font-tajawal text-xs font-black text-white">العقل · الحقائق</p>
+            <p className="mx-auto mt-4 max-w-xl font-tajawal text-base leading-relaxed text-charcoal/70">
+              نثق بمنتجاتنا ١٠٠٪. إذا استلمتي الطلب وما عجبكِ لأي سبب — كلّمينا خلال ١٤ يوم وبنرجّع فلوسكِ كاملة. بدون أسئلة محرجة، بدون شروط مخفية.
+            </p>
+            <div className="mx-auto mt-8 grid max-w-md grid-cols-3 gap-4">
+              <div className="flex flex-col items-center gap-2 rounded-2xl bg-emerald/5 p-4">
+                <span className="text-2xl">📦</span>
+                <p className="font-tajawal text-[11px] font-bold text-emerald">شحن مغلّف بعناية</p>
               </div>
-              <ul className="flex flex-col gap-3">
-                {whyUs.logic.map((item) => (
-                  <li key={item} className="flex items-start gap-3 font-tajawal text-sm text-charcoal/85 leading-relaxed">
-                    <span className="mt-0.5 text-emerald font-black">✓</span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            {/* EMOTION card */}
-            <div className="rounded-3xl border border-saffron/30 bg-saffron/5 p-6">
-              <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-saffron px-3 py-1">
-                <span className="text-base">💛</span>
-                <p className="font-tajawal text-xs font-black text-emerald">القلب · الشعور</p>
+              <div className="flex flex-col items-center gap-2 rounded-2xl bg-emerald/5 p-4">
+                <span className="text-2xl">💵</span>
+                <p className="font-tajawal text-[11px] font-bold text-emerald">استرداد كامل</p>
               </div>
-              <ul className="flex flex-col gap-3">
-                {whyUs.emotion.map((item) => (
-                  <li key={item} className="flex items-start gap-3 font-tajawal text-sm text-charcoal/85 leading-relaxed">
-                    <span className="mt-0.5 text-saffron font-black">★</span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
+              <div className="flex flex-col items-center gap-2 rounded-2xl bg-emerald/5 p-4">
+                <span className="text-2xl">📞</span>
+                <p className="font-tajawal text-[11px] font-bold text-emerald">فريق دعم سعودي</p>
+              </div>
             </div>
+            <p className="mt-6 font-tajawal text-sm font-bold text-emerald">
+              ما عندكِ شي تخسرينه — جرّبي بكل ثقة.
+            </p>
           </div>
         </div>
       </section>
 
-      {/* ════ HOW TO USE — 3 simple steps ════ */}
+      {/* ════ COMPARISON TABLE — Why us vs alternatives ════ */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <div className="text-center mb-10">
+            <p className="font-tajawal text-sm font-bold text-saffron mb-2">قارني بنفسكِ</p>
+            <h2 className="font-tajawal font-black text-3xl md:text-4xl text-emerald">
+              ليش {product.nameAr} أفضل؟
+            </h2>
+          </div>
+
+          <div className="overflow-hidden rounded-3xl border border-[#E0D4C0] shadow-sm">
+            <div className="grid grid-cols-4 border-b border-[#E0D4C0] bg-[#FAFAF8]">
+              <div className="p-4" />
+              <div className="border-s border-[#E0D4C0] p-4 text-center">
+                <p className="font-tajawal text-[11px] text-charcoal/50">🧴</p>
+                <p className="font-tajawal text-xs font-bold text-charcoal/70">كريمات خارجية</p>
+              </div>
+              <div className="border-s border-[#E0D4C0] p-4 text-center">
+                <p className="font-tajawal text-[11px] text-charcoal/50">💊</p>
+                <p className="font-tajawal text-xs font-bold text-charcoal/70">مكمّلات عادية</p>
+              </div>
+              <div className="border-s-2 border-emerald bg-emerald/5 p-4 text-center">
+                <p className="font-tajawal text-[11px] text-emerald">🌿</p>
+                <p className="font-tajawal text-xs font-black text-emerald">{product.nameAr}</p>
+              </div>
+            </div>
+            {[
+              { label: 'يوصل للخلايا من الداخل', a: false, b: true, c: true },
+              { label: 'جرعات فعّالة ومثبتة', a: false, b: false, c: true },
+              { label: 'فحص مخبري لكل دفعة', a: false, b: false, c: true },
+              { label: 'طعم لذيذ أو كبسولة سهلة', a: true, b: false, c: true },
+              { label: 'حلال ١٠٠٪ بدون جيلاتين', a: true, b: false, c: true },
+              { label: 'ضمان استرداد', a: false, b: false, c: true },
+            ].map((row, i) => (
+              <div key={row.label} className={`grid grid-cols-4 ${i % 2 === 0 ? 'bg-white' : 'bg-[#FAFAF8]'}`}>
+                <div className="flex items-center p-4">
+                  <p className="font-tajawal text-xs font-medium text-charcoal/80">{row.label}</p>
+                </div>
+                <CompareCell value={row.a} />
+                <CompareCell value={row.b} />
+                <CompareCell value={row.c} highlight />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ════ HOW TO USE ════ */}
       <section className="py-16 bg-ivory">
         <div className="container mx-auto px-4 max-w-4xl">
           <div className="text-center mb-10">
             <h2 className="font-tajawal font-black text-3xl md:text-4xl text-emerald">
               كيف تستخدمينها؟
             </h2>
-            <p className="mt-2 font-tajawal text-base text-charcoal/60">٣ خطوات بسيطة</p>
+            <p className="mt-2 font-tajawal text-base text-charcoal/60">أبسط روتين ممكن</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {howToUse.map((step, i) => (
@@ -503,7 +550,7 @@ export function PdpClient({
         </div>
       </section>
 
-      {/* ════ INGREDIENTS — clean cards ════ */}
+      {/* ════ INGREDIENTS ════ */}
       <section className="py-16 bg-stone-50">
         <div className="container mx-auto px-4 max-w-4xl">
           <div className="text-center mb-10">
@@ -541,7 +588,7 @@ export function PdpClient({
               { icon: '🧪', text: 'مكوّنات مثبتة علميًا' },
               { icon: '🔬', text: 'فحص مخبري كل دفعة' },
               { icon: '☪️', text: 'حلال ١٠٠٪' },
-              { icon: '💵', text: 'دفع عند الاستلام' },
+              { icon: '🇸🇦', text: 'شركة سعودية' },
             ].map((item) => (
               <div key={item.text} className="flex flex-col items-center gap-2 rounded-2xl border border-emerald/15 bg-white p-4 text-center">
                 <span className="text-2xl">{item.icon}</span>
@@ -557,7 +604,7 @@ export function PdpClient({
         <div className="container mx-auto px-4 max-w-3xl">
           <div className="text-center mb-10">
             <h2 className="font-tajawal font-black text-3xl md:text-4xl text-emerald">
-              ماذا قالت عميلاتنا؟
+              عميلات حقيقيات · نتائج حقيقية
             </h2>
             <div className="mt-3 inline-flex items-center gap-2">
               <StarRating value={product.ratingValue} showValue reviewCount={product.reviewCount} size="md" />
@@ -616,7 +663,7 @@ export function PdpClient({
         </div>
       </section>
 
-      {/* ════ HIGH-AOV BUNDLE — only on non-bundle PDPs ════ */}
+      {/* ════ BUNDLE UPSELL — only on non-bundle PDPs ════ */}
       {product.slug !== 'bundle-glow-trio' && (
       <section className="py-16 bg-gradient-to-br from-[#FFF7E6] via-ivory to-[#FFEFD9]">
         <div className="container mx-auto px-4 max-w-5xl">
@@ -628,7 +675,7 @@ export function PdpClient({
               صندوق الجمال الكامل
             </h2>
             <p className="mt-3 font-tajawal text-base text-charcoal/70 max-w-2xl mx-auto">
-              خذي الـ 3 منتجات مع بعض ووفّري 100 ريال سعودي
+              خذي الـ 3 منتجات مع بعض ووفّري {formatSar(100)}
             </p>
           </div>
 
@@ -637,9 +684,9 @@ export function PdpClient({
               <div className="relative aspect-square rounded-2xl overflow-hidden bg-stone-100">
                 <Image
                   src="/images/products/bundle-glow-trio/cover.png"
-                  alt="صندوق الجمال الكامل — نضرة + بريق + جذر"
+                  alt="صندوق الجمال الكامل"
                   fill
-                  className="object-cover"
+                  className="object-contain p-4"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
               </div>
@@ -647,9 +694,9 @@ export function PdpClient({
               <div className="flex flex-col gap-4">
                 <ul className="flex flex-col gap-2.5">
                   {[
-                    'بشرة مشدودة وأقل تجاعيد — حبّة نضرة',
-                    'هالات أفتح وعيون متحمّسة — حبّة بريق',
-                    'شعر أكثف ويوقف التساقط — حبّة جذر',
+                    '✨ بشرة مشدودة وأقل تجاعيد — حبّة نضرة',
+                    '👁️ هالات أفتح بدون كونسيلر — حبّة بريق',
+                    '💇‍♀️ شعر أكثف من الجذر — حبّة جذر',
                   ].map((item) => (
                     <li key={item} className="flex items-start gap-2 font-tajawal text-sm text-charcoal">
                       <span className="mt-0.5 text-emerald font-black">✓</span>
@@ -658,7 +705,6 @@ export function PdpClient({
                   ))}
                 </ul>
 
-                {/* PRICE COMPARISON — clear "before vs after" */}
                 <div className="rounded-2xl bg-emerald/5 border border-emerald/15 p-4 space-y-3">
                   <div className="flex items-center justify-between border-b border-emerald/10 pb-2">
                     <span className="font-tajawal text-sm text-charcoal/70">شراء فردي للـ 3</span>
@@ -678,7 +724,7 @@ export function PdpClient({
                     </span>
                   </div>
                   <p className="font-tajawal text-xs text-charcoal/60 border-t border-emerald/10 pt-2">
-                    🚚 شحن مجاني · يكفي شهر كامل
+                    🚚 شحن مجاني · 🛡️ ضمان ١٤ يوم
                   </p>
                 </div>
 
@@ -694,7 +740,7 @@ export function PdpClient({
                 </Link>
 
                 <p className="text-center font-tajawal text-[11px] text-charcoal/55">
-                  💵 دفع عند الاستلام · 🚚 شحن مجاني · ↩️ ضمان 14 يوم
+                  💵 دفع عند الاستلام · بدون بطاقة
                 </p>
               </div>
             </div>
@@ -703,7 +749,7 @@ export function PdpClient({
       </section>
       )}
 
-      {/* ════ YOU MAY ALSO LIKE — cross-sell ════ */}
+      {/* ════ CROSS-SELL ════ */}
       {(() => {
         const crossSlugs = PRODUCT_CROSS_SELLS[product.slug] ?? [];
         const crossProducts = crossSlugs
@@ -764,13 +810,13 @@ export function PdpClient({
       <section className="py-16 bg-emerald text-ivory text-center">
         <div className="container mx-auto px-4 max-w-2xl">
           <p className="font-tajawal text-sm font-bold text-saffron mb-3">
-            ⏰ آخر فرصة — السعر يرجع لـ ٢٤٩ ر.س قريبًا
+            🛡️ ضمان ١٤ يوم · دفع عند الاستلام · ما عندكِ شي تخسرينه
           </p>
           <h2 className="font-tajawal font-black text-3xl md:text-4xl mb-4">
             جاهزة تجرّبين {product.nameAr}؟
           </h2>
           <p className="font-tajawal text-base text-white/80 mb-8">
-            دفع عند الاستلام · شحن ١-٣ أيام · ضمان ١٤ يوم
+            حبّتين بالصباح · نتيجة خلال ٣٠ يوم · شحن ١-٣ أيام
           </p>
           <Button
             variant="primary"
@@ -799,6 +845,18 @@ export function PdpClient({
         </Button>
       </div>
     </>
+  );
+}
+
+function CompareCell({ value, highlight = false }: { value: boolean; highlight?: boolean }) {
+  return (
+    <div className={`flex items-center justify-center border-s p-4 ${highlight ? 'border-emerald bg-emerald/5' : 'border-[#E0D4C0]'}`}>
+      {value ? (
+        <span className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-black ${highlight ? 'bg-emerald text-white' : 'bg-emerald/15 text-emerald'}`}>✓</span>
+      ) : (
+        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-red-50 text-xs font-black text-red-400">✕</span>
+      )}
+    </div>
   );
 }
 
