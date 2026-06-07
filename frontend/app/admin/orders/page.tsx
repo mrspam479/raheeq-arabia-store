@@ -188,7 +188,7 @@ export default function AdminOrders() {
                   <td className="px-4 py-3 text-charcoal/70" dir="ltr">{o.phone}</td>
                   <td className="px-4 py-3 text-charcoal/70">{o.city || '—'}</td>
                   <td className="px-4 py-3 text-charcoal/80">
-                    {o.lines.length === 1 ? o.lines[0].product_name_ar : `${o.lines.length} products`}
+                    {o.lines.length === 1 ? (o.lines[0]?.product_name_ar ?? '—') : `${o.lines.length} products`}
                     {o.upsell_added_sar > 0 && <span className="ml-1 text-saffron text-[10px] font-bold">+UPSELL</span>}
                   </td>
                   <td className="px-4 py-3 font-bold text-emerald">{fmtSar(o.total_sar)}</td>
