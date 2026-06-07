@@ -1,12 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { formatSar } from '@/lib/price';
+import { useEffect, useState, useCallback } from 'react';
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.raheeqarabia.com';
 
 interface OrderLine {
   product_slug: string;
   product_name_ar: string;
-  offer_code: string;
   offer_label_ar: string;
   quantity: number;
   unit_price_sar: number;
@@ -16,192 +16,316 @@ interface OrderLine {
 interface Order {
   id: string;
   status: string;
+  full_name: string;
+  phone: string;
+  city: string | null;
+  address_line: string | null;
+  notes: string | null;
+  subtotal_sar: number;
+  upsell_added_sar: number;
   total_sar: number;
-  lines: OrderLine[];
+  currency: string;
+  utm_source: string | null;
+  utm_medium: string | null;
+  utm_campaign: string | null;
   created_at: string;
+  lines: OrderLine[];
 }
+
+const STATUSES = ['all', 'pending', 'confirmed', 'shipped', 'delivered', 'returned', 'cancelled'] as const;
+const STATUS_LABELS: Record<string, string> = {
+  all: 'All',
+  pending: 'Pending',
+  confirmed: 'Confirmed',
+  shipped: 'Shipped',
+  delivered: 'Delivered',
+  returned: 'Returned',
+  cancelled: 'Cancelled',
+};
+
+const STATUS_COLORS: Record<string, string> = {
+  pending: 'bg-yellow-100 text-yellow-800 border-yellow-200',
+  confirmed: 'bg-blue-100 text-blue-800 border-blue-200',
+  shipped: 'bg-indigo-100 text-indigo-800 border-indigo-200',
+  delivered: 'bg-green-100 text-green-800 border-green-200',
+  returned: 'bg-orange-100 text-orange-800 border-orange-200',
+  cancelled: 'bg-red-100 text-red-800 border-red-200',
+};
+
+const fmtSar = (n: number) => `${Math.round(n).toLocaleString()} ﷼`;
 
 export default function AdminOrders() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [selected, setSelected] = useState<Order | null>(null);
+  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [query, setQuery] = useState('');
+  const [debouncedQuery, setDebouncedQuery] = useState('');
 
+  // Debounce search
   useEffect(() => {
-    const fetchOrders = async () => {
-      setLoading(true);
-      try {
-        const token = localStorage.getItem('admin_token');
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/admin/orders?limit=100`, {
-          headers: { 'Authorization': `Bearer ${token || ''}` }
-        });
-        if (res.status === 401) {
-          localStorage.removeItem('admin_token');
-          window.location.href = '/admin/login';
-          return;
-        }
-        if (!res.ok) throw new Error('Failed to fetch orders');
-        const data = await res.json();
-        setOrders(data.items);
+    const t = setTimeout(() => setDebouncedQuery(query), 400);
+    return () => clearTimeout(t);
+  }, [query]);
+
+  const fetchOrders = useCallback(async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const token = localStorage.getItem('admin_token');
+      const params = new URLSearchParams();
+      if (statusFilter !== 'all') params.set('status', statusFilter);
+      if (debouncedQuery) params.set('q', debouncedQuery);
+      params.set('limit', '200');
+
+      const res = await fetch(`${API_URL}/api/admin/orders?${params.toString()}`, {
+        headers: { Authorization: `Bearer ${token || ''}` },
+      });
+      if (res.status === 401) {
+        localStorage.removeItem('admin_token');
+        window.location.href = '/admin/login';
+        return;
+      }
+      if (!res.ok) throw new Error('Failed to fetch orders');
+      const data = await res.json();
+      setOrders(data.items);
     } catch (err) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError('حدث خطأ غير متوقع');
-      }
+      setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
-        setLoading(false);
-      }
-    };
-    fetchOrders();
-  }, []);
+      setLoading(false);
+    }
+  }, [statusFilter, debouncedQuery]);
 
-  const translateStatus = (status: string) => {
-    const map: Record<string, string> = {
-      pending: 'قيد الانتظار',
-      confirmed: 'مؤكد',
-      shipped: 'تم الشحن',
-      delivered: 'تم التوصيل',
-      returned: 'مسترجع',
-      cancelled: 'ملغي'
-    };
-    return map[status] || status;
+  useEffect(() => { fetchOrders(); }, [fetchOrders]);
+
+  const updateStatus = async (orderId: string, newStatus: string) => {
+    const token = localStorage.getItem('admin_token');
+    try {
+      const res = await fetch(`${API_URL}/api/admin/orders/${orderId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token || ''}` },
+        body: JSON.stringify({ status: newStatus }),
+      });
+      if (!res.ok) throw new Error('Update failed');
+      setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: newStatus } : o));
+      if (selected && selected.id === orderId) setSelected({ ...selected, status: newStatus });
+    } catch (err) {
+      alert('Failed to update: ' + (err instanceof Error ? err.message : 'unknown'));
+    }
   };
 
-  const getStatusColor = (status: string) => {
-    const map: Record<string, string> = {
-      pending: 'bg-yellow-100 text-yellow-800',
-      confirmed: 'bg-blue-100 text-blue-800',
-      shipped: 'bg-indigo-100 text-indigo-800',
-      delivered: 'bg-green-100 text-green-800',
-      returned: 'bg-orange-100 text-orange-800',
-      cancelled: 'bg-red-100 text-red-800'
-    };
-    return map[status] || 'bg-stone-100 text-stone-800';
-  };
+  const counts = STATUSES.reduce((acc, s) => {
+    acc[s] = s === 'all' ? orders.length : orders.filter(o => o.status === s).length;
+    return acc;
+  }, {} as Record<string, number>);
 
   return (
-    <div className="p-8" dir="rtl">
-      <div className="mb-8">
-        <h1 className="font-tajawal font-black text-3xl text-emerald">الطلبات (Orders)</h1>
-        <p className="font-tajawal text-charcoal/60 mt-1">إدارة أحدث الطلبات</p>
+    <div className="p-6 md:p-8 bg-stone-50 min-h-screen" dir="ltr">
+      <div className="mb-6">
+        <h1 className="font-sans font-black text-3xl text-charcoal">Orders</h1>
+        <p className="font-sans text-charcoal/60 mt-1 text-sm">Manage all customer orders</p>
       </div>
 
-      {error && <div className="text-red-500 mb-4">{error}</div>}
+      {/* Filters */}
+      <div className="bg-white rounded-2xl border border-stone-100 shadow-sm p-4 mb-6">
+        <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center">
+          <input
+            type="text"
+            placeholder="Search by name, phone, or city..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            className="flex-1 px-4 py-2.5 rounded-xl border border-stone-200 outline-none focus:border-emerald font-sans text-sm"
+          />
+          <div className="flex flex-wrap gap-2">
+            {STATUSES.map(s => (
+              <button
+                key={s}
+                onClick={() => setStatusFilter(s)}
+                className={`px-3 py-1.5 rounded-lg font-sans text-xs font-bold border transition-colors ${
+                  statusFilter === s
+                    ? 'bg-emerald text-white border-emerald'
+                    : 'bg-white text-charcoal/70 border-stone-200 hover:border-emerald/50'
+                }`}
+              >
+                {STATUS_LABELS[s]} {statusFilter === s ? `(${counts[s]})` : ''}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
 
-      <div className="bg-white rounded-3xl shadow-sm border border-stone-100 overflow-hidden">
+      {error && <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-4 font-sans text-sm">{error}</div>}
+
+      {/* Table */}
+      <div className="bg-white rounded-2xl shadow-sm border border-stone-100 overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-right font-tajawal">
-            <thead className="bg-stone-50 border-b border-stone-100 text-charcoal/60 text-sm">
+          <table className="w-full font-sans text-sm">
+            <thead className="bg-stone-50 text-charcoal/60 text-xs uppercase">
               <tr>
-                <th className="p-4 font-bold">رقم الطلب (ID)</th>
-                <th className="p-4 font-bold">التاريخ</th>
-                <th className="p-4 font-bold">المنتجات</th>
-                <th className="p-4 font-bold">الإجمالي</th>
-                <th className="p-4 font-bold">الحالة</th>
-                <th className="p-4 font-bold text-center">إجراء</th>
+                <th className="px-4 py-3 text-left font-bold">Date</th>
+                <th className="px-4 py-3 text-left font-bold">Customer</th>
+                <th className="px-4 py-3 text-left font-bold">Phone</th>
+                <th className="px-4 py-3 text-left font-bold">City</th>
+                <th className="px-4 py-3 text-left font-bold">Products</th>
+                <th className="px-4 py-3 text-left font-bold">Total</th>
+                <th className="px-4 py-3 text-left font-bold">Status</th>
+                <th className="px-4 py-3 text-center font-bold">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-stone-100 text-sm">
+            <tbody className="divide-y divide-stone-100">
               {loading ? (
-                <tr><td colSpan={6} className="p-8 text-center text-charcoal/50">جاري التحميل...</td></tr>
-              ) : orders.map(order => (
-                <tr key={order.id} className="hover:bg-stone-50/50 transition-colors">
-                  <td className="p-4 font-sans text-xs text-charcoal/50">{order.id.split('-')[0]}...</td>
-                  <td className="p-4 text-charcoal/80" dir="ltr">{new Date(order.created_at).toLocaleString('en-GB')}</td>
-                  <td className="p-4">
-                    {order.lines.map((l, i) => (
-                      <div key={i} className="text-emerald font-bold">
-                        {l.product_name_ar} <span className="text-charcoal/50 font-normal">x{l.quantity}</span>
-                      </div>
-                    ))}
+                <tr><td colSpan={8} className="px-4 py-12 text-center text-charcoal/50">Loading...</td></tr>
+              ) : orders.length === 0 ? (
+                <tr><td colSpan={8} className="px-4 py-12 text-center text-charcoal/40">No orders found</td></tr>
+              ) : orders.map(o => (
+                <tr key={o.id} className="hover:bg-stone-50/70 transition-colors">
+                  <td className="px-4 py-3 text-charcoal/70 text-xs">
+                    {new Date(o.created_at).toLocaleDateString('en-GB')}<br />
+                    <span className="text-charcoal/40">{new Date(o.created_at).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}</span>
                   </td>
-                  <td className="p-4 font-sans font-bold text-charcoal">{formatSar(order.total_sar)}</td>
-                  <td className="p-4">
-                    <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${getStatusColor(order.status)}`}>
-                      {translateStatus(order.status)}
+                  <td className="px-4 py-3 font-bold text-charcoal">{o.full_name}</td>
+                  <td className="px-4 py-3 text-charcoal/70" dir="ltr">{o.phone}</td>
+                  <td className="px-4 py-3 text-charcoal/70">{o.city || '—'}</td>
+                  <td className="px-4 py-3 text-charcoal/80">
+                    {o.lines.length === 1 ? o.lines[0].product_name_ar : `${o.lines.length} products`}
+                    {o.upsell_added_sar > 0 && <span className="ml-1 text-saffron text-[10px] font-bold">+UPSELL</span>}
+                  </td>
+                  <td className="px-4 py-3 font-bold text-emerald">{fmtSar(o.total_sar)}</td>
+                  <td className="px-4 py-3">
+                    <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase border ${STATUS_COLORS[o.status]}`}>
+                      {o.status}
                     </span>
                   </td>
-                  <td className="p-4 text-center">
-                    <button 
-                      onClick={() => setSelectedOrder(order)}
-                      className="text-emerald hover:text-emerald/70 font-bold underline"
+                  <td className="px-4 py-3 text-center">
+                    <button
+                      onClick={() => setSelected(o)}
+                      className="text-emerald hover:underline font-bold text-xs"
                     >
-                      عرض التفاصيل
+                      View
                     </button>
                   </td>
                 </tr>
               ))}
-              {!loading && orders.length === 0 && (
-                <tr><td colSpan={6} className="p-8 text-center text-charcoal/50">لا يوجد طلبات</td></tr>
-              )}
             </tbody>
           </table>
         </div>
       </div>
 
-      {/* Order Preview Modal */}
-      {selectedOrder && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4" dir="rtl">
-          <div className="bg-white rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl">
-            <div className="p-6 border-b border-stone-100 flex justify-between items-center sticky top-0 bg-white">
-              <h2 className="font-tajawal font-black text-2xl text-emerald">تفاصيل الطلب</h2>
-              <button 
-                onClick={() => setSelectedOrder(null)}
-                className="w-8 h-8 flex items-center justify-center rounded-full bg-stone-100 text-charcoal hover:bg-stone-200 transition-colors font-sans"
+      {/* Order detail modal */}
+      {selected && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={() => setSelected(null)}>
+          <div
+            className="bg-white rounded-3xl w-full max-w-3xl max-h-[90vh] overflow-y-auto shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal header */}
+            <div className="sticky top-0 bg-white border-b border-stone-100 px-6 py-4 flex justify-between items-center z-10">
+              <div>
+                <h2 className="font-sans font-black text-2xl text-charcoal">Order Details</h2>
+                <p className="font-mono text-xs text-charcoal/40 mt-1">{selected.id}</p>
+              </div>
+              <button
+                onClick={() => setSelected(null)}
+                className="w-9 h-9 flex items-center justify-center rounded-full bg-stone-100 hover:bg-stone-200 transition-colors text-charcoal"
               >
                 ✕
               </button>
             </div>
-            
-            <div className="p-6 space-y-6">
-              <div className="grid grid-cols-2 gap-4 bg-stone-50 p-4 rounded-2xl">
-                <div>
-                  <p className="font-tajawal text-xs text-charcoal/50 mb-1">رقم الطلب</p>
-                  <p className="font-sans text-sm font-bold text-charcoal">{selectedOrder.id}</p>
-                </div>
-                <div>
-                  <p className="font-tajawal text-xs text-charcoal/50 mb-1">تاريخ الطلب</p>
-                  <p className="font-sans text-sm font-bold text-charcoal" dir="ltr">{new Date(selectedOrder.created_at).toLocaleString('en-GB')}</p>
-                </div>
-                <div>
-                  <p className="font-tajawal text-xs text-charcoal/50 mb-1">الحالة</p>
-                  <span className={`inline-block px-2.5 py-1 rounded-full text-xs font-bold ${getStatusColor(selectedOrder.status)}`}>
-                    {translateStatus(selectedOrder.status)}
-                  </span>
-                </div>
-                <div>
-                  <p className="font-tajawal text-xs text-charcoal/50 mb-1">الإجمالي</p>
-                  <p className="font-sans text-lg font-black text-emerald">{formatSar(selectedOrder.total_sar)}</p>
+
+            <div className="p-6 space-y-6 font-sans">
+              {/* Status actions */}
+              <div>
+                <p className="text-xs font-bold text-charcoal/60 uppercase mb-2">Quick Status Update</p>
+                <div className="flex flex-wrap gap-2">
+                  {(['pending', 'confirmed', 'shipped', 'delivered', 'returned', 'cancelled'] as const).map(s => (
+                    <button
+                      key={s}
+                      onClick={() => updateStatus(selected.id, s)}
+                      className={`px-3 py-2 rounded-lg text-xs font-bold border transition-all ${
+                        selected.status === s
+                          ? 'bg-emerald text-white border-emerald shadow-md'
+                          : 'bg-white text-charcoal/70 border-stone-200 hover:border-emerald hover:text-emerald'
+                      }`}
+                    >
+                      {STATUS_LABELS[s]}
+                    </button>
+                  ))}
                 </div>
               </div>
 
+              {/* Customer info */}
               <div>
-                <h3 className="font-tajawal font-bold text-lg text-emerald mb-3">المنتجات المطلوبة</h3>
-                <div className="space-y-3">
-                  {selectedOrder.lines.map((line, idx) => (
-                    <div key={idx} className="flex justify-between items-center p-4 rounded-2xl border border-stone-100 bg-white">
+                <p className="text-xs font-bold text-charcoal/60 uppercase mb-2">Customer Information</p>
+                <div className="bg-stone-50 rounded-2xl p-4 grid grid-cols-2 gap-4 text-sm">
+                  <Field label="Full Name" value={selected.full_name} />
+                  <Field label="Phone" value={selected.phone} mono />
+                  <Field label="City" value={selected.city || '—'} />
+                  <Field label="Date" value={new Date(selected.created_at).toLocaleString('en-GB')} />
+                  {selected.address_line && <Field label="Address" value={selected.address_line} full />}
+                  {selected.notes && <Field label="Notes" value={selected.notes} full />}
+                </div>
+              </div>
+
+              {/* Items */}
+              <div>
+                <p className="text-xs font-bold text-charcoal/60 uppercase mb-2">Order Items</p>
+                <div className="space-y-2">
+                  {selected.lines.map((l, i) => (
+                    <div key={i} className="flex justify-between items-center p-4 rounded-xl border border-stone-100 bg-white">
                       <div>
-                        <p className="font-tajawal font-bold text-charcoal">{line.product_name_ar}</p>
-                        <p className="font-tajawal text-xs text-charcoal/60 mt-1">{line.offer_label_ar}</p>
-                        {line.is_upsell && (
-                          <span className="inline-block mt-2 bg-saffron/20 text-saffron px-2 py-0.5 rounded text-[10px] font-bold">
-                            ➕ عرض إضافي (Upsell)
-                          </span>
-                        )}
+                        <p className="font-bold text-charcoal">{l.product_name_ar}</p>
+                        <p className="text-xs text-charcoal/60 mt-1">{l.offer_label_ar} · qty: {l.quantity}</p>
+                        {l.is_upsell && <span className="inline-block mt-1 bg-saffron/20 text-saffron px-2 py-0.5 rounded text-[10px] font-bold">UPSELL</span>}
                       </div>
-                      <div className="text-left">
-                        <p className="font-sans font-bold text-emerald">{formatSar(line.unit_price_sar * line.quantity)}</p>
-                        <p className="font-tajawal text-xs text-charcoal/50 mt-1">الكمية: {line.quantity}</p>
-                      </div>
+                      <p className="font-bold text-emerald">{fmtSar(l.unit_price_sar * l.quantity)}</p>
                     </div>
                   ))}
                 </div>
               </div>
+
+              {/* Totals */}
+              <div className="bg-emerald/5 rounded-2xl p-4 space-y-2 border border-emerald/15">
+                <div className="flex justify-between text-sm">
+                  <span className="text-charcoal/60">Subtotal</span>
+                  <span className="font-bold">{fmtSar(selected.subtotal_sar)}</span>
+                </div>
+                {selected.upsell_added_sar > 0 && (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-saffron font-bold">Upsell</span>
+                    <span className="font-bold text-saffron">+{fmtSar(selected.upsell_added_sar)}</span>
+                  </div>
+                )}
+                <div className="border-t border-emerald/10 pt-2 flex justify-between text-lg">
+                  <span className="font-bold text-charcoal">Total</span>
+                  <span className="font-black text-emerald">{fmtSar(selected.total_sar)}</span>
+                </div>
+              </div>
+
+              {/* Marketing attribution */}
+              {(selected.utm_source || selected.utm_medium || selected.utm_campaign) && (
+                <div>
+                  <p className="text-xs font-bold text-charcoal/60 uppercase mb-2">Marketing Attribution</p>
+                  <div className="bg-stone-50 rounded-2xl p-4 grid grid-cols-3 gap-4 text-xs">
+                    <Field label="Source" value={selected.utm_source || '—'} />
+                    <Field label="Medium" value={selected.utm_medium || '—'} />
+                    <Field label="Campaign" value={selected.utm_campaign || '—'} />
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+function Field({ label, value, mono = false, full = false }: { label: string; value: string; mono?: boolean; full?: boolean }) {
+  return (
+    <div className={full ? 'col-span-2' : ''}>
+      <p className="text-[10px] text-charcoal/50 uppercase font-bold">{label}</p>
+      <p className={`font-bold text-charcoal mt-1 ${mono ? 'font-mono' : ''}`} dir={mono ? 'ltr' : 'auto'}>{value}</p>
     </div>
   );
 }
