@@ -1,13 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.raheeqarabia.com';
 
 export default function AdminLogin() {
-  const router = useRouter();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
