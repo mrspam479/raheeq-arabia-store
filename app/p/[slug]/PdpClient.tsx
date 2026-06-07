@@ -58,6 +58,7 @@ export function PdpClient({
 
   const selectedOffer = product.offers.find((o) => o.code === `T${selectedTier}`)!;
   const singleBoxPrice = product.offers.find((o) => o.code === 'T1')?.priceSar ?? 199;
+  const isBundle = product.slug === 'bundle-glow-trio';
 
   useEffect(() => {
     trackViewContent(product.slug, product.nameAr);
@@ -211,13 +212,19 @@ export function PdpClient({
                         {/* Product image + quantity visual */}
                         <div className="flex shrink-0 items-center gap-1">
                           {Array.from({ length: offer.quantity }, (_, idx) => (
-                            <div key={idx} className="relative h-12 w-10 overflow-hidden rounded-lg bg-stone-100">
+                            <div
+                              key={idx}
+                              className={cn(
+                                'relative overflow-hidden rounded-lg bg-stone-100',
+                                isBundle ? 'h-12 w-14 border border-emerald/15' : 'h-12 w-10',
+                              )}
+                            >
                               <Image
                                 src={product.coverImageUrl}
                                 alt={product.nameAr}
                                 fill
-                                className="object-cover"
-                                sizes="40px"
+                                className={isBundle ? 'object-contain p-1' : 'object-cover'}
+                                sizes={isBundle ? '56px' : '40px'}
                               />
                             </div>
                           ))}
@@ -226,13 +233,13 @@ export function PdpClient({
                         {/* Title + duration */}
                         <div className="mx-3 flex-1">
                           <p className="font-tajawal text-base font-black text-charcoal">
-                            {getOfferTitle(tier)}
+                            {getOfferTitle(tier, isBundle)}
                           </p>
                           <p className={cn(
                             'font-tajawal text-xs mt-0.5',
                             isActive ? 'text-charcoal/65' : 'text-charcoal/45',
                           )}>
-                            {getOfferDuration(tier)}
+                            {getOfferDuration(tier, isBundle)}
                           </p>
                           {savings > 0 && (
                             <p className="mt-1 font-tajawal text-[11px] font-bold text-[#00A85A]">
@@ -795,13 +802,23 @@ export function PdpClient({
   );
 }
 
-function getOfferTitle(tier: 1 | 2 | 3): string {
+function getOfferTitle(tier: 1 | 2 | 3, isBundle = false): string {
+  if (isBundle) {
+    if (tier === 1) return 'صندوق واحد = ٣ منتجات';
+    if (tier === 2) return 'صندوقين = ٦ منتجات';
+    return '٣ صناديق = ٩ منتجات';
+  }
   if (tier === 1) return 'علبة واحدة';
   if (tier === 2) return 'علبتين';
   return '٣ علب';
 }
 
-function getOfferDuration(tier: 1 | 2 | 3): string {
+function getOfferDuration(tier: 1 | 2 | 3, isBundle = false): string {
+  if (isBundle) {
+    if (tier === 1) return 'نضرة + بريق + جذر · تجربة شهر';
+    if (tier === 2) return 'روتين شهرين كامل · قيمة أفضل';
+    return 'روتين ٣ أشهر · أعلى توفير وأقوى التزام';
+  }
   if (tier === 1) return 'يكفي شهر · تجربة';
   if (tier === 2) return 'يكفي شهرين · قيمة أفضل';
   return 'يكفي ٣ أشهر · النتيجة الكاملة';

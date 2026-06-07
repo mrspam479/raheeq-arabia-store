@@ -416,9 +416,9 @@ export const PRODUCTS: Product[] = [
     ],
 
     offers: [
-      { code: 'T1', labelAr: 'صندوق شهر', quantity: 1, priceSar: 499, isRecommended: false },
-      { code: 'T2', labelAr: 'صندوقين (شهرين)', quantity: 2, priceSar: 899, isRecommended: false },
-      { code: 'T3', labelAr: '3 صناديق (الأوفر)', quantity: 3, priceSar: 1299, isRecommended: true },
+      { code: 'T1', labelAr: 'صندوق واحد = ٣ منتجات', quantity: 1, priceSar: 499, isRecommended: false },
+      { code: 'T2', labelAr: 'صندوقين = ٦ منتجات', quantity: 2, priceSar: 899, isRecommended: false },
+      { code: 'T3', labelAr: '٣ صناديق = ٩ منتجات', quantity: 3, priceSar: 1299, isRecommended: true },
     ],
 
     ingredients: [
@@ -516,7 +516,7 @@ export const PRODUCT_ONE_LINERS: Record<string, string> = {
   'habba-nadra': 'أستازانتين + كولاجين بحري — تجاعيد أقل ونضارة أكثر.',
   'habba-bareeq': 'حديد + حمض فوليك + فيتامين سي — هالات أفتح من الداخل.',
   'habba-jathr': 'بيوتين + كولاجين + كيراتين — شعر أكثف من الجذر.',
-  'bundle-glow-trio': 'الـ 3 منتجات معًا — توفير 100 ريال سعودي + شحن مجاني.',
+  'bundle-glow-trio': 'صندوق واحد = نضرة + بريق + جذر — الحل الكامل للبشرة والهالات والشعر.',
 };
 
 /** 3 BIG benefits with icon. Keep ULTRA short — max 4-5 words each. */
@@ -537,9 +537,9 @@ export const PRODUCT_BENEFITS: Record<string, { icon: string; text: string }[]> 
     { icon: '✨', text: 'لمعان طبيعي' },
   ],
   'bundle-glow-trio': [
-    { icon: '🎁', text: 'الـ 3 منتجات في صندوق واحد' },
-    { icon: '💰', text: 'وفّري 100 ريال سعودي' },
-    { icon: '🚚', text: 'شحن مجاني · شهر كامل' },
+    { icon: '🎁', text: '٣ مشاكل · ٣ حلول' },
+    { icon: '💰', text: 'وفّري 100 ريال' },
+    { icon: '🚚', text: 'شحن مجاني' },
   ],
 };
 

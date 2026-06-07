@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.raheeqarabia.com';
 
@@ -43,6 +43,7 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [dateRange, setDateRange] = useState('30');
+  const [adSpend, setAdSpend] = useState('0');
 
   const fetchAll = useCallback(async () => {
     setLoading(true);
@@ -85,26 +86,56 @@ export default function AdminDashboard() {
   useEffect(() => { fetchAll(); }, [fetchAll]);
 
   const maxOrders = Math.max(1, ...timeseries.map(d => d.orders));
+  const adSpendValue = Number(adSpend) || 0;
+  const roas = overview && adSpendValue > 0 ? overview.gross_revenue / adSpendValue : 0;
+  const cpa = overview && adSpendValue > 0 && overview.total_orders > 0 ? adSpendValue / overview.total_orders : 0;
+  const leverage = overview ? overview.gross_revenue - adSpendValue : 0;
+  const revenuePerVisitor = overview && overview.clicks > 0 ? overview.gross_revenue / overview.clicks : 0;
+  const dashboardMood = useMemo(() => {
+    if (!overview) return { label: 'Waiting for data', className: 'bg-stone-100 text-charcoal/60' };
+    if (overview.confirmation_rate >= 70 && overview.delivery_rate >= 75 && roas >= 2.5) {
+      return { label: 'Great: scale carefully', className: 'bg-emerald text-white' };
+    }
+    if (overview.confirmation_rate < 45 || overview.delivery_rate < 55 || (adSpendValue > 0 && roas < 1.5)) {
+      return { label: 'Danger: fix before scaling', className: 'bg-red-600 text-white' };
+    }
+    return { label: 'Watch: improve before heavy spend', className: 'bg-amber-500 text-white' };
+  }, [adSpendValue, overview, roas]);
 
   return (
     <div className="p-6 md:p-8 bg-stone-50 min-h-screen" dir="ltr">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4 mb-6">
         <div>
-          <h1 className="font-sans font-black text-3xl text-charcoal">Dashboard</h1>
-          <p className="font-sans text-charcoal/60 mt-1 text-sm">Overview of your store performance</p>
+          <div className="inline-flex rounded-full bg-emerald/10 px-3 py-1 font-sans text-xs font-black text-emerald mb-2">
+            COD Command Center
+          </div>
+          <h1 className="font-sans font-black text-3xl md:text-4xl text-charcoal">Dashboard</h1>
+          <p className="font-sans text-charcoal/60 mt-1 text-sm">Read the store in 10 seconds: cash, funnel, ads, delivery.</p>
         </div>
-        <select
-          value={dateRange}
-          onChange={(e) => setDateRange(e.target.value)}
-          className="font-sans rounded-xl border border-stone-200 bg-white px-4 py-2.5 outline-none focus:border-emerald shadow-sm"
-        >
-          <option value="1">Today</option>
-          <option value="7">Last 7 days</option>
-          <option value="30">Last 30 days</option>
-          <option value="90">Last 90 days</option>
-          <option value="365">Last year</option>
-        </select>
+        <div className="flex flex-col sm:flex-row gap-3">
+          <label className="rounded-xl border border-stone-200 bg-white px-4 py-2 shadow-sm">
+            <span className="block font-sans text-[10px] font-bold uppercase text-charcoal/45">Ad spend (SAR)</span>
+            <input
+              value={adSpend}
+              onChange={(e) => setAdSpend(e.target.value)}
+              inputMode="decimal"
+              className="w-32 bg-transparent font-sans text-sm font-black text-charcoal outline-none"
+              placeholder="0"
+            />
+          </label>
+          <select
+            value={dateRange}
+            onChange={(e) => setDateRange(e.target.value)}
+            className="font-sans rounded-xl border border-stone-200 bg-white px-4 py-2.5 outline-none focus:border-emerald shadow-sm"
+          >
+            <option value="1">Today</option>
+            <option value="7">Last 7 days</option>
+            <option value="30">Last 30 days</option>
+            <option value="90">Last 90 days</option>
+            <option value="365">Last year</option>
+          </select>
+        </div>
       </div>
 
       {error && <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6 font-sans text-sm">{error}</div>}
@@ -114,11 +145,61 @@ export default function AdminDashboard() {
       {overview && (
         <>
           {/* ── Top KPIs ── */}
+          <div className="rounded-3xl bg-gradient-to-br from-emerald via-[#0f5d49] to-[#082a1c] p-5 md:p-6 mb-6 text-white shadow-[0_24px_80px_rgba(18,107,82,0.25)]">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div>
+                <p className="font-sans text-xs font-black uppercase text-saffron">Today’s read</p>
+                <h2 className="font-sans text-2xl md:text-3xl font-black mt-1">
+                  {dashboardMood.label}
+                </h2>
+                <p className="font-sans text-sm text-white/70 mt-2">
+                  Fictive revenue = money you would collect if every order gets confirmed and delivered.
+                </p>
+              </div>
+              <span className={`self-start rounded-full px-4 py-2 font-sans text-xs font-black ${dashboardMood.className}`}>
+                {overview.total_orders} orders · {overview.conversion_rate}% CVR
+              </span>
+            </div>
+          </div>
+
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <KpiCard label="Total Revenue" value={fmtSar(overview.gross_revenue)} hint={`Net (delivered): ${fmtSar(overview.net_revenue)}`} color="emerald" />
+            <KpiCard label="Fictive Revenue" value={fmtSar(overview.gross_revenue)} hint={`Real delivered so far: ${fmtSar(overview.net_revenue)}`} color="emerald" />
             <KpiCard label="Total Orders" value={overview.total_orders.toLocaleString()} hint={`AOV: ${fmtSar(overview.aov)}`} color="blue" />
             <KpiCard label="Valid Visitors" value={overview.clicks.toLocaleString()} hint="KSA only · no VPN" color="purple" />
             <KpiCard label="Conversion Rate" value={`${overview.conversion_rate}%`} hint="Orders / Visitors" color="amber" />
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-6">
+            <AdMetricCard
+              label="ROAS"
+              value={adSpendValue > 0 ? `${roas.toFixed(2)}x` : 'Add spend'}
+              hint="Fictive revenue ÷ ad spend. Bad <1.5x · Good 2.5x+ · Great 4x+."
+              status={adSpendValue === 0 ? 'neutral' : roas >= 4 ? 'great' : roas >= 2.5 ? 'good' : roas >= 1.5 ? 'watch' : 'bad'}
+            />
+            <AdMetricCard
+              label="CPA"
+              value={adSpendValue > 0 ? fmtSar(cpa) : 'Add spend'}
+              hint="Cost per order. Lower is better. Compare it to AOV."
+              status={adSpendValue === 0 ? 'neutral' : cpa <= overview.aov * 0.25 ? 'great' : cpa <= overview.aov * 0.4 ? 'good' : 'bad'}
+            />
+            <AdMetricCard
+              label="Leverage"
+              value={fmtSar(leverage)}
+              hint="Fictive revenue minus ad spend. This is not profit; product/shipping costs are not included."
+              status={leverage > 0 ? 'good' : adSpendValue > 0 ? 'bad' : 'neutral'}
+            />
+            <AdMetricCard
+              label="Revenue / Visitor"
+              value={fmtSar(revenuePerVisitor)}
+              hint="Each valid KSA visitor is worth this much fictive revenue."
+              status={revenuePerVisitor >= 8 ? 'great' : revenuePerVisitor >= 4 ? 'good' : revenuePerVisitor > 0 ? 'watch' : 'neutral'}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <RuleCard title="ROAS benchmark" body="Under 1.5x is usually dangerous. 2.5x+ is healthy. 4x+ is excellent if confirmation and delivery stay strong." />
+            <RuleCard title="COD bottleneck" body="If confirmation is below 60%, fix call script, offer clarity, and fake/test orders before scaling ads." />
+            <RuleCard title="Delivery bottleneck" body="If delivery is below 70%, improve customer expectation, call confirmation, address quality, and courier follow-up." />
           </div>
 
           {/* ── COD Performance ── */}
@@ -224,6 +305,43 @@ function KpiCard({ label, value, hint, color }: { label: string; value: string; 
       <p className="font-sans text-xs font-bold text-charcoal/60 uppercase tracking-wide">{label}</p>
       <p className={`font-sans font-black text-2xl md:text-3xl mt-2 ${colorMap[color]}`}>{value}</p>
       <p className="font-sans text-xs text-charcoal/50 mt-1">{hint}</p>
+    </div>
+  );
+}
+
+function AdMetricCard({
+  label,
+  value,
+  hint,
+  status,
+}: {
+  label: string;
+  value: string;
+  hint: string;
+  status: 'great' | 'good' | 'watch' | 'bad' | 'neutral';
+}) {
+  const statusMap = {
+    great: 'border-emerald bg-emerald text-white',
+    good: 'border-emerald/30 bg-emerald/5 text-emerald',
+    watch: 'border-amber-300 bg-amber-50 text-amber-700',
+    bad: 'border-red-300 bg-red-50 text-red-700',
+    neutral: 'border-stone-200 bg-white text-charcoal',
+  };
+
+  return (
+    <div className={`rounded-2xl border-2 p-5 shadow-sm ${statusMap[status]}`}>
+      <p className="font-sans text-xs font-black uppercase opacity-70">{label}</p>
+      <p className="font-sans text-3xl font-black mt-2">{value}</p>
+      <p className="font-sans text-xs leading-relaxed mt-2 opacity-75">{hint}</p>
+    </div>
+  );
+}
+
+function RuleCard({ title, body }: { title: string; body: string }) {
+  return (
+    <div className="rounded-2xl border border-stone-100 bg-white p-5 shadow-sm">
+      <p className="font-sans text-sm font-black text-charcoal">{title}</p>
+      <p className="font-sans text-xs leading-relaxed text-charcoal/60 mt-2">{body}</p>
     </div>
   );
 }

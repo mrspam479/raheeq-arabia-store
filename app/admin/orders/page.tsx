@@ -115,6 +115,24 @@ export default function AdminOrders() {
     }
   };
 
+  const deleteOrder = async (order: Order) => {
+    const ok = window.confirm(`Delete this order permanently?\n\n${order.full_name} · ${fmtSar(order.total_sar)}\n\nUse this only for fake/test orders.`);
+    if (!ok) return;
+
+    const token = localStorage.getItem('admin_token');
+    try {
+      const res = await fetch(`${API_URL}/api/admin/orders/${order.id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token || ''}` },
+      });
+      if (!res.ok) throw new Error('Delete failed');
+      setOrders(prev => prev.filter(o => o.id !== order.id));
+      if (selected?.id === order.id) setSelected(null);
+    } catch (err) {
+      alert('Failed to delete: ' + (err instanceof Error ? err.message : 'unknown'));
+    }
+  };
+
   const counts = STATUSES.reduce((acc, s) => {
     acc[s] = s === 'all' ? orders.length : orders.filter(o => o.status === s).length;
     return acc;
@@ -198,12 +216,21 @@ export default function AdminOrders() {
                     </span>
                   </td>
                   <td className="px-4 py-3 text-center">
-                    <button
-                      onClick={() => setSelected(o)}
-                      className="text-emerald hover:underline font-bold text-xs"
-                    >
-                      View
-                    </button>
+                    <div className="flex items-center justify-center gap-3">
+                      <button
+                        onClick={() => setSelected(o)}
+                        className="text-emerald hover:underline font-bold text-xs"
+                      >
+                        View
+                      </button>
+                      <button
+                        onClick={() => deleteOrder(o)}
+                        className="text-red-600 hover:underline font-bold text-xs"
+                        title="Delete fake/test order"
+                      >
+                        Trash
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -251,6 +278,21 @@ export default function AdminOrders() {
                       {STATUS_LABELS[s]}
                     </button>
                   ))}
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-red-100 bg-red-50 p-4">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                  <div>
+                    <p className="font-sans text-sm font-black text-red-700">Fake/Test order?</p>
+                    <p className="font-sans text-xs text-red-700/70 mt-1">Delete it from dashboard metrics permanently.</p>
+                  </div>
+                  <button
+                    onClick={() => deleteOrder(selected)}
+                    className="rounded-xl bg-red-600 px-4 py-2 font-sans text-xs font-black text-white hover:bg-red-700"
+                  >
+                    Trash this order
+                  </button>
                 </div>
               </div>
 
