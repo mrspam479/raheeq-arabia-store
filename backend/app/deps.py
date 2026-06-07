@@ -7,7 +7,8 @@ from time import time
 from typing import AsyncGenerator
 
 import structlog
-from fastapi import Header, HTTPException, Request
+from fastapi import Header, HTTPException, Request, Depends
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
@@ -21,8 +22,11 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
         yield session
 
 
-def require_api_key(x_api_key: str = Header(...)) -> None:
-    if not secrets.compare_digest(x_api_key, settings.BACKEND_API_KEY):
+bearer_scheme = HTTPBearer(auto_error=False)
+
+
+def require_api_key(cred: HTTPAuthorizationCredentials | None = Depends(bearer_scheme)) -> None:
+    if not cred or not secrets.compare_digest(cred.credentials, settings.BACKEND_API_KEY):
         raise HTTPException(status_code=401, detail={"code": "UNAUTHORIZED", "message": "Invalid API key"})
 
 

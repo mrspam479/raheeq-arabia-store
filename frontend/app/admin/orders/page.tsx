@@ -33,7 +33,7 @@ export default function AdminOrders() {
       try {
         const token = localStorage.getItem('admin_token');
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/admin/orders?limit=100`, {
-          headers: { 'x-api-key': token || '' }
+          headers: { 'Authorization': `Bearer ${token || ''}` }
         });
         if (res.status === 401) {
           localStorage.removeItem('admin_token');
