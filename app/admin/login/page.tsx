@@ -17,10 +17,13 @@ export default function AdminLogin() {
     setError('');
 
     try {
+      const cleanUsername = username.trim().toLowerCase();
+      const cleanPassword = password.trim();
+
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/admin/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username: cleanUsername, password: cleanPassword }),
       });
 
       if (!res.ok) throw new Error('بيانات الدخول غير صحيحة');
