@@ -32,9 +32,9 @@ export default function HomePage() {
   return (
     <div className="bg-white">
 
-      {/* ══ HERO ══════════════════════════════════════════ */}
+      {/* ══ HERO — Bundle focused, high AOV ═════════════════════════ */}
       <section className="border-b border-[#EAE0D0] px-4 py-16 md:py-24">
-        <div className="container mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 md:grid-cols-[1fr_0.9fr]">
+        <div className="container mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 md:grid-cols-[1fr_1fr]">
 
           {/* Text */}
           <div className="text-center md:text-right">
@@ -45,37 +45,37 @@ export default function HomePage() {
 
             <h1
               className="font-tajawal font-black leading-[1.1] text-emerald"
-              style={{ fontSize: 'clamp(2.4rem, 6vw, 4.8rem)' }}
+              style={{ fontSize: 'clamp(2.4rem, 6vw, 4.4rem)' }}
             >
-              تعبتي من الكريمات اللي ما تجيب نتيجة؟
-              <span className="block text-saffron">الحل يبدأ من الداخل.</span>
+              تعبتي من الترقيع؟
+              <span className="block mt-2 text-3xl md:text-4xl">بشرة باهتة، هالات واضحة، وشعر يتساقط؟</span>
             </h1>
 
-            <p className="mx-auto mt-6 max-w-lg font-tajawal text-lg font-semibold leading-relaxed text-charcoal md:mx-0 md:text-xl">
-              حلوى لذيذة — تعمل من داخل بشرتكِ وشعركِ.
-              <span className="block mt-1 text-charcoal/70">
-                ٣٠ يوم — أو نردّ فلوسكِ كاملة.
+            <p className="mx-auto mt-6 max-w-lg font-tajawal text-lg font-bold leading-relaxed text-charcoal md:mx-0 md:text-xl">
+              لا تضيعين فلوسكِ على كريمات وزيوت مؤقتة.
+              <span className="block mt-1 text-emerald">
+                الحل الجذري يبدأ من الداخل — صندوق الجمال المتكامل.
               </span>
             </p>
 
             <div className="mt-6 grid grid-cols-3 gap-2 max-w-md mx-auto md:mx-0">
               <div className="rounded-2xl border border-emerald/20 bg-[#F3FAF6] p-3 text-center">
                 <p className="text-2xl">✨</p>
-                <p className="mt-1 font-tajawal text-xs font-bold text-emerald">للبشرة</p>
+                <p className="mt-1 font-tajawal text-[11px] font-bold text-emerald">بشرة نضرة<br/>(حبّة نضرة)</p>
               </div>
               <div className="rounded-2xl border border-emerald/20 bg-[#F3FAF6] p-3 text-center">
                 <p className="text-2xl">👁️</p>
-                <p className="mt-1 font-tajawal text-xs font-bold text-emerald">للهالات</p>
+                <p className="mt-1 font-tajawal text-[11px] font-bold text-emerald">مسح الهالات<br/>(حبّة بريق)</p>
               </div>
               <div className="rounded-2xl border border-emerald/20 bg-[#F3FAF6] p-3 text-center">
                 <p className="text-2xl">💇‍♀️</p>
-                <p className="mt-1 font-tajawal text-xs font-bold text-emerald">للشعر</p>
+                <p className="mt-1 font-tajawal text-[11px] font-bold text-emerald">إيقاف التساقط<br/>(حبّة جذر)</p>
               </div>
             </div>
 
             <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row md:justify-start">
-              <Button size="lg" variant="primary" asChild className="h-16 px-10 text-xl font-black">
-                <Link href="/collection">اطلبي حبّتكِ — من {formatSar(199)}</Link>
+              <Button size="lg" variant="primary" asChild className="h-16 px-8 text-lg font-black shadow-lg">
+                <Link href="/p/bundle-glow-trio">اطلبي الصندوق الكامل — ووفري {formatSar(100)}</Link>
               </Button>
               <div className="text-center sm:text-right">
                 <p className="font-tajawal text-sm font-bold text-emerald">💵 دفع عند الاستلام</p>
@@ -83,39 +83,42 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="mt-8 grid grid-cols-3 gap-3">
+            <div className="mt-8 grid grid-cols-3 gap-3 max-w-md mx-auto md:mx-0">
               <HeroProof number="4.9/5" label="تقييم" />
-              <HeroProof number="+12k" label="عميلة" />
+              <HeroProof number="60" label="يوم للنتيجة" />
               <HeroProof number="1–3" label="أيام شحن" />
             </div>
           </div>
 
           {/* Hero visual — bundle image */}
-          <div className="relative mx-auto w-full max-w-[460px]">
+          <div className="relative mx-auto w-full max-w-[500px]">
             <Link
               href="/p/bundle-glow-trio"
               prefetch
               className="group block overflow-hidden rounded-[28px] border-2 border-[#E0D4C0] bg-[#FAFAF8] shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-emerald/40 hover:shadow-md"
             >
-              <div className="relative aspect-square overflow-hidden">
+              <div className="relative aspect-[4/3] overflow-hidden bg-[#f8f6f0]">
                 <Image
                   src="/images/products/bundle-glow-trio/cover.png"
-                  alt="رحيق — صندوق الجمال الكامل"
+                  alt="رحيق — صندوق الجمال المتكامل"
                   fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  sizes="(max-width: 768px) 80vw, 460px"
+                  className="object-contain p-4 transition-transform duration-500 group-hover:scale-105"
+                  sizes="(max-width: 768px) 90vw, 500px"
                   priority
                 />
                 <span className="absolute top-3 right-3 rounded-full bg-saffron px-3 py-1 font-tajawal text-xs font-black text-emerald shadow">
                   💎 الأكثر طلبًا
                 </span>
+                <span className="absolute bottom-3 left-3 rounded-full bg-emerald px-3 py-1 font-tajawal text-[10px] font-black text-white shadow">
+                  وفرّي {formatSar(100)}
+                </span>
               </div>
-              <div className="p-4 text-center">
-                <p className="font-tajawal text-base font-black text-emerald">
-                  صندوق الجمال الكامل
+              <div className="p-5 text-center">
+                <p className="font-tajawal text-xl font-black text-emerald">
+                  صندوق الجمال المتكامل
                 </p>
-                <p className="mt-1 font-tajawal text-xs text-charcoal/60">
-                  بشرة + هالات + شعر · {formatSar(499)} بدلًا من {formatSar(597)}
+                <p className="mt-1 font-tajawal text-sm text-charcoal/70">
+                  روتينكِ اليومي من الداخل · يكفي لشهر كامل
                 </p>
               </div>
             </Link>
@@ -213,24 +216,24 @@ export default function HomePage() {
         <div className="container mx-auto max-w-5xl">
           <div className="mb-8 text-center">
             <span className="mb-3 inline-block rounded-full bg-emerald px-4 py-1.5 font-tajawal text-xs font-black text-saffron">
-              💎 العرض الأقوى
+              💎 العرض الأقوى للنتيجة الأكفى
             </span>
             <h2 className="font-tajawal text-3xl font-black leading-tight text-emerald md:text-4xl">
-              صندوق الجمال الكامل
+              صندوق الجمال المتكامل
             </h2>
             <p className="mx-auto mt-3 max-w-2xl font-tajawal text-base text-charcoal/70">
-              الـ ٣ منتجات معًا — لأن جمالكِ ما هو جزء واحد
+              الـ ٣ منتجات معًا — لأن الجمال الحقيقي لا يتجزأ. عوّضي النقص من الداخل.
             </p>
           </div>
 
           <div className="rounded-[28px] border-2 border-saffron/30 bg-white p-6 shadow-[0_24px_60px_rgba(18,107,82,0.15)] md:p-10">
             <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-2">
-              <div className="relative aspect-square overflow-hidden rounded-3xl bg-stone-100">
+              <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-[#f8f6f0] border border-[#EAE0D0] p-4">
                 <Image
                   src="/images/products/bundle-glow-trio/cover.png"
-                  alt="صندوق الجمال الكامل — نضرة + بريق + جذر"
+                  alt="صندوق الجمال المتكامل — نضرة + بريق + جذر"
                   fill
-                  className="object-cover"
+                  className="object-contain p-4"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
               </div>
