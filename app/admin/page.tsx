@@ -26,7 +26,7 @@ export default function AdminDashboard() {
       
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/admin/metrics?start_date=${start.toISOString()}&end_date=${now.toISOString()}`, {
         headers: {
-          'x-api-key': token || '',
+          'Authorization': `Bearer ${token || ''}`,
         }
       });
       if (res.status === 401) {
