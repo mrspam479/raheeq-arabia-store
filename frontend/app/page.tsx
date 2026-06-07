@@ -57,14 +57,14 @@ export default function HomePage() {
     <div className="bg-white">
 
       {/* ══ HERO — Bundle focused, high AOV ═════════════════════════ */}
-      <section className="border-b border-[#EAE0D0] px-4 py-16 md:py-24">
+      <section className="border-b border-[#EAE0D0] px-4 py-10 md:py-24">
         <div className="container mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 md:grid-cols-[1fr_1fr]">
 
           {/* Text */}
           <div className="text-center md:text-right">
 
-            <p className="mb-4 inline-block font-tajawal text-sm font-bold text-saffron">
-              🇸🇦 يُصنع للسعودية · فحص مخبري لكل دفعة
+            <p className="mb-4 inline-block rounded-full border border-saffron/25 bg-saffron/10 px-4 py-1.5 font-tajawal text-xs font-black text-saffron">
+              دفع عند الاستلام · نتصل نأكد طلبكِ قبل الشحن
             </p>
 
             <h1
@@ -82,19 +82,56 @@ export default function HomePage() {
               </span>
             </p>
 
-            <div className="mt-6 grid grid-cols-3 gap-2 max-w-md mx-auto md:mx-0">
-              <div className="rounded-2xl border border-emerald/20 bg-[#F3FAF6] p-3 text-center">
-                <p className="text-2xl">✨</p>
-                <p className="mt-1 font-tajawal text-[11px] font-bold text-emerald">بشرة نضرة<br/>(حبّة نضرة)</p>
+            <div className="mx-auto mt-6 max-w-md rounded-[28px] border border-saffron/25 bg-gradient-to-b from-[#FFF9EA] to-white p-2 shadow-[0_18px_55px_rgba(126,91,35,0.12)] md:mx-0">
+              <p className="mb-2 text-center font-tajawal text-[11px] font-black text-emerald">
+                اختاري حسب مشكلتكِ
+              </p>
+              <div className="grid grid-cols-3 gap-2">
+                {MAIN_PRODUCTS.map((product, idx) => {
+                  const card = issueCards[idx] ?? {
+                    icon: '✨',
+                    issue: product.nameAr,
+                    product: product.nameAr,
+                    solution: 'حل من الداخل',
+                    outcome: product.heroTagAr,
+                  };
+
+                  return (
+                    <Link
+                      key={product.slug}
+                      href={`/p/${product.slug}`}
+                      prefetch
+                      className="group overflow-hidden rounded-2xl border border-[#E6D8BA] bg-white text-center shadow-sm transition-all hover:-translate-y-1 hover:border-saffron"
+                    >
+                      <div className="relative mx-auto mt-1 aspect-square w-full overflow-hidden bg-[#FAF7EF]">
+                        <Image
+                          src={product.coverImageUrl}
+                          alt={product.nameAr}
+                          fill
+                          className="object-contain p-1.5 transition-transform duration-300 group-hover:scale-105"
+                          sizes="120px"
+                          priority={idx === 0}
+                        />
+                      </div>
+                      <div className="px-1.5 pb-2 pt-1">
+                        <p className="font-tajawal text-[10px] font-black leading-tight text-red-600">
+                          {card.issue}
+                        </p>
+                        <p className="mt-0.5 font-tajawal text-[10px] font-black leading-tight text-emerald">
+                          {card.product}
+                        </p>
+                      </div>
+                    </Link>
+                  );
+                })}
               </div>
-              <div className="rounded-2xl border border-emerald/20 bg-[#F3FAF6] p-3 text-center">
-                <p className="text-2xl">👁️</p>
-                <p className="mt-1 font-tajawal text-[11px] font-bold text-emerald">مسح الهالات<br/>(حبّة بريق)</p>
-              </div>
-              <div className="rounded-2xl border border-emerald/20 bg-[#F3FAF6] p-3 text-center">
-                <p className="text-2xl">💇‍♀️</p>
-                <p className="mt-1 font-tajawal text-[11px] font-bold text-emerald">إيقاف التساقط<br/>(حبّة جذر)</p>
-              </div>
+              <Link
+                href="/p/bundle-glow-trio"
+                prefetch
+                className="mt-2 flex items-center justify-center rounded-2xl bg-emerald px-3 py-2.5 font-tajawal text-xs font-black text-white shadow-sm"
+              >
+                أو خذي الصندوق الكامل: الثلاثة معًا
+              </Link>
             </div>
 
             <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row md:justify-start">
