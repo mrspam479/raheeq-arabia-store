@@ -71,32 +71,29 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Hero visual */}
-          <div className="relative mx-auto w-full max-w-[480px]">
+          {/* Hero visual — REAL product photo */}
+          <div className="relative mx-auto w-full max-w-[520px]">
             <Link
               href="/p/bundle-glow-trio"
               prefetch
-              className="group block overflow-hidden rounded-[32px] border-2 border-[#E0D4C0] bg-[#FAFAF8] shadow-[0_24px_60px_rgba(18,107,82,0.12)] transition-all duration-300 hover:-translate-y-1 hover:border-emerald/40 hover:shadow-xl"
+              className="group block overflow-hidden rounded-[32px] border-2 border-[#E0D4C0] bg-white shadow-[0_24px_60px_rgba(18,107,82,0.12)] transition-all duration-300 hover:-translate-y-1 hover:border-emerald/40 hover:shadow-xl"
             >
-              <div className="relative aspect-square overflow-hidden bg-[#f8f6f0]">
+              <div className="relative aspect-[4/3] overflow-hidden bg-white">
                 <Image
-                  src="/images/products/bundle-glow-trio/cover.png"
-                  alt="صندوق الجمال المتكامل — رحيق"
+                  src="/images/products/trio-real-photo.png"
+                  alt="المنتجات الثلاثة — نضرة + بريق + جذر"
                   fill
-                  className="object-contain p-6 transition-transform duration-500 group-hover:scale-105"
-                  sizes="(max-width: 768px) 90vw, 480px"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  sizes="(max-width: 768px) 90vw, 520px"
                   priority
                 />
                 <span className="absolute top-4 right-4 rounded-full bg-saffron px-3 py-1.5 font-tajawal text-xs font-black text-emerald shadow-lg">
                   💎 الأكثر طلبًا
                 </span>
-                <span className="absolute bottom-4 left-4 rounded-full bg-emerald px-3 py-1.5 font-tajawal text-xs font-black text-white shadow-lg">
-                  وفّري {formatSar(100)}
-                </span>
               </div>
               <div className="border-t border-[#EAE0D0] bg-white p-5 text-center">
-                <p className="font-tajawal text-xl font-black text-emerald">صندوق الجمال المتكامل</p>
-                <p className="mt-1 font-tajawal text-sm text-charcoal/65">بشرة + هالات + شعر · يكفي شهر كامل</p>
+                <p className="font-tajawal text-xl font-black text-emerald">الـ ٣ منتجات — نفس اللي بالصورة</p>
+                <p className="mt-1 font-tajawal text-sm text-charcoal/65">نضرة + بريق + جذر · يكفي شهر كامل</p>
                 <div className="mt-2 inline-flex items-center gap-2">
                   <span className="font-tajawal text-sm text-charcoal/50 line-through">{formatSar(597)}</span>
                   <span className="font-tajawal text-2xl font-black text-emerald">{formatSar(499)}</span>
@@ -262,23 +259,48 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ══ GUARANTEE — The trust killer section ═══════════════════════ */}
-      <section className="border-b border-[#EAE0D0] bg-gradient-to-br from-[#F0FFF7] to-white px-4 py-16 md:py-20">
+      {/* ══ GUARANTEE — IMPOSSIBLE TO IGNORE ═══════════════════════════ */}
+      <section className="border-b-4 border-emerald bg-gradient-to-br from-[#E8FFF4] via-[#F0FFF7] to-white px-4 py-20 md:py-28">
         <div className="container mx-auto max-w-4xl">
-          <div className="rounded-[32px] border-2 border-emerald/20 bg-white p-8 text-center shadow-[0_24px_60px_rgba(18,107,82,0.08)] md:p-12">
-            <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-emerald/10">
-              <span className="text-5xl">🛡️</span>
+          <div className="rounded-[36px] border-4 border-emerald bg-white p-8 text-center shadow-[0_32px_80px_rgba(18,107,82,0.15)] md:p-14">
+            <div className="mx-auto mb-6 flex h-28 w-28 items-center justify-center rounded-full border-4 border-emerald/30 bg-emerald/10">
+              <span className="text-6xl">🛡️</span>
             </div>
-            <h2 className="font-tajawal text-3xl font-black text-emerald md:text-4xl">
-              ضمان رضا ١٤ يوم — أو نردّ فلوسكِ
-            </h2>
-            <p className="mx-auto mt-4 max-w-2xl font-tajawal text-base leading-relaxed text-charcoal/70">
-              جرّبي رحيق بكل راحة. إذا ما حسّيتي بفرق أو ما عجبكِ المنتج لأي سبب — كلّمينا وبنرجّع فلوسكِ كاملة بدون أسئلة. ما عندكِ شي تخسرينه.
+            <p className="mb-2 font-tajawal text-sm font-black uppercase tracking-widest text-saffron">
+              وعد رحيق لكِ
             </p>
-            <div className="mx-auto mt-8 grid max-w-lg grid-cols-3 gap-4">
-              <GuaranteePill icon="📦" text="شحن آمن ومغلّف" />
-              <GuaranteePill icon="💵" text="استرداد كامل" />
-              <GuaranteePill icon="📞" text="دعم سعودي سريع" />
+            <h2
+              className="font-tajawal font-black leading-tight text-emerald"
+              style={{ fontSize: 'clamp(1.8rem, 5vw, 3.2rem)' }}
+            >
+              ضمان ٣٠ يوم كامل — أو فلوسكِ ترجع
+            </h2>
+            <p className="mx-auto mt-5 max-w-2xl font-tajawal text-lg leading-relaxed text-charcoal/75 md:text-xl">
+              جرّبي رحيق لمدة ٣٠ يوم. إذا ما لاحظتي فرق، أو ما عجبكِ المنتج لأي سبب كان — <span className="font-black text-emerald">كلّمينا وبنرجّع فلوسكِ كاملة. بدون أسئلة. بدون شروط.</span>
+            </p>
+
+            <div className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-4 md:grid-cols-3">
+              <div className="rounded-2xl border-2 border-emerald/20 bg-emerald/5 p-5">
+                <span className="text-3xl">🚫</span>
+                <p className="mt-2 font-tajawal text-base font-black text-emerald">بدون مخاطرة</p>
+                <p className="mt-1 font-tajawal text-xs text-charcoal/60">ما تخسرين ولا ريال</p>
+              </div>
+              <div className="rounded-2xl border-2 border-emerald/20 bg-emerald/5 p-5">
+                <span className="text-3xl">💵</span>
+                <p className="mt-2 font-tajawal text-base font-black text-emerald">استرداد كامل</p>
+                <p className="mt-1 font-tajawal text-xs text-charcoal/60">كل فلوسكِ ترجع لكِ</p>
+              </div>
+              <div className="rounded-2xl border-2 border-emerald/20 bg-emerald/5 p-5">
+                <span className="text-3xl">❌</span>
+                <p className="mt-2 font-tajawal text-base font-black text-emerald">بدون أسئلة</p>
+                <p className="mt-1 font-tajawal text-xs text-charcoal/60">ما نسألكِ ليش</p>
+              </div>
+            </div>
+
+            <div className="mx-auto mt-8 max-w-lg rounded-2xl bg-saffron/10 border border-saffron/30 p-4">
+              <p className="font-tajawal text-sm font-bold text-charcoal/80">
+                💬 يعني ببساطة: اطلبي، جرّبي ٣٠ يوم، لو ما عجبكِ — نرجّع فلوسكِ. انتهى.
+              </p>
             </div>
           </div>
         </div>
@@ -301,12 +323,12 @@ export default function HomePage() {
 
           <div className="rounded-[28px] border-2 border-saffron/30 bg-white p-6 shadow-[0_24px_60px_rgba(18,107,82,0.15)] md:p-10">
             <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-2">
-              <div className="relative aspect-square overflow-hidden rounded-3xl border border-[#EAE0D0] bg-[#f8f6f0]">
+              <div className="relative aspect-square overflow-hidden rounded-3xl border border-[#EAE0D0] bg-white">
                 <Image
-                  src="/images/products/bundle-glow-trio/cover.png"
-                  alt="صندوق الجمال المتكامل"
+                  src="/images/products/trio-real-photo.png"
+                  alt="المنتجات الثلاثة الحقيقية — نضرة + بريق + جذر"
                   fill
-                  className="object-contain p-6"
+                  className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
               </div>
@@ -341,7 +363,7 @@ export default function HomePage() {
                     <span className="font-tajawal text-3xl font-black text-emerald">{formatSar(499)}</span>
                   </div>
                   <p className="font-tajawal text-xs text-charcoal/60 border-t border-emerald/10 pt-2">
-                    🚚 شحن مجاني · يكفي شهر كامل · 🛡️ ضمان ١٤ يوم
+                    🚚 شحن مجاني · يكفي شهر كامل · 🛡️ ضمان ٣٠ يوم
                   </p>
                 </div>
 
@@ -468,7 +490,7 @@ export default function HomePage() {
             جاهزة تبدئين التحوّل؟
           </h2>
           <p className="mx-auto mt-4 max-w-md font-tajawal text-base text-white/75">
-            حبّتين بالصباح. نتيجة خلال ٣٠ يوم. ضمان ١٤ يوم.
+            حبّتين بالصباح. نتيجة خلال ٣٠ يوم. ضمان ٣٠ يوم.
             <br />ما عندكِ شي تخسرينه.
           </p>
           <div className="mt-8">
@@ -477,7 +499,7 @@ export default function HomePage() {
             </Button>
           </div>
           <p className="mt-4 font-tajawal text-sm text-white/50">
-            💵 كاش للمندوب · 🚚 شحن ١-٣ أيام · 🛡️ ضمان رضا ١٤ يوم
+            💵 كاش للمندوب · 🚚 شحن ١-٣ أيام · 🛡️ ضمان ٣٠ يوم كامل
           </p>
         </div>
       </section>
@@ -546,14 +568,6 @@ function CompareCell({ value, highlight = false }: { value: boolean; highlight?:
   );
 }
 
-function GuaranteePill({ icon, text }: { icon: string; text: string }) {
-  return (
-    <div className="flex flex-col items-center gap-2 rounded-2xl bg-emerald/5 p-3">
-      <span className="text-2xl">{icon}</span>
-      <p className="font-tajawal text-[11px] font-bold text-emerald">{text}</p>
-    </div>
-  );
-}
 
 function FaqItem({ question, answer }: { question: string; answer: string }) {
   return (
