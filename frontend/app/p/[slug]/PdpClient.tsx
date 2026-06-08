@@ -126,7 +126,7 @@ export function PdpClient({
               <div className="flex flex-wrap gap-2">
                 <Badge variant="ivory">{COPY.BADGES.COD}</Badge>
                 <Badge variant="ivory">{COPY.BADGES.HALAL}</Badge>
-                <Badge variant="ivory">🛡️ ضمان ١٤ يوم</Badge>
+                <Badge variant="ivory">🛡️ ضمان ٣٠ يوم</Badge>
               </div>
 
               {/* Title + Pain Point */}
@@ -292,7 +292,7 @@ export function PdpClient({
 
               {/* Trust row */}
               <div className="flex flex-wrap justify-center gap-3 border-t border-stone-100 pt-3">
-                {['💵 دفع عند الاستلام', '🚚 شحن سريع', '☪️ حلال ١٠٠٪', '🛡️ ضمان ١٤ يوم'].map((badge) => (
+                {['💵 دفع عند الاستلام', '🚚 شحن سريع', '☪️ حلال ١٠٠٪', '🛡️ ضمان ٣٠ يوم'].map((badge) => (
                   <span key={badge} className="font-tajawal text-[11px] font-bold text-charcoal/60">
                     {badge}
                   </span>
@@ -442,36 +442,49 @@ export function PdpClient({
         </div>
       </section>
 
-      {/* ════ GUARANTEE SECTION — Dedicated, visual, bold ════ */}
-      <section className="py-16 bg-gradient-to-br from-[#F0FFF7] to-white">
+      {/* ════ GUARANTEE — IMPOSSIBLE TO IGNORE ════ */}
+      <section className="py-20 bg-gradient-to-br from-[#E8FFF4] via-[#F0FFF7] to-white border-y-4 border-emerald">
         <div className="container mx-auto px-4 max-w-4xl">
-          <div className="rounded-[32px] border-2 border-emerald/20 bg-white p-8 text-center shadow-[0_24px_60px_rgba(18,107,82,0.08)] md:p-12">
-            <div className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-emerald/10">
-              <span className="text-4xl">🛡️</span>
+          <div className="rounded-[36px] border-4 border-emerald bg-white p-8 text-center shadow-[0_32px_80px_rgba(18,107,82,0.15)] md:p-14">
+            <div className="mx-auto mb-6 flex h-28 w-28 items-center justify-center rounded-full border-4 border-emerald/30 bg-emerald/10">
+              <span className="text-6xl">🛡️</span>
             </div>
-            <h2 className="font-tajawal text-2xl font-black text-emerald md:text-3xl">
-              ضمان رضا ١٤ يوم كامل
+            <p className="mb-2 font-tajawal text-sm font-black uppercase tracking-widest text-saffron">
+              وعد رحيق لكِ
+            </p>
+            <h2
+              className="font-tajawal font-black leading-tight text-emerald"
+              style={{ fontSize: 'clamp(1.8rem, 5vw, 3rem)' }}
+            >
+              ضمان ٣٠ يوم كامل — أو فلوسكِ ترجع
             </h2>
-            <p className="mx-auto mt-4 max-w-xl font-tajawal text-base leading-relaxed text-charcoal/70">
-              نثق بمنتجاتنا ١٠٠٪. إذا استلمتي الطلب وما عجبكِ لأي سبب — كلّمينا خلال ١٤ يوم وبنرجّع فلوسكِ كاملة. بدون أسئلة محرجة، بدون شروط مخفية.
+            <p className="mx-auto mt-5 max-w-xl font-tajawal text-lg leading-relaxed text-charcoal/75">
+              جرّبي لمدة ٣٠ يوم. إذا ما لاحظتي فرق أو ما عجبكِ لأي سبب — <span className="font-black text-emerald">نرجّع فلوسكِ كاملة. بدون أسئلة. بدون شروط.</span>
             </p>
-            <div className="mx-auto mt-8 grid max-w-md grid-cols-3 gap-4">
-              <div className="flex flex-col items-center gap-2 rounded-2xl bg-emerald/5 p-4">
-                <span className="text-2xl">📦</span>
-                <p className="font-tajawal text-[11px] font-bold text-emerald">شحن مغلّف بعناية</p>
+
+            <div className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-4 md:grid-cols-3">
+              <div className="rounded-2xl border-2 border-emerald/20 bg-emerald/5 p-5">
+                <span className="text-3xl">🚫</span>
+                <p className="mt-2 font-tajawal text-base font-black text-emerald">بدون مخاطرة</p>
+                <p className="mt-1 font-tajawal text-xs text-charcoal/60">ما تخسرين ولا ريال</p>
               </div>
-              <div className="flex flex-col items-center gap-2 rounded-2xl bg-emerald/5 p-4">
-                <span className="text-2xl">💵</span>
-                <p className="font-tajawal text-[11px] font-bold text-emerald">استرداد كامل</p>
+              <div className="rounded-2xl border-2 border-emerald/20 bg-emerald/5 p-5">
+                <span className="text-3xl">💵</span>
+                <p className="mt-2 font-tajawal text-base font-black text-emerald">استرداد كامل</p>
+                <p className="mt-1 font-tajawal text-xs text-charcoal/60">كل فلوسكِ ترجع</p>
               </div>
-              <div className="flex flex-col items-center gap-2 rounded-2xl bg-emerald/5 p-4">
-                <span className="text-2xl">📞</span>
-                <p className="font-tajawal text-[11px] font-bold text-emerald">فريق دعم سعودي</p>
+              <div className="rounded-2xl border-2 border-emerald/20 bg-emerald/5 p-5">
+                <span className="text-3xl">❌</span>
+                <p className="mt-2 font-tajawal text-base font-black text-emerald">بدون أسئلة</p>
+                <p className="mt-1 font-tajawal text-xs text-charcoal/60">ما نسألكِ ليش</p>
               </div>
             </div>
-            <p className="mt-6 font-tajawal text-sm font-bold text-emerald">
-              ما عندكِ شي تخسرينه — جرّبي بكل ثقة.
-            </p>
+
+            <div className="mx-auto mt-8 max-w-lg rounded-2xl bg-saffron/10 border border-saffron/30 p-4">
+              <p className="font-tajawal text-sm font-bold text-charcoal/80">
+                💬 يعني ببساطة: اطلبي، جرّبي ٣٠ يوم، لو ما عجبكِ — نرجّع فلوسكِ. انتهى.
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -681,12 +694,12 @@ export function PdpClient({
 
           <div className="rounded-3xl bg-white border-2 border-saffron/30 p-6 md:p-8 shadow-[0_24px_60px_rgba(18,107,82,0.15)]">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-              <div className="relative aspect-square rounded-2xl overflow-hidden bg-stone-100">
+              <div className="relative aspect-square rounded-2xl overflow-hidden bg-white">
                 <Image
-                  src="/images/products/bundle-glow-trio/cover.png"
-                  alt="صندوق الجمال الكامل"
+                  src="/images/products/trio-real-photo.png"
+                  alt="المنتجات الثلاثة الحقيقية — نضرة + بريق + جذر"
                   fill
-                  className="object-contain p-4"
+                  className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
               </div>
@@ -724,7 +737,7 @@ export function PdpClient({
                     </span>
                   </div>
                   <p className="font-tajawal text-xs text-charcoal/60 border-t border-emerald/10 pt-2">
-                    🚚 شحن مجاني · 🛡️ ضمان ١٤ يوم
+                    🚚 شحن مجاني · 🛡️ ضمان ٣٠ يوم
                   </p>
                 </div>
 
@@ -810,7 +823,7 @@ export function PdpClient({
       <section className="py-16 bg-emerald text-ivory text-center">
         <div className="container mx-auto px-4 max-w-2xl">
           <p className="font-tajawal text-sm font-bold text-saffron mb-3">
-            🛡️ ضمان ١٤ يوم · دفع عند الاستلام · ما عندكِ شي تخسرينه
+            🛡️ ضمان ٣٠ يوم كامل · دفع عند الاستلام · ما عندكِ شي تخسرينه
           </p>
           <h2 className="font-tajawal font-black text-3xl md:text-4xl mb-4">
             جاهزة تجرّبين {product.nameAr}؟
