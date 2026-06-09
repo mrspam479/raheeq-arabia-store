@@ -34,7 +34,7 @@ export default function HomePage() {
             <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-emerald/20 bg-emerald/5 px-4 py-1.5">
               <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-[#00C97A]" />
               <span className="font-tajawal text-xs font-black text-emerald">
-                +{formatNumber(REVIEW_AGGREGATE.totalReviews)} عميلة سعودية جرّبت رحيق
+                مرخّصة من الغذاء والدواء (SFDA)
               </span>
             </div>
 
@@ -42,32 +42,32 @@ export default function HomePage() {
               className="font-tajawal font-black leading-[1.1] text-emerald"
               style={{ fontSize: 'clamp(2.2rem, 5.5vw, 4rem)' }}
             >
-              بشرتكِ باهتة؟ هالات واضحة؟
-              <br />شعركِ يتساقط؟
+              صيدلية الجمال السعودية.
+              <br />لجمال يبدأ من الداخل.
             </h1>
 
             <p className="mx-auto mt-5 max-w-lg font-tajawal text-lg font-bold leading-relaxed text-charcoal/80 md:mx-0 md:text-xl">
-              الكريمات والزيوت تبقى على السطح.
+              ثلاث تركيبات سريرية مدعومة بأبحاث — تستهدف التجاعيد، الهالات، والتساقط من الداخل.
               <span className="mt-1 block font-black text-emerald">
-                الحل الحقيقي يبدأ من الداخل — حبّتين بالصباح وخلاص.
+                بدون إبر، بدون عيادات، وبدون مخاطرة.
               </span>
             </p>
 
             <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row md:justify-start">
               <Button size="lg" variant="primary" asChild className="h-16 px-8 text-lg font-black shadow-[0_18px_42px_rgba(18,107,82,0.30)]">
-                <Link href="/p/bundle-glow-trio">اطلبي الصندوق الكامل — {formatSar(499)}</Link>
+                <Link href="/p/bundle-glow-trio">استكشفي الروتين السريري — {formatSar(499)}</Link>
               </Button>
               <div className="text-center sm:text-right">
-                <p className="font-tajawal text-sm font-bold text-emerald">💵 دفع عند الاستلام</p>
-                <p className="font-tajawal text-xs text-charcoal/55">بدون بطاقة · شحن ١-٣ أيام</p>
+                <p className="font-tajawal text-sm font-bold text-emerald">💵 الدفع عند الاستلام</p>
+                <p className="font-tajawal text-xs text-charcoal/55">بدون دفع أونلاين · شحن ١-٣ أيام</p>
               </div>
             </div>
 
             {/* Social proof strip */}
             <div className="mt-8 grid grid-cols-3 gap-3 max-w-md mx-auto md:mx-0">
-              <HeroProof number="4.9/5" label="تقييم عميلات" />
-              <HeroProof number="+12,000" label="عميلة سعودية" />
-              <HeroProof number="97%" label="نسبة رضا" />
+              <HeroProof number="SFDA" label="مرخّص رسمياً" />
+              <HeroProof number="100%" label="حلال ونباتي" />
+              <HeroProof number="30 يوم" label="ضمان استرجاع" />
             </div>
           </div>
 
@@ -153,10 +153,10 @@ export default function HomePage() {
         <div className="container mx-auto max-w-5xl">
           <div className="mb-10 text-center">
             <span className="mb-3 inline-block rounded-full bg-saffron/15 px-4 py-1.5 font-tajawal text-xs font-black text-saffron">
-              الفرق الحقيقي
+              صيدلية، مو متجر تجميل
             </span>
             <h2 className="font-tajawal text-3xl font-black leading-tight text-emerald md:text-4xl">
-              ليش المكمّلات أفضل من الكريمات؟
+              ليش العلكات السريرية أفضل من الكريمات؟
             </h2>
           </div>
 
@@ -202,11 +202,14 @@ export default function HomePage() {
         <div className="container mx-auto max-w-6xl">
           <div className="mb-10 text-center">
             <span className="mb-3 inline-block rounded-full bg-saffron/15 px-4 py-1.5 font-tajawal text-xs font-black text-saffron">
-              اختاري حسب مشكلتكِ
+              التركيبات السريرية
             </span>
             <h2 className="font-tajawal text-4xl font-black leading-tight text-emerald md:text-5xl">
-              ٣ مشاكل. ٣ حلول. من الداخل.
+              ثلاث علكات. ثلاث مشاكل. حلّ سريري واحد.
             </h2>
+            <p className="mt-3 font-tajawal text-base text-charcoal/60">
+              كل علكة تركيبة مستقلّة بجرعات مدروسة. اختاري المشكلة، أو ادمجي الثلاث للروتين الكامل.
+            </p>
           </div>
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
@@ -405,10 +408,10 @@ export default function HomePage() {
         <div className="container mx-auto max-w-5xl">
           <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
             {[
-              { icon: '🧪', title: 'مكوّنات مثبتة', sub: 'دراسات على آلاف المشاركات' },
-              { icon: '🔬', title: 'فحص مخبري', sub: 'شهادة COA لكل دفعة' },
-              { icon: '☪️', title: 'حلال ١٠٠٪', sub: 'بيكتين نباتي · بدون جيلاتين' },
-              { icon: '🇸🇦', title: 'شركة سعودية', sub: 'تغليف محلي · خدمة محلية' },
+              { icon: '📋', title: 'مرخّص SFDA', sub: 'مسجّل في الغذاء والدواء' },
+              { icon: '🔬', title: 'جرعات سريرية', sub: 'مكونات بأبحاث منشورة' },
+              { icon: '☪️', title: 'حلال ١٠٠٪', sub: 'بكتين نباتي · بدون جيلاتين' },
+              { icon: '🛡️', title: 'ضمان ٣٠ يوم', sub: 'استرجاع كامل بدون مخاطرة' },
             ].map((item) => (
               <div key={item.title} className="flex flex-col items-center gap-2 rounded-2xl border border-emerald/10 bg-white p-5 text-center">
                 <span className="text-3xl">{item.icon}</span>
@@ -424,14 +427,14 @@ export default function HomePage() {
       <section className="border-b border-[#EAE0D0] px-4 py-16 md:py-20">
         <div className="container mx-auto max-w-5xl">
           <div className="mb-12 text-center">
-            <p className="mb-2 font-tajawal text-sm font-bold text-saffron">عميلات حقيقيات · نتائج حقيقية</p>
+            <p className="mb-2 font-tajawal text-sm font-bold text-saffron">عميلات قرأن المكونات قبل ما يطلبن</p>
             <h2 className="font-tajawal text-3xl font-black text-emerald md:text-4xl">
-              شوفي إيش قالوا عن رحيق
+              رحيق اختيار النساء اللي ما يصدّقن أي إعلان
             </h2>
             <div className="mt-3 flex items-center justify-center gap-2">
               <StarRating value={REVIEW_AGGREGATE.averageRating} showValue size="lg" />
               <span className="font-tajawal text-sm text-charcoal/55">
-                ({formatNumber(REVIEW_AGGREGATE.totalReviews)} تقييم)
+                ({formatNumber(REVIEW_AGGREGATE.totalReviews)} تقييم موثّق)
               </span>
             </div>
           </div>
