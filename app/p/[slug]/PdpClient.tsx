@@ -125,7 +125,7 @@ export function PdpClient({
               {/* Trust badges */}
               <div className="flex flex-wrap gap-2">
                 <Badge variant="ivory">{COPY.BADGES.COD}</Badge>
-                <Badge variant="ivory">{COPY.BADGES.HALAL}</Badge>
+                <Badge variant="ivory">📋 مرخّص SFDA</Badge>
                 <Badge variant="ivory">🛡️ ضمان ٣٠ يوم</Badge>
               </div>
 
@@ -464,9 +464,9 @@ export function PdpClient({
 
             <div className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-4 md:grid-cols-3">
               <div className="rounded-2xl border-2 border-emerald/20 bg-emerald/5 p-5">
-                <span className="text-3xl">🚫</span>
-                <p className="mt-2 font-tajawal text-base font-black text-emerald">بدون مخاطرة</p>
-                <p className="mt-1 font-tajawal text-xs text-charcoal/60">ما تخسرين ولا ريال</p>
+                <span className="text-3xl">📋</span>
+                <p className="mt-2 font-tajawal text-base font-black text-emerald">مرخّص SFDA</p>
+                <p className="mt-1 font-tajawal text-xs text-charcoal/60">مسجّل في الغذاء والدواء</p>
               </div>
               <div className="rounded-2xl border-2 border-emerald/20 bg-emerald/5 p-5">
                 <span className="text-3xl">💵</span>
@@ -571,7 +571,7 @@ export function PdpClient({
               إيش فيها؟
             </h2>
             <p className="mt-2 font-tajawal text-base text-charcoal/60">
-              مكوّنات عالمية بشهادة تحليل لكل دفعة
+              مكوّنات سريرية بجرعات مدروسة
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -598,10 +598,10 @@ export function PdpClient({
         <div className="container mx-auto px-4 max-w-5xl">
           <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
             {[
-              { icon: '🧪', text: 'مكوّنات مثبتة علميًا' },
-              { icon: '🔬', text: 'فحص مخبري كل دفعة' },
+              { icon: '📋', text: 'مرخّص من SFDA' },
+              { icon: '🔬', text: 'جرعات سريرية' },
               { icon: '☪️', text: 'حلال ١٠٠٪' },
-              { icon: '🇸🇦', text: 'شركة سعودية' },
+              { icon: '🛡️', text: 'ضمان ٣٠ يوم' },
             ].map((item) => (
               <div key={item.text} className="flex flex-col items-center gap-2 rounded-2xl border border-emerald/15 bg-white p-4 text-center">
                 <span className="text-2xl">{item.icon}</span>
@@ -616,8 +616,9 @@ export function PdpClient({
       <section className="py-16 bg-ivory">
         <div className="container mx-auto px-4 max-w-3xl">
           <div className="text-center mb-10">
+            <p className="mb-2 font-tajawal text-sm font-bold text-saffron">عميلات قرأن المكونات قبل ما يطلبن</p>
             <h2 className="font-tajawal font-black text-3xl md:text-4xl text-emerald">
-              عميلات حقيقيات · نتائج حقيقية
+              اختيار النساء اللي ما يصدّقن أي إعلان
             </h2>
             <div className="mt-3 inline-flex items-center gap-2">
               <StarRating value={product.ratingValue} showValue reviewCount={product.reviewCount} size="md" />
@@ -852,10 +853,13 @@ export function PdpClient({
       </section>
 
       {/* Sticky CTA bar — mobile */}
-      <div className="fixed bottom-0 inset-x-0 z-50 md:hidden bg-ivory border-t border-stone-200 p-3 safe-bottom">
-        <Button variant="primary" size="lg" fullWidth onClick={handleAddToCart}>
+      <div className="fixed bottom-0 inset-x-0 z-50 md:hidden bg-white border-t border-stone-200 p-3 shadow-[0_-10px_40px_rgba(0,0,0,0.08)] safe-bottom">
+        <Button variant="primary" size="lg" fullWidth onClick={handleAddToCart} className="h-14 text-lg font-black shadow-lg">
           اطلبيها الآن · {formatSar(selectedOffer.priceSar)}
         </Button>
+        <p className="mt-1.5 text-center font-tajawal text-[11px] font-bold text-emerald">
+          🚚 الدفع عند الاستلام · 🛡️ ضمان ٣٠ يوم
+        </p>
       </div>
     </>
   );
