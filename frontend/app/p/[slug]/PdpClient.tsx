@@ -696,7 +696,7 @@ export function PdpClient({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
               <div className="relative aspect-square rounded-2xl overflow-hidden bg-white">
                 <Image
-                  src="/images/products/trio-real-photo.png"
+                  src="/images/products/trio-real-photo.webp"
                   alt="المنتجات الثلاثة الحقيقية — نضرة + بريق + جذر"
                   fill
                   className="object-cover"

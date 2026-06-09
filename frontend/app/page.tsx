@@ -80,7 +80,7 @@ export default function HomePage() {
             >
               <div className="relative aspect-[4/3] overflow-hidden bg-white">
                 <Image
-                  src="/images/products/trio-real-photo.png"
+                  src="/images/products/trio-real-photo.webp"
                   alt="المنتجات الثلاثة — نضرة + بريق + جذر"
                   fill
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -325,7 +325,7 @@ export default function HomePage() {
             <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-2">
               <div className="relative aspect-square overflow-hidden rounded-3xl border border-[#EAE0D0] bg-white">
                 <Image
-                  src="/images/products/trio-real-photo.png"
+                  src="/images/products/trio-real-photo.webp"
                   alt="المنتجات الثلاثة الحقيقية — نضرة + بريق + جذر"
                   fill
                   className="object-cover"

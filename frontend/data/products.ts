@@ -31,8 +31,8 @@ export const PRODUCTS: Product[] = [
     ratingValue: 4.9,
     reviewCount: 387,
     stockLabelAr: 'بقي 24 علبة فقط من دفعة هذا الأسبوع.',
-    coverImageUrl: '/images/products/habba-nadra/cover.png',
-    galleryImageUrls: ['/images/products/habba-nadra/cover.png'],
+    coverImageUrl: '/images/products/habba-nadra/cover.webp',
+    galleryImageUrls: ['/images/products/habba-nadra/cover.webp'],
 
     offers: [
       { code: 'T1', labelAr: 'علبة واحدة', quantity: 1, priceSar: 199, isRecommended: false },
@@ -170,8 +170,8 @@ export const PRODUCTS: Product[] = [
     ratingValue: 4.8,
     reviewCount: 293,
     stockLabelAr: 'بقي 18 علبة فقط من دفعة هذا الأسبوع.',
-    coverImageUrl: '/images/products/habba-bareeq/cover.png',
-    galleryImageUrls: ['/images/products/habba-bareeq/cover.png'],
+    coverImageUrl: '/images/products/habba-bareeq/cover.webp',
+    galleryImageUrls: ['/images/products/habba-bareeq/cover.webp'],
 
     offers: [
       { code: 'T1', labelAr: 'علبة واحدة', quantity: 1, priceSar: 199, isRecommended: false },
@@ -292,8 +292,8 @@ export const PRODUCTS: Product[] = [
     ratingValue: 4.9,
     reviewCount: 412,
     stockLabelAr: 'بقي 32 علبة فقط من دفعة هذا الأسبوع.',
-    coverImageUrl: '/images/products/habba-jathr/cover.png',
-    galleryImageUrls: ['/images/products/habba-jathr/cover.png'],
+    coverImageUrl: '/images/products/habba-jathr/cover.webp',
+    galleryImageUrls: ['/images/products/habba-jathr/cover.webp'],
 
     offers: [
       { code: 'T1', labelAr: 'علبة واحدة', quantity: 1, priceSar: 199, isRecommended: false },
@@ -407,12 +407,12 @@ export const PRODUCTS: Product[] = [
     ratingValue: 4.9,
     reviewCount: 312,
     stockLabelAr: 'بقي 12 صندوق فقط — العرض ينتهي قريباً.',
-    coverImageUrl: '/images/products/bundle-glow-trio/cover.png',
+    coverImageUrl: '/images/products/bundle-glow-trio/cover.webp',
     galleryImageUrls: [
-      '/images/products/bundle-glow-trio/cover.png',
-      '/images/products/habba-nadra/cover.png',
-      '/images/products/habba-bareeq/cover.png',
-      '/images/products/habba-jathr/cover.png',
+      '/images/products/bundle-glow-trio/cover.webp',
+      '/images/products/habba-nadra/cover.webp',
+      '/images/products/habba-bareeq/cover.webp',
+      '/images/products/habba-jathr/cover.webp',
     ],
 
     offers: [
@@ -429,7 +429,7 @@ export const PRODUCTS: Product[] = [
         whatItDoesAr:
           'أستازانتين + كولاجين بحري + فيتامين سي + هيالورونيك. لبشرة أكثر نضارة وتجاعيد أقل.',
         scienceSourceShort: 'Tominaga 2017, Choi 2014',
-        thumbImageUrl: '/images/products/habba-nadra/cover.png',
+        thumbImageUrl: '/images/products/habba-nadra/cover.webp',
       },
       {
         nameAr: 'حبّة بريق',
@@ -438,7 +438,7 @@ export const PRODUCTS: Product[] = [
         whatItDoesAr:
           'حديد bisglycinate + حمض فوليك + فيتامين سي. دعم للهالات المرتبطة بالإرهاق ونقص الحديد.',
         scienceSourceShort: 'Pinnell 2003, Hallberg 1995',
-        thumbImageUrl: '/images/products/habba-bareeq/cover.png',
+        thumbImageUrl: '/images/products/habba-bareeq/cover.webp',
       },
       {
         nameAr: 'حبّة جذر',
@@ -447,7 +447,7 @@ export const PRODUCTS: Product[] = [
         whatItDoesAr:
           'بيوتين + كولاجين + كيراتين. دعم للشعر من الداخل، للقوة واللمعان وتقليل التساقط التدريجي.',
         scienceSourceShort: 'Tenore 2018',
-        thumbImageUrl: '/images/products/habba-jathr/cover.png',
+        thumbImageUrl: '/images/products/habba-jathr/cover.webp',
       },
     ],
 
