@@ -370,10 +370,10 @@ export function PdpClient({
           </div>
           <div className="mt-10 rounded-2xl bg-white/10 border border-saffron/40 p-5 text-center backdrop-blur-sm">
             <p className="font-tajawal text-base font-bold text-saffron">
-              ⭐ للنتيجة الكاملة — استمري 60 يوم
+              ⭐ النتيجة الواقعية تحتاج استمرار ٨-١٢ أسبوع
             </p>
             <p className="mt-1 font-tajawal text-sm text-saffron/70">
-              عشان كذا العلبتين هي الأنصح — والأكثر توفيرًا.
+              عشان كذا العلبتين أو ٣ علب هي الأفضل للالتزام، مو لأننا نبيع أكثر.
             </p>
           </div>
         </div>
@@ -422,7 +422,7 @@ export function PdpClient({
                 <div className="mb-5 flex items-center gap-3">
                   <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/20 text-lg">✨</span>
                   <div>
-                    <p className="font-tajawal text-lg font-black text-white">حياتكِ بعد ٦٠ يوم</p>
+                    <p className="font-tajawal text-lg font-black text-white">حياتكِ بعد الاستمرار</p>
                     <p className="font-tajawal text-[11px] text-saffron/90">مع {product.nameAr}</p>
                   </div>
                 </div>
@@ -829,7 +829,7 @@ export function PdpClient({
             جاهزة تجرّبين {product.nameAr}؟
           </h2>
           <p className="font-tajawal text-base text-white/80 mb-8">
-            حبّتين بالصباح · نتيجة خلال ٣٠ يوم · شحن ١-٣ أيام
+            حبّتين بالصباح · مؤشرات أولية خلال ٤-٨ أسابيع · شحن ١-٣ أيام
           </p>
           <Button
             variant="primary"

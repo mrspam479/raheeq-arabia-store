@@ -490,7 +490,7 @@ export default function HomePage() {
             جاهزة تبدئين التحوّل؟
           </h2>
           <p className="mx-auto mt-4 max-w-md font-tajawal text-base text-white/75">
-            حبّتين بالصباح. نتيجة خلال ٣٠ يوم. ضمان ٣٠ يوم.
+            حبّتين بالصباح. مؤشرات أولية خلال ٤-٨ أسابيع. ضمان ٣٠ يوم.
             <br />ما عندكِ شي تخسرينه.
           </p>
           <div className="mt-8">
