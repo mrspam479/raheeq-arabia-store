@@ -78,22 +78,28 @@ export default function HomePage() {
               prefetch
               className="group block overflow-hidden rounded-[32px] border-2 border-[#E0D4C0] bg-white shadow-[0_24px_60px_rgba(18,107,82,0.12)] transition-all duration-300 hover:-translate-y-1 hover:border-emerald/40 hover:shadow-xl"
             >
-              <div className="relative aspect-[4/3] overflow-hidden bg-white">
-                <Image
-                  src="/images/products/trio-real-photo.webp"
-                  alt="المنتجات الثلاثة — نضرة + بريق + جذر"
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  sizes="(max-width: 768px) 90vw, 520px"
-                  priority
-                />
-                <span className="absolute top-4 right-4 rounded-full bg-saffron px-3 py-1.5 font-tajawal text-xs font-black text-emerald shadow-lg">
+              <div className="relative bg-white p-4">
+                <span className="absolute top-4 right-4 z-10 rounded-full bg-saffron px-3 py-1.5 font-tajawal text-xs font-black text-emerald shadow-lg">
                   💎 الأكثر طلبًا
                 </span>
+                <div className="grid grid-cols-3 gap-3">
+                  {[
+                    { src: '/images/products/habba-nadra/cover.webp', sub: 'ضد التجاعيد' },
+                    { src: '/images/products/habba-bareeq/cover.webp', sub: 'ضد الهالات' },
+                    { src: '/images/products/habba-jathr/cover.webp', sub: 'للشعر' },
+                  ].map((p) => (
+                    <div key={p.sub} className="flex flex-col items-center gap-1">
+                      <div className="relative w-full aspect-square overflow-hidden rounded-xl border border-[#EAE0D0] bg-white">
+                        <Image src={p.src} alt={p.sub} fill className="object-contain p-2" sizes="(max-width: 768px) 30vw, 165px" priority />
+                      </div>
+                      <p className="font-tajawal text-[10px] font-bold text-charcoal/60 text-center">{p.sub}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
               <div className="border-t border-[#EAE0D0] bg-white p-5 text-center">
-                <p className="font-tajawal text-xl font-black text-emerald">الـ ٣ منتجات — نفس اللي بالصورة</p>
-                <p className="mt-1 font-tajawal text-sm text-charcoal/65">نضرة + بريق + جذر · يكفي شهر كامل</p>
+                <p className="font-tajawal text-xl font-black text-emerald">الروتين الكامل — ٣ علكات في طلب واحد</p>
+                <p className="mt-1 font-tajawal text-sm text-charcoal/65">ضد التجاعيد · ضد الهالات · للشعر · كل علبة شهر كامل</p>
                 <div className="mt-2 inline-flex items-center gap-2">
                   <span className="font-tajawal text-sm text-charcoal/50 line-through">{formatSar(597)}</span>
                   <span className="font-tajawal text-2xl font-black text-emerald">{formatSar(499)}</span>
@@ -326,22 +332,36 @@ export default function HomePage() {
 
           <div className="rounded-[28px] border-2 border-saffron/30 bg-white p-6 shadow-[0_24px_60px_rgba(18,107,82,0.15)] md:p-10">
             <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-2">
-              <div className="relative aspect-square overflow-hidden rounded-3xl border border-[#EAE0D0] bg-white">
-                <Image
-                  src="/images/products/trio-real-photo.webp"
-                  alt="المنتجات الثلاثة الحقيقية — نضرة + بريق + جذر"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
+              {/* 3 real product images side-by-side */}
+              <div className="flex flex-col gap-4">
+                <div className="grid grid-cols-3 gap-3">
+                  {[
+                    { src: '/images/products/habba-nadra/cover.webp', name: 'علكات الأستازانثين', sub: 'ضد التجاعيد' },
+                    { src: '/images/products/habba-bareeq/cover.webp', name: 'علكات الحديد', sub: 'ضد الهالات' },
+                    { src: '/images/products/habba-jathr/cover.webp', name: 'علكات البيوتين', sub: 'للشعر' },
+                  ].map((p) => (
+                    <div key={p.name} className="flex flex-col items-center gap-2">
+                      <div className="relative w-full aspect-square overflow-hidden rounded-xl border-2 border-[#EAE0D0] bg-white shadow-sm">
+                        <Image src={p.src} alt={p.name} fill className="object-contain p-2" sizes="(max-width: 768px) 33vw, 17vw" />
+                      </div>
+                      <div className="text-center">
+                        <p className="font-tajawal text-[10px] font-black text-emerald leading-tight">{p.name}</p>
+                        <p className="font-tajawal text-[9px] text-charcoal/60">{p.sub}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="rounded-xl bg-[#F3FAF6] border border-emerald/15 py-2 px-3 text-center">
+                  <p className="font-tajawal text-xs font-black text-emerald">٣ علكات · كل علبة شهر كامل</p>
+                </div>
               </div>
 
               <div className="flex flex-col gap-5">
                 <ul className="flex flex-col gap-3">
                   {[
-                    { icon: '✨', label: 'حبّة نضرة', desc: 'كولاجين + أستازانتين — بشرة أصغر بدون تجاعيد' },
-                    { icon: '👁️', label: 'حبّة بريق', desc: 'حديد + فوليك — هالات أفتح بدون كونسيلر' },
-                    { icon: '💇‍♀️', label: 'حبّة جذر', desc: 'بيوتين + كيراتين — شعر أكثف من الجذر' },
+                    { icon: '✨', label: 'علكات الأستازانثين', desc: 'كولاجين + أستازانتين — بشرة أصغر بدون تجاعيد' },
+                    { icon: '👁️', label: 'علكات الحديد', desc: 'حديد + فوليك — هالات أفتح بدون كونسيلر' },
+                    { icon: '💇‍♀️', label: 'علكات البيوتين', desc: 'بيوتين + كيراتين — شعر أكثف من الجذر' },
                   ].map((item) => (
                     <li key={item.label} className="flex items-start gap-3 rounded-2xl border border-emerald/15 bg-[#F3FAF6] p-4">
                       <span className="text-2xl">{item.icon}</span>
