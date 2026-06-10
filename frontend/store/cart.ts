@@ -14,6 +14,7 @@ interface CartState {
   isCheckoutOpen: boolean;
   isUpsellOpen: boolean;
   lastOrderId: string | null;
+  lastOrderCustomer: { name: string; phone: string } | null;
   upsellToken: string | null;
   upsellSku: string | null;
 
@@ -25,7 +26,7 @@ interface CartState {
   closeCart: () => void;
   openCheckout: () => void;
   closeCheckout: () => void;
-  openUpsell: (orderId: string, token: string, sku: string) => void;
+  openUpsell: (orderId: string, token: string, sku: string, customer?: { name: string; phone: string }) => void;
   closeUpsell: () => void;
   totalSar: () => number;
   totalItems: () => number;
@@ -39,6 +40,7 @@ export const useCartStore = create<CartState>()(
       isCheckoutOpen: false,
       isUpsellOpen: false,
       lastOrderId: null,
+      lastOrderCustomer: null,
       upsellToken: null,
       upsellSku: null,
 
@@ -101,8 +103,8 @@ export const useCartStore = create<CartState>()(
       closeCart: () => set({ isCartOpen: false }),
       openCheckout: () => set({ isCheckoutOpen: true, isCartOpen: false }),
       closeCheckout: () => set({ isCheckoutOpen: false }),
-      openUpsell: (orderId, token, sku) =>
-        set({ isUpsellOpen: true, isCheckoutOpen: false, lastOrderId: orderId, upsellToken: token, upsellSku: sku }),
+      openUpsell: (orderId, token, sku, customer) =>
+        set({ isUpsellOpen: true, isCheckoutOpen: false, lastOrderId: orderId, upsellToken: token, upsellSku: sku, ...(customer ? { lastOrderCustomer: customer } : {}) }),
       closeUpsell: () => set({ isUpsellOpen: false }),
 
       totalSar: () => get().lines.reduce((sum, l) => sum + l.totalPrice, 0),
@@ -114,6 +116,7 @@ export const useCartStore = create<CartState>()(
       partialize: (state) => ({
         lines: state.lines,
         lastOrderId: state.lastOrderId,
+        lastOrderCustomer: state.lastOrderCustomer,
         upsellToken: state.upsellToken,
         upsellSku: state.upsellSku,
       }),

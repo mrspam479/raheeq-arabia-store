@@ -145,12 +145,12 @@ export function CheckoutModal() {
       const upsellSku = data.upsell?.sku ?? '';
 
       trackPurchase(orderId, total, values.phone, values.name);
-      openUpsell(orderId, upsellToken, upsellSku);
+      openUpsell(orderId, upsellToken, upsellSku, { name: values.name, phone: values.phone });
     } catch (err) {
       if (isLocalPreview()) {
         const previewOrderId = `preview-${Date.now()}`;
         trackPurchase(previewOrderId, total, values.phone, values.name);
-        openUpsell(previewOrderId, 'preview-upsell-token', 'habba-bareeq');
+        openUpsell(previewOrderId, 'preview-upsell-token', 'habba-bareeq', { name: values.name, phone: values.phone });
         return;
       }
 
