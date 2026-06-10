@@ -561,11 +561,21 @@ function StepCard({
 
 function CompareCell({ value, highlight = false }: { value: boolean; highlight?: boolean }) {
   return (
-    <div className={`flex items-center justify-center border-s p-4 ${highlight ? 'border-emerald bg-emerald/5' : 'border-[#E0D4C0]'}`}>
+    <div
+      className={`flex items-center justify-center border-s p-4 ${highlight ? 'border-s-2' : ''}`}
+      style={highlight ? { borderColor: '#0F4D3D', backgroundColor: '#EEF7F2' } : { borderColor: '#E0D4C0' }}
+    >
       {value ? (
-        <span className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-black ${highlight ? 'bg-emerald text-white' : 'bg-emerald/15 text-emerald'}`}>✓</span>
+        <span
+          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-black"
+          style={highlight ? { backgroundColor: '#0F4D3D', color: '#ffffff' } : { backgroundColor: '#D1EDE1', color: '#0F4D3D' }}
+        >
+          ✓
+        </span>
       ) : (
-        <span className="flex h-7 w-7 items-center justify-center rounded-full bg-red-50 text-xs font-black text-red-400">✕</span>
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-red-50 text-sm font-black text-red-400">
+          ✕
+        </span>
       )}
     </div>
   );
