@@ -90,35 +90,63 @@ export function PdpClient({
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-16 max-w-5xl mx-auto">
             {/* Image gallery */}
-            <div className="flex flex-col gap-3">
-              <div className="relative aspect-square rounded-2xl overflow-hidden bg-stone-100">
-                <Image
-                  src={product.galleryImageUrls[activeImage] ?? product.coverImageUrl}
-                  alt={product.nameAr}
-                  fill
-                  className="object-cover"
-                  priority
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
-              </div>
-              {product.galleryImageUrls.length > 1 && (
-                <div className="flex gap-2">
-                  {product.galleryImageUrls.map((url, i) => (
-                    <button
-                      key={i}
-                      onClick={() => setActiveImage(i)}
-                      className={cn(
-                        'relative w-16 h-16 rounded-lg overflow-hidden border-2 transition-colors',
-                        activeImage === i ? 'border-emerald' : 'border-transparent',
-                      )}
-                      aria-label={`صورة ${i + 1}`}
-                    >
-                      <Image src={url} alt="" fill className="object-cover" sizes="64px" />
-                    </button>
+            {isBundle ? (
+              /* Bundle: show all 3 products side-by-side, no AI image */
+              <div className="flex flex-col gap-4">
+                <div className="grid grid-cols-3 gap-3">
+                  {[
+                    { src: '/images/products/habba-nadra/cover.webp', name: 'علكات الأستازانثين', sub: 'ضد التجاعيد' },
+                    { src: '/images/products/habba-bareeq/cover.webp', name: 'علكات الحديد', sub: 'ضد الهالات' },
+                    { src: '/images/products/habba-jathr/cover.webp', name: 'علكات البيوتين', sub: 'للشعر' },
+                  ].map((p) => (
+                    <div key={p.sub} className="flex flex-col items-center gap-2">
+                      <div className="relative w-full aspect-square overflow-hidden rounded-2xl border-2 border-[#EAE0D0] bg-white shadow-sm">
+                        <Image src={p.src} alt={p.name} fill className="object-contain p-3" sizes="(max-width: 768px) 33vw, 17vw" priority />
+                      </div>
+                      <div className="text-center">
+                        <p className="font-tajawal text-[11px] font-black text-emerald leading-tight">{p.name}</p>
+                        <p className="font-tajawal text-[10px] text-charcoal/55">{p.sub}</p>
+                      </div>
+                    </div>
                   ))}
                 </div>
-              )}
-            </div>
+                <div className="rounded-2xl bg-[#F3FAF6] border border-emerald/20 py-3 px-4 text-center">
+                  <p className="font-tajawal text-sm font-black text-emerald">الروتين الكامل — ٣ علكات في طلب واحد</p>
+                  <p className="font-tajawal text-xs text-charcoal/60 mt-0.5">كل علبة تكفي شهر كامل</p>
+                </div>
+              </div>
+            ) : (
+              /* Single product: standard image gallery */
+              <div className="flex flex-col gap-3">
+                <div className="relative aspect-square rounded-2xl overflow-hidden bg-stone-100">
+                  <Image
+                    src={product.galleryImageUrls[activeImage] ?? product.coverImageUrl}
+                    alt={product.nameAr}
+                    fill
+                    className="object-cover"
+                    priority
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                  />
+                </div>
+                {product.galleryImageUrls.length > 1 && (
+                  <div className="flex gap-2">
+                    {product.galleryImageUrls.map((url, i) => (
+                      <button
+                        key={i}
+                        onClick={() => setActiveImage(i)}
+                        className={cn(
+                          'relative w-16 h-16 rounded-lg overflow-hidden border-2 transition-colors',
+                          activeImage === i ? 'border-emerald' : 'border-transparent',
+                        )}
+                        aria-label={`صورة ${i + 1}`}
+                      >
+                        <Image src={url} alt="" fill className="object-cover" sizes="64px" />
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Info card */}
             <div className="flex flex-col gap-5 rounded-[28px] border border-emerald/10 bg-white p-5 shadow-[0_18px_55px_rgba(74,56,46,0.08)] md:p-6">

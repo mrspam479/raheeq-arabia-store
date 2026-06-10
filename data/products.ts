@@ -18,7 +18,7 @@ export const PRODUCTS: Product[] = [
   {
     id: 'habba-nadra',
     slug: 'habba-nadra',
-    nameAr: 'حبّة نضرة',
+    nameAr: 'علكات الأستازانثين ضد التجاعيد',
 
     heroTagAr: 'المرآة صارت تورّيكِ خطوط ما كانت موجودة قبل؟',
 
@@ -157,7 +157,7 @@ export const PRODUCTS: Product[] = [
   {
     id: 'habba-bareeq',
     slug: 'habba-bareeq',
-    nameAr: 'حبّة بريق',
+    nameAr: 'علكات الحديد ضد الهالات السوداء',
 
     heroTagAr: 'تنامين كويس… ولسه وجهكِ يقول للناس إنكِ تعبانة؟',
 
@@ -279,7 +279,7 @@ export const PRODUCTS: Product[] = [
   {
     id: 'habba-jathr',
     slug: 'habba-jathr',
-    nameAr: 'حبّة جذر',
+    nameAr: 'علكات البيوتين ضد تساقط الشعر',
 
     heroTagAr: 'كل استحمام يذكّركِ إن شعركِ مو مثل قبل؟',
 
@@ -394,7 +394,7 @@ export const PRODUCTS: Product[] = [
     id: 'bundle-glow-trio',
     slug: 'bundle-glow-trio',
 
-    nameAr: 'صندوق الجمال المتكامل',
+    nameAr: 'الروتين الكامل — ٣ علكات تحارب التجاعيد والهالات والتساقط',
 
     heroTagAr: 'لو المشكلة مو وحدة… ليش تشترين حل واحد؟',
 
