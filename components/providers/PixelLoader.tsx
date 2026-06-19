@@ -76,39 +76,43 @@ function loadTikTokPixel(pixelId: string): void {
     'holdConsent', 'revokeConsent', 'grantConsent',
   ];
 
-  // Cast via unknown — TS cannot express an array that also has string-keyed properties
-  // without an intermediate unknown cast. Object.assign([], {...}) infers `never[]`.
-  const ttq = [] as unknown as Record<string, unknown> & unknown[];
-  ttq['methods'] = methods;
-  ttq['_i'] = {} as Record<string, unknown[]>;
-  ttq['_t'] = {} as Record<string, number>;
-  ttq['_o'] = {} as Record<string, unknown>;
+  // TikTok's queue is an array with extra string-keyed properties — an inherently
+  // dynamic JS pattern that can't be expressed without `any` in strict TS.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const ttq: any[] = [];
+  ttq.methods = methods;
+  ttq._i = {};
+  ttq._t = {};
+  ttq._o = {};
 
-  const setAndDefer = (obj: Record<string, unknown>, method: string) => {
-    obj[method] = (...args: unknown[]) => { (obj as unknown as unknown[]).push([method, ...args]); };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const setAndDefer = (obj: any, method: string) => {
+    obj[method] = (...args: unknown[]) => { obj.push([method, ...args]); };
   };
   methods.forEach((m) => setAndDefer(ttq, m));
 
-  ttq['instance'] = () => {
-    const inst = [] as unknown as Record<string, unknown> & unknown[];
+  ttq.instance = () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const inst: any[] = [];
     methods.forEach((m) => setAndDefer(inst, m));
     return inst;
   };
 
-  ttq['load'] = (id: string, opts?: unknown) => {
-    const i: unknown[] & { _u?: string } = [];
+  ttq.load = (id: string, opts?: unknown) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const i: any[] = [];
     i._u = `https://analytics.tiktok.com/i18n/pixel/events.js?sdkid=${id}&lib=${lib}`;
-    (ttq['_i'] as Record<string, unknown[]>)[id] = i;
-    (ttq['_t'] as Record<string, number>)[id] = +new Date();
-    (ttq['_o'] as Record<string, unknown>)[id] = opts ?? {};
+    ttq._i[id] = i;
+    ttq._t[id] = +new Date();
+    ttq._o[id] = opts ?? {};
   };
 
   win[lib] = ttq;
   window.ttq = ttq as typeof window.ttq;
 
   // Queue init + PageView BEFORE the script loads — flushed when events.js runs
-  (ttq['load'] as (id: string) => void)(pixelId);
-  (ttq['page'] as () => void)();
+  ttq.load(pixelId);
+  ttq.page();
 
   // &lib=ttq is required — tells events.js which window property is the queue
   const script = document.createElement('script');
