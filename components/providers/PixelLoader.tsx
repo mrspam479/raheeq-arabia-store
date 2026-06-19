@@ -7,16 +7,34 @@
  * - Load after first interaction (scroll / pointerdown) OR after
  *   requestIdleCallback fires (≥ 3 s timeout).
  * - Each pixel script is appended once; idempotency guarded by window._pixelsLoaded.
+ *
+ * Pixel IDs are fetched at runtime from /api/pixel-config (server-side env vars)
+ * instead of being baked into the bundle at build time. This means EasyPanel only
+ * needs to inject them as runtime env vars — no Docker build-arg plumbing required.
  */
 
 import { useEffect } from 'react';
 
-// Pixel IDs: env var is preferred (set at Docker build time via ARG).
-// The hardcoded fallbacks ensure pixels fire even when EasyPanel only
-// injects env vars at runtime (after the Next.js bundle is already built).
-const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID ?? '';
-const TIKTOK_PIXEL_ID = process.env.NEXT_PUBLIC_TIKTOK_PIXEL_ID ?? 'D8PIOU3C77U082M85FM0';
-const SNAP_PIXEL_ID = process.env.NEXT_PUBLIC_SNAP_PIXEL_ID ?? 'f2c54c8f-1550-44e8-8832-515ff3d8865c';
+interface PixelConfig {
+  tiktok: string;
+  snap: string;
+  meta: string;
+}
+
+async function fetchPixelConfig(): Promise<PixelConfig> {
+  try {
+    const res = await fetch('/api/pixel-config', { cache: 'no-store' });
+    if (!res.ok) throw new Error('config fetch failed');
+    return res.json() as Promise<PixelConfig>;
+  } catch {
+    // Hardcoded fallback — pixel IDs are public, not secret
+    return {
+      tiktok: 'D8PIOU3C77U082M85FM0',
+      snap: 'f2c54c8f-1550-44e8-8832-515ff3d8865c',
+      meta: '',
+    };
+  }
+}
 
 function loadMetaPixel(pixelId: string): void {
   if (!pixelId) return;
@@ -65,20 +83,25 @@ function loadSnapPixel(pixelId: string): void {
   document.body.appendChild(script);
 }
 
-function loadAllPixels(): void {
-  if (window._pixelsLoaded) return;
-  window._pixelsLoaded = true;
-  loadMetaPixel(META_PIXEL_ID);
-  loadTikTokPixel(TIKTOK_PIXEL_ID);
-  loadSnapPixel(SNAP_PIXEL_ID);
-}
-
 export function PixelLoader(): null {
   useEffect(() => {
+    // Begin fetching config immediately — by the time the user interacts
+    // or 3 s elapse, this tiny request will already have resolved.
+    const configPromise = fetchPixelConfig();
+
+    async function loadAllPixels(): Promise<void> {
+      if (window._pixelsLoaded) return;
+      window._pixelsLoaded = true;
+      const { meta, tiktok, snap } = await configPromise;
+      loadMetaPixel(meta);
+      loadTikTokPixel(tiktok);
+      loadSnapPixel(snap);
+    }
+
     // Interaction-based loading
     const events = ['scroll', 'pointerdown', 'keydown', 'touchstart'] as const;
     function onInteraction() {
-      loadAllPixels();
+      void loadAllPixels();
       events.forEach((e) => window.removeEventListener(e, onInteraction));
     }
     events.forEach((e) => window.addEventListener(e, onInteraction, { passive: true, once: true }));
@@ -86,9 +109,9 @@ export function PixelLoader(): null {
     // Idle fallback after 3 s
     let idleId: number | ReturnType<typeof setTimeout>;
     if ('requestIdleCallback' in window) {
-      idleId = requestIdleCallback(loadAllPixels, { timeout: 3000 });
+      idleId = requestIdleCallback(() => void loadAllPixels(), { timeout: 3000 });
     } else {
-      idleId = setTimeout(loadAllPixels, 3000);
+      idleId = setTimeout(() => void loadAllPixels(), 3000);
     }
 
     return () => {
