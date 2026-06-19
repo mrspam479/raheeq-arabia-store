@@ -77,9 +77,10 @@ function loadTikTokPixel(pixelId: string): void {
   ];
 
   // TikTok's queue is an array with extra string-keyed properties — an inherently
-  // dynamic JS pattern that can't be expressed without `any` in strict TS.
+  // dynamic JS pattern. `any` (not `any[]`) is required so TS allows both
+  // array methods (push) and arbitrary property assignment (methods, _i, _t, _o).
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const ttq: any[] = [];
+  const ttq: any = [];
   ttq.methods = methods;
   ttq._i = {};
   ttq._t = {};
@@ -93,14 +94,14 @@ function loadTikTokPixel(pixelId: string): void {
 
   ttq.instance = () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const inst: any[] = [];
+    const inst: any = [];
     methods.forEach((m) => setAndDefer(inst, m));
     return inst;
   };
 
   ttq.load = (id: string, opts?: unknown) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const i: any[] = [];
+    const i: any = [];
     i._u = `https://analytics.tiktok.com/i18n/pixel/events.js?sdkid=${id}&lib=${lib}`;
     ttq._i[id] = i;
     ttq._t[id] = +new Date();
