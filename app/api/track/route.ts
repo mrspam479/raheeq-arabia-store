@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-API-Key': process.env.BACKEND_API_KEY ?? '',
+        'Authorization': `Bearer ${process.env.BACKEND_API_KEY ?? ''}`,
         'X-Forwarded-For': req.headers.get('x-forwarded-for') ?? req.headers.get('x-real-ip') ?? '',
         'X-Real-IP': req.headers.get('x-real-ip') ?? '',
         'User-Agent': req.headers.get('user-agent') ?? '',
