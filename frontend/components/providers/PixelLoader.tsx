@@ -60,12 +60,13 @@ function loadMetaPixel(pixelId: string): void {
 
 function loadTikTokPixel(pixelId: string): void {
   if (!pixelId) return;
-  if ((window as Record<string, unknown>).ttq) return;
+  // Cast via unknown — Window doesn't have an index signature
+  const win = window as unknown as Record<string, unknown>;
+  if (win['ttq']) return;
 
   // Exact official TikTok initialization stub (adapted from TikTok docs).
   // window.TiktokAnalyticsObject tells the downloaded script which window
   // property holds the queue — without it the script does nothing.
-  const win = window as unknown as Record<string, unknown>;
   const lib = 'ttq';
   win['TiktokAnalyticsObject'] = lib;
 
@@ -87,7 +88,8 @@ function loadTikTokPixel(pixelId: string): void {
   };
   methods.forEach((m) => setAndDefer(ttq, m));
 
-  ttq['instance'] = (id: string) => {
+  // _id is intentionally unused — instance() mirrors TikTok's official API signature
+  ttq['instance'] = (_id: string) => {
     const inst = Object.assign([], ttq);
     methods.forEach((m) => setAndDefer(inst as Record<string, unknown>, m));
     return inst;
@@ -122,12 +124,12 @@ function loadSnapPixel(pixelId: string): void {
   if (typeof window.snaptr === 'function') return;
 
   // Official Snapchat initialization queue stub.
+  // Use a plain array as the backing queue to avoid expression-statement lint errors.
+  const q: unknown[][] = [];
   const snaptr = ((...args: unknown[]) => {
-    (snaptr as { q: unknown[][] }).q
-      ? (snaptr as { q: unknown[][] }).q.push(args)
-      : ((snaptr as { q: unknown[][] }).q = [args]);
+    q.push(args);
   }) as ((...args: unknown[]) => void) & { q: unknown[][] };
-  snaptr.q = [];
+  snaptr.q = q;
   window.snaptr = snaptr;
 
   const script = document.createElement('script');
