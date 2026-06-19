@@ -94,7 +94,8 @@ function loadTikTokPixel(pixelId: string): void {
   };
 
   ttq['load'] = (id: string, opts?: unknown) => {
-    const i: unknown[] = [];
+    const i: unknown[] & { _u?: string } = [];
+    i._u = `https://analytics.tiktok.com/i18n/pixel/events.js?sdkid=${id}&lib=${lib}`;
     (ttq['_i'] as Record<string, unknown[]>)[id] = i;
     (ttq['_t'] as Record<string, number>)[id] = +new Date();
     (ttq['_o'] as Record<string, unknown>)[id] = opts ?? {};
