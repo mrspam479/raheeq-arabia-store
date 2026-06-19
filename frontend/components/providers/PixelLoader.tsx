@@ -85,7 +85,7 @@ function loadTikTokPixel(pixelId: string): void {
   ttq['_o'] = {} as Record<string, unknown>;
 
   const setAndDefer = (obj: Record<string, unknown>, method: string) => {
-    obj[method] = (...args: unknown[]) => { (obj as unknown[]).push([method, ...args]); };
+    obj[method] = (...args: unknown[]) => { (obj as unknown as unknown[]).push([method, ...args]); };
   };
   methods.forEach((m) => setAndDefer(ttq, m));
 
