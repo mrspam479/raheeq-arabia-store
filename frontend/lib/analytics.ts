@@ -42,7 +42,11 @@ export interface TrackPayload {
 declare global {
   interface Window {
     fbq?: (...args: unknown[]) => void;
-    ttq?: { track: (...args: unknown[]) => void; identify: (...args: unknown[]) => void };
+    ttq?: {
+      track: (event: string, params: Record<string, unknown>, options?: Record<string, unknown>) => void;
+      identify: (...args: unknown[]) => void;
+      page: () => void;
+    };
     snaptr?: (...args: unknown[]) => void;
     _pixelsLoaded?: boolean;
   }
@@ -79,13 +83,37 @@ async function sendCapi(payload: TrackPayload): Promise<void> {
   try {
     const cookies = getCookies();
     const utms = getUtms();
-    const body: TrackPayload = {
-      ...payload,
-      ...cookies,
-      ...utms,
-      userAgent: navigator.userAgent,
-      pageUrl: window.location.href,
+
+    // Build the nested structure the backend TrackEventIn schema expects
+    const body = {
+      event_name: payload.event,
+      event_id: payload.eventId,
+      event_time: Math.floor(Date.now() / 1000),
+      event_source_url: window.location.href,
+      user: {
+        phone: payload.phone ?? null,
+        first_name: payload.name ?? null,
+      },
+      client: {
+        user_agent: navigator.userAgent,
+        fbp: cookies.fbp ?? null,
+        fbc: cookies.fbc ?? null,
+        ttp: cookies.ttp ?? null,
+        ttclid: utms.ttclid ?? null,
+        sc_click_id: utms.scClickId ?? null,
+      },
+      data: {
+        currency: payload.currency ?? 'SAR',
+        value: payload.value ?? 0,
+        contents: payload.productSlug
+          ? [{ id: payload.productSlug, quantity: payload.quantity ?? 1, item_price: payload.value ?? 0 }]
+          : [],
+        num_items: payload.quantity ?? (payload.productSlug ? 1 : 0),
+        content_type: 'product',
+        order_id: payload.orderId ?? null,
+      },
     };
+
     await fetch('/api/track', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -97,15 +125,28 @@ async function sendCapi(payload: TrackPayload): Promise<void> {
   }
 }
 
+// TikTok uses different event names from the standard set
+const TIKTOK_EVENT_MAP: Record<string, string> = {
+  Purchase: 'CompletePayment',
+};
+
+// Snapchat uses SCREAMING_SNAKE_CASE event names
+const SNAP_EVENT_MAP: Record<string, string> = {
+  ViewContent: 'VIEW_CONTENT',
+  AddToCart: 'ADD_CART',
+  InitiateCheckout: 'START_CHECKOUT',
+  Purchase: 'PURCHASE',
+  PageView: 'PAGE_VIEW',
+};
+
 function fireWebPixels(payload: TrackPayload): void {
   const { event, eventId, value, currency, productSlug, orderId, quantity } = payload;
 
-  const fbContents = productSlug
-    ? [{ id: productSlug, quantity: quantity ?? 1 }]
-    : undefined;
-
-  // Meta Pixel
+  // Meta Pixel — uses standard event names
   if (typeof window.fbq === 'function') {
+    const fbContents = productSlug
+      ? [{ id: productSlug, quantity: quantity ?? 1 }]
+      : undefined;
     const metaParams: Record<string, unknown> = {
       currency: currency ?? 'SAR',
       ...(value !== undefined && { value }),
@@ -115,25 +156,30 @@ function fireWebPixels(payload: TrackPayload): void {
     window.fbq('track', event, metaParams, { eventID: eventId });
   }
 
-  // TikTok Pixel
+  // TikTok Pixel — needs CompletePayment for Purchase, content_id (not id) in contents
   if (window.ttq?.track) {
+    const tiktokEvent = TIKTOK_EVENT_MAP[event] ?? event;
+    const ttContents = productSlug
+      ? [{ content_id: productSlug, quantity: quantity ?? 1, price: value ?? 0 }]
+      : undefined;
     const ttParams: Record<string, unknown> = {
       currency: currency ?? 'SAR',
       ...(value !== undefined && { value }),
-      ...(fbContents && { contents: fbContents }),
+      ...(ttContents && { contents: ttContents }),
       ...(orderId && { order_id: orderId }),
     };
-    window.ttq.track(event, ttParams, { event_id: eventId });
+    window.ttq.track(tiktokEvent, ttParams, { event_id: eventId });
   }
 
-  // Snapchat Pixel
+  // Snapchat Pixel — needs SCREAMING_SNAKE_CASE event names
   if (typeof window.snaptr === 'function') {
+    const snapEvent = SNAP_EVENT_MAP[event] ?? event;
     const snapParams: Record<string, unknown> = {
       currency: currency ?? 'SAR',
       ...(value !== undefined && { price: value }),
       ...(orderId && { transaction_id: orderId }),
     };
-    window.snaptr('track', event, snapParams);
+    window.snaptr('track', snapEvent, snapParams);
   }
 }
 
@@ -162,6 +208,7 @@ export function trackPurchase(
   value: number,
   phone: string,
   name: string,
+  eventId: string,
 ): void {
-  void trackEvent({ event: 'Purchase', orderId, value, phone, name, currency: 'SAR' });
+  void trackEvent({ event: 'Purchase', eventId, orderId, value, phone, name, currency: 'SAR' });
 }

@@ -70,6 +70,7 @@ export function CheckoutModal() {
 
     setSubmitting(true);
     try {
+      const purchaseEventId = uuidv4();
       const utmParams = new URLSearchParams(window.location.search);
       const payload = {
         customer: { full_name: values.name, phone: values.phone },
@@ -79,7 +80,7 @@ export function CheckoutModal() {
           offer_code: l.offerCode ?? (l.tier === 1 ? 'T1' : l.tier === 2 ? 'T2' : 'T3'),
         })),
         tracking: {
-          event_id: uuidv4(),
+          event_id: purchaseEventId,
           fbp: getCookie('_fbp') || undefined,
           fbc: getCookie('_fbc') || undefined,
           ttp: getCookie('_ttp') || undefined,
@@ -144,12 +145,12 @@ export function CheckoutModal() {
       const upsellToken = data.upsell?.token ?? '';
       const upsellSku = data.upsell?.sku ?? '';
 
-      trackPurchase(orderId, total, values.phone, values.name);
+      trackPurchase(orderId, total, values.phone, values.name, purchaseEventId);
       openUpsell(orderId, upsellToken, upsellSku, { name: values.name, phone: values.phone });
     } catch (err) {
       if (isLocalPreview()) {
         const previewOrderId = `preview-${Date.now()}`;
-        trackPurchase(previewOrderId, total, values.phone, values.name);
+        trackPurchase(previewOrderId, total, values.phone, values.name, uuidv4());
         openUpsell(previewOrderId, 'preview-upsell-token', 'habba-bareeq', { name: values.name, phone: values.phone });
         return;
       }

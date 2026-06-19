@@ -42,6 +42,9 @@ function loadTikTokPixel(pixelId: string): void {
   const script = document.createElement('script');
   script.async = true;
   script.src = 'https://analytics.tiktok.com/i18n/pixel/events.js?sdkid=' + pixelId;
+  script.onload = () => {
+    window.ttq?.page();
+  };
   document.body.appendChild(script);
 }
 
