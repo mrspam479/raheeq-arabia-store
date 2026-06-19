@@ -11,9 +11,12 @@
 
 import { useEffect } from 'react';
 
+// Pixel IDs: env var is preferred (set at Docker build time via ARG).
+// The hardcoded fallbacks ensure pixels fire even when EasyPanel only
+// injects env vars at runtime (after the Next.js bundle is already built).
 const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID ?? '';
-const TIKTOK_PIXEL_ID = process.env.NEXT_PUBLIC_TIKTOK_PIXEL_ID ?? '';
-const SNAP_PIXEL_ID = process.env.NEXT_PUBLIC_SNAP_PIXEL_ID ?? '';
+const TIKTOK_PIXEL_ID = process.env.NEXT_PUBLIC_TIKTOK_PIXEL_ID ?? 'D8PIOU3C77U082M85FM0';
+const SNAP_PIXEL_ID = process.env.NEXT_PUBLIC_SNAP_PIXEL_ID ?? 'f2c54c8f-1550-44e8-8832-515ff3d8865c';
 
 function loadMetaPixel(pixelId: string): void {
   if (!pixelId) return;
