@@ -62,40 +62,55 @@ function loadTikTokPixel(pixelId: string): void {
   if (!pixelId) return;
   if ((window as Record<string, unknown>).ttq) return;
 
-  // Official TikTok initialization queue stub.
-  // Must exist BEFORE events.js loads so the script can flush the queue.
+  // Exact official TikTok initialization stub (adapted from TikTok docs).
+  // window.TiktokAnalyticsObject tells the downloaded script which window
+  // property holds the queue — without it the script does nothing.
   const win = window as unknown as Record<string, unknown>;
+  const lib = 'ttq';
+  win['TiktokAnalyticsObject'] = lib;
+
   const methods = [
     'page', 'track', 'identify', 'instances', 'debug', 'on', 'off', 'once',
     'ready', 'alias', 'group', 'enableCookie', 'disableCookie',
+    'holdConsent', 'revokeConsent', 'grantConsent',
   ];
-  const ttq: Record<string, unknown> = Object.assign([], {
-    _i: {} as Record<string, unknown>,
-    _t: {} as Record<string, unknown>,
+
+  const ttq: unknown[] & Record<string, unknown> = Object.assign([], {
+    methods,
+    _i: {} as Record<string, unknown[]>,
+    _t: {} as Record<string, number>,
     _o: {} as Record<string, unknown>,
   });
-  methods.forEach((m) => {
-    ttq[m] = (...args: unknown[]) => {
-      (ttq as unknown[]).push([m, ...args]);
-    };
-  });
-  (ttq as Record<string, unknown>)['load'] = (id: string) => {
-    (ttq as Record<string, unknown>)['_i'] = { [id]: [] };
-    (ttq as Record<string, unknown>)['_t'] = { [id]: +new Date() };
-  };
-  (ttq as Record<string, unknown>)['instance'] = (id: string) =>
-    ((ttq as Record<string, unknown>)['_i'] as Record<string, unknown>)[id] ?? ttq;
 
-  win['ttq'] = ttq;
+  const setAndDefer = (obj: Record<string, unknown>, method: string) => {
+    obj[method] = (...args: unknown[]) => { (obj as unknown[]).push([method, ...args]); };
+  };
+  methods.forEach((m) => setAndDefer(ttq, m));
+
+  ttq['instance'] = (id: string) => {
+    const inst = Object.assign([], ttq);
+    methods.forEach((m) => setAndDefer(inst as Record<string, unknown>, m));
+    return inst;
+  };
+
+  ttq['load'] = (id: string, opts?: unknown) => {
+    const i: unknown[] = [];
+    (ttq['_i'] as Record<string, unknown[]>)[id] = i;
+    (ttq['_t'] as Record<string, number>)[id] = +new Date();
+    (ttq['_o'] as Record<string, unknown>)[id] = opts ?? {};
+  };
+
+  win[lib] = ttq;
   window.ttq = ttq as typeof window.ttq;
 
-  // Initialize the pixel and fire PageView (queued until script loads)
+  // Queue init + PageView BEFORE the script loads — flushed when events.js runs
   (ttq['load'] as (id: string) => void)(pixelId);
   (ttq['page'] as () => void)();
 
+  // &lib=ttq is required — tells events.js which window property is the queue
   const script = document.createElement('script');
   script.async = true;
-  script.src = 'https://analytics.tiktok.com/i18n/pixel/events.js?sdkid=' + pixelId;
+  script.src = `https://analytics.tiktok.com/i18n/pixel/events.js?sdkid=${pixelId}&lib=${lib}`;
   document.body.appendChild(script);
 }
 
