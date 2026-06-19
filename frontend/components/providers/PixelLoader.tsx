@@ -134,7 +134,6 @@ function loadSnapPixel(pixelId: string): void {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const snaptr: any = (...args: unknown[]) => {
     if (snaptr.handleRequest) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       snaptr.handleRequest(...args);
     } else {
       snaptr.queue.push(args);
@@ -148,9 +147,10 @@ function loadSnapPixel(pixelId: string): void {
   script.src = 'https://sc-static.net/scevent.min.js';
   document.body.appendChild(script);
 
-  // Queue init + PAGE_VIEW — scevent.min.js replays snaptr.queue on load
-  window.snaptr('init', pixelId, {});
-  window.snaptr('track', 'PAGE_VIEW');
+  // Call on snaptr directly — window.snaptr is typed as optional so TS would
+  // complain about invoking it even though we just assigned it above.
+  snaptr('init', pixelId, {});
+  snaptr('track', 'PAGE_VIEW');
 }
 
 // ─── Loader ───────────────────────────────────────────────────────────────────
