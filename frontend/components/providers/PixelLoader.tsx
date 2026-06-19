@@ -76,22 +76,22 @@ function loadTikTokPixel(pixelId: string): void {
     'holdConsent', 'revokeConsent', 'grantConsent',
   ];
 
-  const ttq: unknown[] & Record<string, unknown> = Object.assign([], {
-    methods,
-    _i: {} as Record<string, unknown[]>,
-    _t: {} as Record<string, number>,
-    _o: {} as Record<string, unknown>,
-  });
+  // Cast via unknown — TS cannot express an array that also has string-keyed properties
+  // without an intermediate unknown cast. Object.assign([], {...}) infers `never[]`.
+  const ttq = [] as unknown as Record<string, unknown> & unknown[];
+  ttq['methods'] = methods;
+  ttq['_i'] = {} as Record<string, unknown[]>;
+  ttq['_t'] = {} as Record<string, number>;
+  ttq['_o'] = {} as Record<string, unknown>;
 
   const setAndDefer = (obj: Record<string, unknown>, method: string) => {
     obj[method] = (...args: unknown[]) => { (obj as unknown[]).push([method, ...args]); };
   };
   methods.forEach((m) => setAndDefer(ttq, m));
 
-  // _id is intentionally unused — instance() mirrors TikTok's official API signature
-  ttq['instance'] = (_id: string) => {
-    const inst = Object.assign([], ttq);
-    methods.forEach((m) => setAndDefer(inst as Record<string, unknown>, m));
+  ttq['instance'] = () => {
+    const inst = [] as unknown as Record<string, unknown> & unknown[];
+    methods.forEach((m) => setAndDefer(inst, m));
     return inst;
   };
 
