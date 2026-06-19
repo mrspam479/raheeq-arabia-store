@@ -191,16 +191,29 @@ export async function trackEvent(payload: TrackPayload): Promise<void> {
   await sendCapi(enriched);
 }
 
-export function trackViewContent(productSlug: string, productNameAr: string): void {
-  void trackEvent({ event: 'ViewContent', productSlug, productNameAr, currency: 'SAR' });
+export function trackViewContent(productSlug: string, productNameAr: string, value?: number): void {
+  void trackEvent({ event: 'ViewContent', productSlug, productNameAr, value, currency: 'SAR' });
 }
 
 export function trackAddToCart(productSlug: string, value: number, quantity: number): void {
   void trackEvent({ event: 'AddToCart', productSlug, value, quantity, currency: 'SAR' });
 }
 
-export function trackInitiateCheckout(value: number): void {
-  void trackEvent({ event: 'InitiateCheckout', value, currency: 'SAR' });
+export interface CartItem {
+  slug: string;
+  quantity: number;
+  unitPrice: number;
+}
+
+export function trackInitiateCheckout(value: number, items?: CartItem[]): void {
+  void trackEvent({
+    event: 'InitiateCheckout',
+    value,
+    currency: 'SAR',
+    // Use first item for content_id (TikTok VSA requirement)
+    productSlug: items?.[0]?.slug,
+    quantity: items?.reduce((sum, i) => sum + i.quantity, 0),
+  });
 }
 
 export function trackPurchase(

@@ -60,8 +60,9 @@ export function PdpClient({
   const isBundle = product.slug === 'bundle-glow-trio';
 
   useEffect(() => {
-    trackViewContent(product.slug, product.nameAr);
-  }, [product.slug, product.nameAr]);
+    // Pass singleBoxPrice as value so Meta/TikTok can calculate ROAS on ViewContent
+    trackViewContent(product.slug, product.nameAr, singleBoxPrice);
+  }, [product.slug, product.nameAr, singleBoxPrice]);
 
   useEffect(() => {
     setSelectedTier(2);

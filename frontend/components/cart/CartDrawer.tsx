@@ -9,7 +9,7 @@ import { COPY } from '@/data/copy';
 import { formatSar } from '@/lib/price';
 import { PRODUCTS, PRODUCT_ONE_LINERS } from '@/data/products';
 import { cn } from '@/lib/cn';
-import { trackInitiateCheckout } from '@/lib/analytics';
+import { trackInitiateCheckout, type CartItem } from '@/lib/analytics';
 import type { CartLine } from '@/lib/types';
 
 export function CartDrawer() {
@@ -45,8 +45,19 @@ export function CartDrawer() {
   // Products NOT in cart → cross-sell candidates
   const crossSells = PRODUCTS.filter((p) => !lines.find((l) => l.productId === p.slug)).slice(0, 2);
 
+  // Guard against duplicate InitiateCheckout events if user clicks the button twice
+  const checkoutTracked = useRef(false);
+
   const handleCheckout = () => {
-    trackInitiateCheckout(total);
+    if (!checkoutTracked.current) {
+      checkoutTracked.current = true;
+      const cartItems: CartItem[] = lines.map((l: CartLine) => ({
+        slug: l.productId,
+        quantity: l.quantity,
+        unitPrice: l.unitPrice,
+      }));
+      trackInitiateCheckout(total, cartItems);
+    }
     openCheckout();
   };
 
