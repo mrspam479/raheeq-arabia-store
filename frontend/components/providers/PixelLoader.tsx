@@ -128,13 +128,19 @@ function loadSnapPixel(pixelId: string): void {
   if (!pixelId) return;
   if (typeof window.snaptr === 'function') return;
 
-  // Official Snapchat initialization queue stub.
-  // Use a plain array as the backing queue to avoid expression-statement lint errors.
-  const q: unknown[][] = [];
-  const snaptr = ((...args: unknown[]) => {
-    q.push(args);
-  }) as ((...args: unknown[]) => void) & { q: unknown[][] };
-  snaptr.q = q;
+  // Exact match to Snap's official pixel stub.
+  // - queue (not q) is what scevent.min.js flushes on load
+  // - handleRequest check lets events fired after script loads go through immediately
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const snaptr: any = (...args: unknown[]) => {
+    if (snaptr.handleRequest) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+      snaptr.handleRequest(...args);
+    } else {
+      snaptr.queue.push(args);
+    }
+  };
+  snaptr.queue = [];
   window.snaptr = snaptr;
 
   const script = document.createElement('script');
@@ -142,7 +148,7 @@ function loadSnapPixel(pixelId: string): void {
   script.src = 'https://sc-static.net/scevent.min.js';
   document.body.appendChild(script);
 
-  // Queue init + PAGE_VIEW before script loads — flushed when script executes
+  // Queue init + PAGE_VIEW — scevent.min.js replays snaptr.queue on load
   window.snaptr('init', pixelId, {});
   window.snaptr('track', 'PAGE_VIEW');
 }
