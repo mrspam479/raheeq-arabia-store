@@ -52,7 +52,7 @@ export function PdpClient({
   beforeAfter,
 }: PdpClientProps) {
   const { addLine, openCart } = useCartStore();
-  const [selectedTier, setSelectedTier] = useState<1 | 2 | 3>(2);
+  const [selectedTier, setSelectedTier] = useState<1 | 2 | 3>(1);
   const [activeImage, setActiveImage] = useState(0);
 
   const selectedOffer = product.offers.find((o) => o.code === `T${selectedTier}`)!;
@@ -65,7 +65,7 @@ export function PdpClient({
   }, [product.slug, product.nameAr, singleBoxPrice]);
 
   useEffect(() => {
-    setSelectedTier(2);
+    setSelectedTier(1);
     setActiveImage(0);
   }, [product.slug]);
 
@@ -169,13 +169,18 @@ export function PdpClient({
               </div>
 
               {/* Rating */}
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
                 <StarRating
                   value={product.ratingValue}
                   showValue
                   reviewCount={product.reviewCount}
                   size="md"
                 />
+                {product.slug === 'habba-jathr' && (
+                  <span className="inline-flex items-center gap-1 rounded-full border border-emerald/25 bg-emerald/8 px-2.5 py-0.5 font-tajawal text-[11px] font-bold text-emerald">
+                    🍬 ٩٠ علكة في كل علبة
+                  </span>
+                )}
               </div>
 
               {/* 3 BIG benefits */}
@@ -363,6 +368,38 @@ export function PdpClient({
               ✨ {product.nameAr} تعالج هذي المشاكل من جذورها — من الداخل.
             </p>
           </div>
+
+          {/* ── Pinned social-proof review ── */}
+          {product.reviews[2] && (
+            <div className="mt-6 rounded-2xl border-2 border-emerald/25 bg-white p-5 shadow-sm">
+              <div className="flex items-center gap-1 mb-3">
+                {[1,2,3,4,5].map((s) => (
+                  <svg key={s} className="w-4 h-4 text-saffron fill-saffron" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                ))}
+              </div>
+              <p className="font-tajawal text-sm leading-relaxed text-charcoal">
+                &ldquo;{product.reviews[2].bodyAr}&rdquo;
+              </p>
+              <div className="mt-3 flex items-center gap-2">
+                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald/10">
+                  <span className="font-tajawal text-[11px] font-bold text-emerald">
+                    {product.reviews[2].authorFirstNameAr[0]}
+                  </span>
+                </div>
+                <span className="font-tajawal text-xs font-semibold text-emerald">
+                  {product.reviews[2].authorFirstNameAr}
+                </span>
+                <span className="font-tajawal text-[11px] text-charcoal/50">
+                  · {product.reviews[2].authorCityAr}
+                </span>
+                <span className="ms-auto rounded-full bg-emerald/8 px-2 py-0.5 font-tajawal text-[10px] font-bold text-emerald border border-emerald/20">
+                  مشترية موثّقة ✓
+                </span>
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
@@ -883,7 +920,7 @@ export function PdpClient({
 
       {/* Sticky CTA bar — mobile */}
       <div className="fixed bottom-0 inset-x-0 z-50 md:hidden bg-white border-t border-stone-200 p-3 shadow-[0_-10px_40px_rgba(0,0,0,0.08)] safe-bottom">
-        <Button variant="primary" size="lg" fullWidth onClick={handleAddToCart} className="h-14 text-lg font-black shadow-lg">
+        <Button variant="primary" size="lg" fullWidth onClick={handleAddToCart} className="h-14 text-lg font-black cta-pulse">
           اطلبيها الآن · {formatSar(selectedOffer.priceSar)}
         </Button>
         <p className="mt-1.5 text-center font-tajawal text-[11px] font-bold text-emerald">
@@ -922,9 +959,9 @@ function getOfferTitle(tier: 1 | 2 | 3, isBundle = false): string {
     if (tier === 2) return 'صندوقين = ٦ منتجات';
     return '٣ صناديق = ٩ منتجات';
   }
-  if (tier === 1) return 'علبة واحدة';
-  if (tier === 2) return 'علبتين';
-  return '٣ علب';
+  if (tier === 1) return 'علبة واحدة (٩٠ علكة)';
+  if (tier === 2) return 'علبتين (١٨٠ علكة)';
+  return '٣ علب (٢٧٠ علكة)';
 }
 
 function getOfferDuration(tier: 1 | 2 | 3, isBundle = false): string {

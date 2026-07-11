@@ -1,11 +1,19 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { useCartStore } from '@/store/cart';
 import { cn } from '@/lib/cn';
 
 export function CartButton() {
   const { openCart, totalItems } = useCartStore();
-  const count = totalItems();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Read cart count only after hydration to avoid SSR/client mismatch.
+  const count = mounted ? totalItems() : 0;
 
   return (
     <button

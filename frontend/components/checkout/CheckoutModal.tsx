@@ -27,8 +27,13 @@ export function CheckoutModal() {
   const { isCheckoutOpen, closeCheckout, lines, openUpsell, totalSar } =
     useCartStore();
   const [submitting, setSubmitting] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
   const idempotencyRef = useRef<string>(uuidv4());
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const {
     register,
@@ -270,7 +275,7 @@ export function CheckoutModal() {
                   </p>
                 </div>
                 <p className="font-tajawal text-xl font-black text-emerald">
-                  {formatSar(total)}
+                  {mounted ? formatSar(total) : formatSar(0)}
                 </p>
               </div>
             </div>

@@ -13,7 +13,7 @@ import { trackInitiateCheckout, type CartItem } from '@/lib/analytics';
 import type { CartLine } from '@/lib/types';
 
 export function CartDrawer() {
-  const { lines, isCartOpen, closeCart, removeLine, setTier, openCheckout, totalSar } =
+  const { lines, isCartOpen, closeCart, removeLine, openCheckout, totalSar } =
     useCartStore();
   const drawerRef = useRef<HTMLDivElement>(null);
 
@@ -125,7 +125,6 @@ export function CartDrawer() {
                     key={line.productId}
                     line={line}
                     onRemove={() => removeLine(line.productId)}
-                    onTierChange={(t) => setTier(line.productId, t)}
                   />
                 ))}
               </ul>
@@ -164,9 +163,16 @@ export function CartDrawer() {
             >
               {COPY.CART.CHECKOUT_CTA}
             </Button>
-            <p className="mt-2 text-center font-tajawal text-xs text-charcoal/60">
-              {COPY.CART.COD_NOTE}
-            </p>
+            <div className="mt-3 flex items-center justify-center gap-4">
+              <span className="flex items-center gap-1 font-tajawal text-[11px] font-bold text-charcoal/60">
+                <svg className="w-3.5 h-3.5 text-emerald" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+                دفع آمن ١٠٠٪
+              </span>
+              <span className="font-tajawal text-[11px] font-bold text-charcoal/60">💵 {COPY.CART.COD_NOTE}</span>
+              <span className="font-tajawal text-[11px] font-bold text-charcoal/60">🛡️ ضمان ٣٠ يوم</span>
+            </div>
           </div>
         )}
       </div>
@@ -177,18 +183,10 @@ export function CartDrawer() {
 function CartLineItem({
   line,
   onRemove,
-  onTierChange,
 }: {
   line: CartLine;
   onRemove: () => void;
-  onTierChange: (t: 1 | 2 | 3) => void;
 }) {
-  const tiers: { tier: 1 | 2 | 3; label: string; price: number }[] = [
-    { tier: 1, label: 'علبة', price: 199 },
-    { tier: 2, label: 'الزوجي', price: 279 },
-    { tier: 3, label: 'Glow Kit', price: 349 },
-  ];
-
   return (
     <li className="flex gap-3 p-3 bg-white rounded-xl border border-stone-200">
       <div className="w-16 h-16 rounded-lg bg-stone-100 overflow-hidden shrink-0 relative">
@@ -215,26 +213,10 @@ function CartLineItem({
             </svg>
           </button>
         </div>
-
-        {/* Tier selector */}
-        <div className="flex gap-1 mt-2">
-          {tiers.map(({ tier, label }) => (
-            <button
-              key={tier}
-              onClick={() => onTierChange(tier)}
-              className={cn(
-                'px-2 py-0.5 rounded-md text-[10px] font-tajawal font-medium transition-colors border',
-                line.tier === tier
-                  ? 'bg-emerald text-ivory border-emerald'
-                  : 'bg-transparent text-charcoal/60 border-stone-200 hover:border-emerald/50',
-              )}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-
-        <p className="font-tajawal font-bold text-sm text-emerald mt-1.5">
+        <p className="font-tajawal text-xs text-charcoal/50 mt-1">
+          الكمية: {line.quantity}
+        </p>
+        <p className="font-tajawal font-bold text-sm text-emerald mt-1">
           {formatSar(line.totalPrice)}
         </p>
       </div>
@@ -257,11 +239,11 @@ function CrossSellItem({
     addLine({
       productId: slug,
       nameAr,
-      tier: 3,
-      quantity: 3,
-      unitPrice: 349 / 3,
+      tier: 1,
+      quantity: 1,
+      unitPrice: 199,
       imageUrl: `/images/products/${slug}/cover.webp`,
-      offerCode: 'T3',
+      offerCode: 'T1',
     });
   };
 

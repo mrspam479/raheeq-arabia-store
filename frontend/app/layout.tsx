@@ -59,6 +59,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       lang="ar"
       dir="rtl"
       className={`${tajawal.variable} ${cormorant.variable}`}
+      suppressHydrationWarning
     >
       <head>
         <meta name="theme-color" content="#0E4F3A" />

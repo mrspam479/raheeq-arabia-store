@@ -296,9 +296,9 @@ export const PRODUCTS: Product[] = [
     galleryImageUrls: ['/images/products/habba-jathr/cover.webp'],
 
     offers: [
-      { code: 'T1', labelAr: 'علبة واحدة', quantity: 1, priceSar: 199, isRecommended: false },
-      { code: 'T2', labelAr: 'علبتين', quantity: 2, priceSar: 279, isRecommended: false },
-      { code: 'T3', labelAr: '٣ علب (الأوفر)', quantity: 3, priceSar: 349, isRecommended: true },
+      { code: 'T1', labelAr: 'علبة واحدة (90 علكة)', quantity: 1, priceSar: 199, isRecommended: false },
+      { code: 'T2', labelAr: 'علبتين (180 علكة)', quantity: 2, priceSar: 279, isRecommended: false },
+      { code: 'T3', labelAr: '٣ علب (270 علكة — الأوفر)', quantity: 3, priceSar: 349, isRecommended: true },
     ],
 
     ingredients: [
