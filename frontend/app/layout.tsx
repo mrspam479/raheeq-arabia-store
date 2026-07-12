@@ -6,7 +6,6 @@ import { JsonLdOrganization } from '@/components/brand/JsonLd';
 import { AnnouncementBar } from '@/components/layout/AnnouncementBar';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
-import { CookieBanner } from '@/components/layout/CookieBanner';
 import { CartDrawer } from '@/components/cart/CartDrawer';
 import { CheckoutModal } from '@/components/checkout/CheckoutModal';
 import { UpsellModal } from '@/components/checkout/UpsellModal';
@@ -77,7 +76,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <CartDrawer />
         <CheckoutModal />
         <UpsellModal />
-        <CookieBanner />
         <ToastProvider />
         <Script id="ms-clarity" strategy="afterInteractive">{`
           (function(c,l,a,r,i,t,y){

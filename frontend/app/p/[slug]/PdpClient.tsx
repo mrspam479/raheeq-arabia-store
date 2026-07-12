@@ -919,7 +919,7 @@ export function PdpClient({
       </section>
 
       {/* Sticky CTA bar — mobile */}
-      <div className="fixed bottom-0 inset-x-0 z-50 md:hidden bg-white border-t border-stone-200 p-3 shadow-[0_-10px_40px_rgba(0,0,0,0.08)] safe-bottom">
+      <div className="fixed bottom-0 inset-x-0 z-[200] md:hidden bg-white border-t border-stone-200 p-3 shadow-[0_-10px_40px_rgba(0,0,0,0.08)] safe-bottom">
         <Button variant="primary" size="lg" fullWidth onClick={handleAddToCart} className="h-14 text-lg font-black cta-pulse">
           اطلبيها الآن · {formatSar(selectedOffer.priceSar)}
         </Button>
