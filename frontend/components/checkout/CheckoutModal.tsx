@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -174,7 +175,7 @@ export function CheckoutModal() {
       {/* Backdrop */}
       <div
         className={cn(
-          'fixed inset-0 z-[100] bg-charcoal/50 backdrop-blur-sm transition-opacity duration-300',
+          'fixed inset-0 z-[290] bg-black/40 backdrop-blur-sm transition-opacity duration-300',
           isCheckoutOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none',
         )}
         onClick={closeCheckout}
@@ -189,118 +190,139 @@ export function CheckoutModal() {
         aria-label={COPY.CHECKOUT.MODAL_TITLE}
         tabIndex={-1}
         className={cn(
-          'fixed inset-0 z-[110] flex items-center justify-center p-4',
+          'fixed inset-x-0 bottom-0 z-[300] flex items-end justify-center sm:inset-0 sm:items-center sm:p-4',
           'focus:outline-none',
           isCheckoutOpen ? 'pointer-events-auto' : 'pointer-events-none',
         )}
       >
         <div
           className={cn(
-            'w-full max-w-md overflow-hidden rounded-[28px] bg-ivory shadow-2xl transition-all duration-300',
-            isCheckoutOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95',
+            'w-full max-w-md overflow-hidden bg-white shadow-2xl transition-all duration-300',
+            'rounded-t-[28px] sm:rounded-[28px]',
+            isCheckoutOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4',
           )}
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Header */}
-          <div className="relative bg-gradient-to-l from-emerald via-[#188565] to-[#0b4a3a] p-6 text-white">
-            <div className="flex items-start justify-between gap-4">
+          {/* ── Header ── */}
+          <div className="bg-emerald px-5 py-4">
+            <div className="flex items-center justify-between">
               <div>
-                <p className="mb-1 font-tajawal text-xs font-bold text-saffron">
-                  خطوة واحدة فقط
-                </p>
-                <h2 className="font-tajawal text-2xl font-black">
-                  احجزي طلبك الآن
-                </h2>
-                <p className="mt-1 font-tajawal text-sm text-white/80">
-                  الاسم + الجوال فقط. العنوان نأخذه بالاتصال.
-                </p>
+                <p className="font-tajawal text-[11px] font-bold text-saffron uppercase tracking-widest mb-0.5">خطوة واحدة فقط</p>
+                <h2 className="font-tajawal text-xl font-black text-white">أكملي طلبكِ الآن</h2>
               </div>
-            <button
-              onClick={closeCheckout}
-              className="rounded-full p-2 text-white/80 transition-colors hover:bg-white/10 hover:text-white"
-              aria-label="إغلاق"
-            >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
+              <button
+                onClick={closeCheckout}
+                className="flex h-8 w-8 items-center justify-center rounded-full bg-white/15 text-white transition-colors hover:bg-white/25"
+                aria-label="إغلاق"
+              >
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            {/* Trust pills inside header */}
+            <div className="mt-3 flex gap-2">
+              {['💵 دفع عند الاستلام', '🚚 شحن سريع', '🛡️ ضمان ٣٠ يوم'].map((t) => (
+                <span key={t} className="rounded-full bg-white/15 px-2.5 py-0.5 font-tajawal text-[10px] font-bold text-white/90">{t}</span>
+              ))}
             </div>
           </div>
 
-          {/* Body */}
-          <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-4 p-5">
-            {/* Honeypot — hidden from humans */}
-            <input
-              {...register('honeypot')}
-              type="text"
-              autoComplete="off"
-              tabIndex={-1}
-              aria-hidden="true"
-              style={{ display: 'none' }}
-            />
-
-            <Input
-              label={COPY.CHECKOUT.NAME_LABEL}
-              placeholder={COPY.CHECKOUT.NAME_PLACEHOLDER}
-              autoComplete="name"
-              {...register('name')}
-              error={errors.name?.message}
-            />
-
-            <div>
-              <Input
-                label={COPY.CHECKOUT.PHONE_LABEL}
-                placeholder={COPY.CHECKOUT.PHONE_PLACEHOLDER}
-                type="tel"
-                inputMode="tel"
-                dir="ltr"
-                autoComplete="tel"
-                {...register('phone')}
-                error={errors.phone?.message}
+          {/* ── Scrollable body ── */}
+          <div className="max-h-[70vh] overflow-y-auto bg-white pb-safe">
+            <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-4 p-5">
+              {/* Honeypot */}
+              <input
+                {...register('honeypot')}
+                type="text"
+                autoComplete="off"
+                tabIndex={-1}
+                aria-hidden="true"
+                style={{ display: 'none' }}
               />
-              <p className="mt-1 text-xs font-tajawal text-charcoal/60">
-                {COPY.CHECKOUT.PHONE_HINT}
-              </p>
-            </div>
 
-            {/* Order summary */}
-            <div className="rounded-2xl border border-saffron/30 bg-[#fff7e8] p-4">
-              <div className="flex items-center justify-between gap-4">
-                <div>
-                  <p className="font-tajawal text-xs font-bold text-saffron">
-                    طلبك جاهز للتأكيد
-                  </p>
-                  <p className="font-tajawal text-sm font-bold text-emerald">
-                    {lines.length === 1 ? lines[0]?.nameAr : `${lines.length} منتجات`}
-                  </p>
+              {/* ── Order summary ── */}
+              <div className="rounded-2xl border border-emerald/20 bg-white p-4 shadow-sm">
+                <p className="mb-3 font-tajawal text-[11px] font-bold uppercase tracking-wide text-emerald">
+                  ملخّص طلبكِ
+                </p>
+                <div className="flex flex-col gap-3">
+                  {lines.map((line) => (
+                    <div key={line.productId} className="flex items-center gap-3">
+                      <div className="relative h-14 w-12 shrink-0 overflow-hidden rounded-xl border border-stone-200 bg-white">
+                        <Image
+                          src={line.imageUrl}
+                          alt={line.nameAr}
+                          fill
+                          className="object-cover"
+                          sizes="48px"
+                        />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-tajawal text-sm font-black text-charcoal leading-snug line-clamp-2">
+                          {line.nameAr}
+                        </p>
+                        <p className="font-tajawal text-xs text-charcoal/50 mt-0.5">
+                          {line.quantity > 1 ? `${line.quantity} علب` : 'علبة واحدة'}
+                        </p>
+                      </div>
+                      <p className="font-tajawal text-base font-black text-emerald shrink-0">
+                        {formatSar(line.totalPrice)}
+                      </p>
+                    </div>
+                  ))}
                 </div>
-                <p className="font-tajawal text-xl font-black text-emerald">
-                  {mounted ? formatSar(total) : formatSar(0)}
+                <div className="mt-3 flex items-center justify-between rounded-xl bg-emerald/8 px-3 py-2.5">
+                  <span className="font-tajawal text-sm font-bold text-charcoal">الإجمالي</span>
+                  <span className="font-tajawal text-2xl font-black text-emerald">
+                    {mounted ? formatSar(total) : formatSar(0)}
+                  </span>
+                </div>
+              </div>
+
+              {/* ── Name ── */}
+              <Input
+                label={COPY.CHECKOUT.NAME_LABEL}
+                placeholder={COPY.CHECKOUT.NAME_PLACEHOLDER}
+                autoComplete="name"
+                {...register('name')}
+                error={errors.name?.message}
+              />
+
+              {/* ── Phone ── */}
+              <div>
+                <Input
+                  label={COPY.CHECKOUT.PHONE_LABEL}
+                  placeholder={COPY.CHECKOUT.PHONE_PLACEHOLDER}
+                  type="tel"
+                  inputMode="tel"
+                  dir="ltr"
+                  autoComplete="tel"
+                  {...register('phone')}
+                  error={errors.phone?.message}
+                />
+                <p className="mt-1 font-tajawal text-xs text-charcoal/50">
+                  {COPY.CHECKOUT.PHONE_HINT}
                 </p>
               </div>
-            </div>
 
-            <div className="grid grid-cols-3 gap-2 text-center font-tajawal text-[11px] font-bold text-emerald">
-              <span className="rounded-full bg-emerald/8 px-2 py-1.5">بدون بطاقة</span>
-              <span className="rounded-full bg-emerald/8 px-2 py-1.5">بدون عنوان الآن</span>
-              <span className="rounded-full bg-emerald/8 px-2 py-1.5">اتصال للتأكيد</span>
-            </div>
+              {/* ── Submit ── */}
+              <Button
+                type="submit"
+                variant="primary"
+                size="lg"
+                fullWidth
+                loading={submitting}
+                className="h-14 text-base font-black shadow-[0_8px_24px_rgba(15,77,61,0.30)]"
+              >
+                أكّدي الطلب — دفع عند الاستلام
+              </Button>
 
-            <Button
-              type="submit"
-              variant="primary"
-              size="lg"
-              fullWidth
-              loading={submitting}
-              className="h-14 text-lg"
-            >
-              أكّدي الطلب الآن — دفع عند الاستلام
-            </Button>
-
-            <p className="text-center font-tajawal text-[11px] text-charcoal/50 leading-relaxed">
-              بعد التأكيد بيظهر لكِ عرض 99 SAR لمدة 15 ثانية فقط.
-            </p>
-          </form>
+              <p className="text-center font-tajawal text-[11px] text-charcoal/40 leading-relaxed pb-1">
+                بعد التأكيد بيظهر لكِ عرض 99 SAR لمدة 15 ثانية فقط.
+              </p>
+            </form>
+          </div>
         </div>
       </div>
     </>

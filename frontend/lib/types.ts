@@ -62,6 +62,7 @@ export type Product = {
   reviews: Review[];
   faqs: Faq[];
   seo: ProductSeo;
+  gummiesPerBottle?: number;
 };
 
 export type OrderLineIn = {

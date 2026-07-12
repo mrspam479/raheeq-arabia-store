@@ -292,6 +292,7 @@ export const PRODUCTS: Product[] = [
     ratingValue: 4.9,
     reviewCount: 412,
     stockLabelAr: 'بقي 32 علبة فقط من دفعة هذا الأسبوع.',
+    gummiesPerBottle: 90,
     coverImageUrl: '/images/products/habba-jathr/cover.webp',
     galleryImageUrls: ['/images/products/habba-jathr/cover.webp'],
 
