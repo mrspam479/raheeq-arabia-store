@@ -51,7 +51,8 @@ export function PdpClient({
   howToUse,
   beforeAfter,
 }: PdpClientProps) {
-  const { addLine, openCart, openCheckout } = useCartStore();
+  const { addLine, openCart, openCheckout, isCheckoutOpen, lines } = useCartStore();
+  const hasThisProductInCart = lines.some((l) => l.productId === product.slug);
   const [selectedTier, setSelectedTier] = useState<1 | 2 | 3>(1);
   const [activeImage, setActiveImage] = useState(0);
 
@@ -191,9 +192,9 @@ export function PdpClient({
                   reviewCount={product.reviewCount}
                   size="md"
                 />
-                {product.slug === 'habba-jathr' && (
+                {product.gummiesPerBottle && (
                   <span className="inline-flex items-center gap-1 rounded-full border border-emerald/25 bg-emerald/8 px-2.5 py-0.5 font-tajawal text-[11px] font-bold text-emerald">
-                    🍬 ٩٠ علكة في كل علبة
+                    🍬 {product.gummiesPerBottle} علكة في كل علبة
                   </span>
                 )}
               </div>
@@ -279,7 +280,7 @@ export function PdpClient({
 
                         <div className="mx-3 flex-1">
                           <p className="font-tajawal text-base font-black text-charcoal">
-                            {getOfferTitle(tier, isBundle)}
+                            {isBundle ? getOfferTitle(tier, isBundle) : offer.labelAr}
                           </p>
                           <p className={cn(
                             'font-tajawal text-xs mt-0.5',
@@ -933,10 +934,21 @@ export function PdpClient({
         </div>
       </section>
 
-      {/* Sticky CTA bar — mobile */}
-      <div className="fixed bottom-0 inset-x-0 z-[200] md:hidden bg-white border-t border-stone-200 p-3 shadow-[0_-10px_40px_rgba(0,0,0,0.08)] safe-bottom">
-        <Button variant="primary" size="lg" fullWidth onClick={handleBuyNow} className="h-14 text-lg font-black cta-pulse">
-          أكملي طلبكِ · {formatSar(selectedOffer.priceSar)}
+      {/* Sticky CTA bar — mobile (hidden when checkout/cart is open so it never covers the modal) */}
+      <div className={cn(
+        'fixed bottom-0 inset-x-0 z-[200] md:hidden bg-white border-t border-stone-200 p-3 shadow-[0_-10px_40px_rgba(0,0,0,0.08)] safe-bottom transition-transform duration-200',
+        isCheckoutOpen ? 'translate-y-full pointer-events-none' : 'translate-y-0',
+      )}>
+        <Button
+          variant="primary"
+          size="lg"
+          fullWidth
+          onClick={hasThisProductInCart ? handleBuyNow : handleAddToCart}
+          className="h-14 text-lg font-black cta-pulse"
+        >
+          {hasThisProductInCart
+            ? `أكملي طلبكِ · ${formatSar(selectedOffer.priceSar)}`
+            : `اطلبيها الآن · ${formatSar(selectedOffer.priceSar)}`}
         </Button>
         <p className="mt-1.5 text-center font-tajawal text-[11px] font-bold text-emerald">
           🚚 الدفع عند الاستلام · 🛡️ ضمان ٣٠ يوم
