@@ -51,7 +51,7 @@ export function PdpClient({
   howToUse,
   beforeAfter,
 }: PdpClientProps) {
-  const { addLine, openCart } = useCartStore();
+  const { addLine, openCart, openCheckout } = useCartStore();
   const [selectedTier, setSelectedTier] = useState<1 | 2 | 3>(1);
   const [activeImage, setActiveImage] = useState(0);
 
@@ -81,6 +81,21 @@ export function PdpClient({
     });
     openCart();
     showToast(COPY.TOAST.ADDED, 'success');
+    trackAddToCart(product.slug, selectedOffer.priceSar, selectedOffer.quantity);
+  };
+
+  // Bottom CTA — skips cart drawer and goes straight to checkout
+  const handleBuyNow = () => {
+    addLine({
+      productId: product.slug,
+      nameAr: product.nameAr,
+      tier: selectedTier,
+      quantity: selectedOffer.quantity,
+      unitPrice: selectedOffer.priceSar / selectedOffer.quantity,
+      imageUrl: product.coverImageUrl,
+      offerCode: selectedOffer.code,
+    });
+    openCheckout();
     trackAddToCart(product.slug, selectedOffer.priceSar, selectedOffer.quantity);
   };
 
@@ -901,10 +916,10 @@ export function PdpClient({
           <Button
             variant="primary"
             size="lg"
-            onClick={handleAddToCart}
+            onClick={handleBuyNow}
             className="h-16 text-xl px-12 shadow-[0_18px_42px_rgba(0,0,0,0.3)]"
           >
-            اطلبيها الآن · {formatSar(selectedOffer.priceSar)}
+            أكملي طلبكِ الآن · {formatSar(selectedOffer.priceSar)}
           </Button>
         </div>
       </section>
@@ -920,8 +935,8 @@ export function PdpClient({
 
       {/* Sticky CTA bar — mobile */}
       <div className="fixed bottom-0 inset-x-0 z-[200] md:hidden bg-white border-t border-stone-200 p-3 shadow-[0_-10px_40px_rgba(0,0,0,0.08)] safe-bottom">
-        <Button variant="primary" size="lg" fullWidth onClick={handleAddToCart} className="h-14 text-lg font-black cta-pulse">
-          اطلبيها الآن · {formatSar(selectedOffer.priceSar)}
+        <Button variant="primary" size="lg" fullWidth onClick={handleBuyNow} className="h-14 text-lg font-black cta-pulse">
+          أكملي طلبكِ · {formatSar(selectedOffer.priceSar)}
         </Button>
         <p className="mt-1.5 text-center font-tajawal text-[11px] font-bold text-emerald">
           🚚 الدفع عند الاستلام · 🛡️ ضمان ٣٠ يوم
