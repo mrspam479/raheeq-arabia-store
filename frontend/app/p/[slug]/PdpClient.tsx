@@ -258,13 +258,14 @@ export function PdpClient({
                           </span>
                         )}
 
+                        {/* Thumbnails — max 2 shown for T3 to avoid overflow */}
                         <div className="flex shrink-0 items-center gap-1">
-                          {Array.from({ length: offer.quantity }, (_, idx) => (
+                          {Array.from({ length: Math.min(offer.quantity, 2) }, (_, idx) => (
                             <div
                               key={idx}
                               className={cn(
                                 'relative overflow-hidden rounded-lg bg-stone-100',
-                                isBundle ? 'h-12 w-14 border border-emerald/15' : 'h-12 w-10',
+                                isBundle ? 'h-11 w-12 border border-emerald/15' : 'h-11 w-9',
                               )}
                             >
                               <Image
@@ -272,39 +273,44 @@ export function PdpClient({
                                 alt={product.nameAr}
                                 fill
                                 className={isBundle ? 'object-contain p-1' : 'object-cover'}
-                                sizes={isBundle ? '56px' : '40px'}
+                                sizes="44px"
                               />
                             </div>
                           ))}
+                          {offer.quantity > 2 && (
+                            <span className="flex h-11 w-9 items-center justify-center rounded-lg bg-emerald/10 font-tajawal text-sm font-black text-emerald">
+                              ×{offer.quantity}
+                            </span>
+                          )}
                         </div>
 
-                        <div className="mx-3 flex-1">
-                          <p className="font-tajawal text-base font-black text-charcoal">
+                        <div className="mx-2 min-w-0 flex-1">
+                          <p className="font-tajawal text-sm font-black text-charcoal line-clamp-2 leading-snug">
                             {isBundle ? getOfferTitle(tier, isBundle) : offer.labelAr}
                           </p>
                           <p className={cn(
-                            'font-tajawal text-xs mt-0.5',
+                            'font-tajawal text-[11px] mt-0.5',
                             isActive ? 'text-charcoal/65' : 'text-charcoal/45',
                           )}>
                             {getOfferDuration(tier, isBundle)}
                           </p>
                           {savings > 0 && (
-                            <p className="mt-1 font-tajawal text-[11px] font-bold text-[#00A85A]">
-                              وفّري {formatSar(savings)}
+                            <p className="mt-0.5 font-tajawal text-[11px] font-bold text-[#00A85A]">
+                              وفّري {savings} ر.س
                             </p>
                           )}
                         </div>
 
-                        <div className="text-left">
+                        <div className="shrink-0 text-left">
                           <p className={cn(
-                            'font-tajawal text-lg font-black leading-none',
+                            'font-tajawal text-base font-black whitespace-nowrap',
                             isActive ? 'text-[#00A85A]' : 'text-charcoal/50',
                           )}>
-                            {formatSar(offer.priceSar)}
+                            {offer.priceSar} <span className="text-xs font-bold">ر.س</span>
                           </p>
                           {savings > 0 && (
-                            <p className="mt-0.5 font-tajawal text-[11px] text-charcoal/40 line-through">
-                              {formatSar(fullPrice)}
+                            <p className="mt-0.5 font-tajawal text-[10px] text-charcoal/35 line-through whitespace-nowrap">
+                              {fullPrice} ر.س
                             </p>
                           )}
                         </div>
@@ -917,10 +923,12 @@ export function PdpClient({
           <Button
             variant="primary"
             size="lg"
-            onClick={handleBuyNow}
+            onClick={hasThisProductInCart ? handleBuyNow : handleAddToCart}
             className="h-16 text-xl px-12 shadow-[0_18px_42px_rgba(0,0,0,0.3)]"
           >
-            أكملي طلبكِ الآن · {formatSar(selectedOffer.priceSar)}
+            {hasThisProductInCart
+              ? `أكملي طلبكِ · ${selectedOffer.priceSar} ر.س`
+              : `اطلبيها الآن · ${selectedOffer.priceSar} ر.س`}
           </Button>
         </div>
       </section>

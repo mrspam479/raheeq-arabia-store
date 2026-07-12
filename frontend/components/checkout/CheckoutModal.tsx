@@ -9,7 +9,6 @@ import { useCartStore } from '@/store/cart';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { COPY } from '@/data/copy';
-import { formatSar } from '@/lib/price';
 import { validateKsaPhone } from '@/lib/phone';
 import { trackPurchase } from '@/lib/analytics';
 import { showToast } from '@/components/ui/Toast';
@@ -204,125 +203,155 @@ export function CheckoutModal() {
           onClick={(e) => e.stopPropagation()}
         >
           {/* ── Header ── */}
-          <div className="bg-emerald px-5 py-4">
-            <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between bg-emerald px-5 py-3.5">
+            <div className="flex items-center gap-2">
+              {/* Lock icon — implies security */}
+              <svg className="h-4 w-4 text-saffron shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
               <div>
-                <p className="font-tajawal text-[11px] font-bold text-saffron uppercase tracking-widest mb-0.5">خطوة واحدة فقط</p>
-                <h2 className="font-tajawal text-xl font-black text-white">أكملي طلبكِ الآن</h2>
+                <p className="font-tajawal text-[10px] font-bold text-saffron tracking-widest">خطوة واحدة فقط</p>
+                <h2 className="font-tajawal text-lg font-black text-white leading-tight">أكملي طلبكِ الآن</h2>
               </div>
-              <button
-                onClick={closeCheckout}
-                className="flex h-8 w-8 items-center justify-center rounded-full bg-white/15 text-white transition-colors hover:bg-white/25"
-                aria-label="إغلاق"
-              >
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
             </div>
-            {/* Trust pills inside header */}
-            <div className="mt-3 flex gap-2">
-              {['💵 دفع عند الاستلام', '🚚 شحن سريع', '🛡️ ضمان ٣٠ يوم'].map((t) => (
-                <span key={t} className="rounded-full bg-white/15 px-2.5 py-0.5 font-tajawal text-[10px] font-bold text-white/90">{t}</span>
-              ))}
-            </div>
+            <button
+              onClick={closeCheckout}
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-white hover:bg-white/30 transition-colors"
+              aria-label="إغلاق"
+            >
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
 
-          {/* ── Scrollable body ── */}
-          <div className="max-h-[70vh] overflow-y-auto bg-white pb-safe">
-            <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-4 p-5">
-              {/* Honeypot */}
-              <input
-                {...register('honeypot')}
-                type="text"
-                autoComplete="off"
-                tabIndex={-1}
-                aria-hidden="true"
-                style={{ display: 'none' }}
-              />
+          {/* ── Body — fits one screen, no scroll ── */}
+          <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-3 p-4 bg-white">
+            <input {...register('honeypot')} type="text" autoComplete="off" tabIndex={-1} aria-hidden="true" style={{ display: 'none' }} />
 
-              {/* ── Order summary ── */}
-              <div className="rounded-2xl border border-emerald/20 bg-white p-4 shadow-sm">
-                <p className="mb-3 font-tajawal text-[11px] font-bold uppercase tracking-wide text-emerald">
-                  ملخّص طلبكِ
-                </p>
-                <div className="flex flex-col gap-3">
-                  {lines.map((line) => (
-                    <div key={line.productId} className="flex items-center gap-3">
-                      <div className="relative h-14 w-12 shrink-0 overflow-hidden rounded-xl border border-stone-200 bg-white">
-                        <Image
-                          src={line.imageUrl}
-                          alt={line.nameAr}
-                          fill
-                          className="object-cover"
-                          sizes="48px"
-                        />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-tajawal text-sm font-black text-charcoal leading-snug line-clamp-2">
-                          {line.nameAr}
-                        </p>
-                        <p className="font-tajawal text-xs text-charcoal/50 mt-0.5">
-                          {line.quantity > 1 ? `${line.quantity} علب` : 'علبة واحدة'}
-                        </p>
-                      </div>
-                      <p className="font-tajawal text-base font-black text-emerald shrink-0">
-                        {formatSar(line.totalPrice)}
-                      </p>
+            {/* ── Order summary — soft premium card ── */}
+            {lines.map((line) => {
+              const bottles = line.quantity;
+              const gummies = bottles * 90;
+              const months = bottles;
+              return (
+                <div key={line.productId} className="rounded-2xl bg-[#F8FAF9] ring-1 ring-black/5 shadow-sm px-3 py-3">
+                  <div className="flex items-center gap-3">
+                    {/* Product image — soft, rounded */}
+                    <div className="relative h-[72px] w-14 shrink-0 overflow-hidden rounded-2xl bg-white shadow ring-1 ring-black/8">
+                      <Image
+                        src={line.imageUrl}
+                        alt={line.nameAr}
+                        fill
+                        className="object-cover"
+                        sizes="56px"
+                      />
                     </div>
-                  ))}
+
+                    {/* Info */}
+                    <div className="flex-1 min-w-0">
+                      <p className="font-tajawal text-[13px] font-black text-charcoal line-clamp-2 leading-snug">{line.nameAr}</p>
+                      <div className="mt-1.5 flex flex-wrap gap-1">
+                        <span className="rounded-full bg-emerald/10 px-2 py-0.5 font-tajawal text-[10px] font-bold text-emerald">
+                          {bottles === 1 ? 'علبة واحدة' : `${bottles} علب`}
+                        </span>
+                        <span className="rounded-full bg-emerald/10 px-2 py-0.5 font-tajawal text-[10px] font-bold text-emerald">
+                          {gummies} علكة
+                        </span>
+                        <span className="rounded-full bg-emerald/10 px-2 py-0.5 font-tajawal text-[10px] font-bold text-emerald">
+                          يكفي {months === 1 ? 'شهر' : `${months} أشهر`}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Price — luxurious layout */}
+                    <div className="shrink-0 text-left">
+                      <p className="font-tajawal text-2xl font-black text-emerald leading-none whitespace-nowrap">
+                        {mounted ? line.totalPrice : 0}
+                      </p>
+                      <p className="font-tajawal text-[11px] font-bold text-emerald/60 text-left mt-0.5">ر.س</p>
+                    </div>
+                  </div>
+
+                  {/* Trust row — with icons */}
+                  <div className="mt-2.5 pt-2.5 border-t border-black/6 flex items-center justify-center gap-3">
+                    <span className="flex items-center gap-1">
+                      {/* Hand/cash icon */}
+                      <svg className="h-3 w-3 text-emerald shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                      </svg>
+                      <span className="font-tajawal text-[10px] font-bold text-charcoal/70">دفع عند الاستلام</span>
+                    </span>
+                    <span className="text-stone-300">|</span>
+                    <span className="flex items-center gap-1">
+                      {/* Truck icon */}
+                      <svg className="h-3 w-3 text-emerald shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
+                      </svg>
+                      <span className="font-tajawal text-[10px] font-bold text-charcoal/70">شحن مجاني</span>
+                    </span>
+                    <span className="text-stone-300">|</span>
+                    <span className="flex items-center gap-1">
+                      {/* Shield icon */}
+                      <svg className="h-3 w-3 text-emerald shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                      </svg>
+                      <span className="font-tajawal text-[10px] font-bold text-charcoal/70">ضمان 30 يوم</span>
+                    </span>
+                  </div>
                 </div>
-                <div className="mt-3 flex items-center justify-between rounded-xl bg-emerald/8 px-3 py-2.5">
-                  <span className="font-tajawal text-sm font-bold text-charcoal">الإجمالي</span>
-                  <span className="font-tajawal text-2xl font-black text-emerald">
-                    {mounted ? formatSar(total) : formatSar(0)}
-                  </span>
-                </div>
-              </div>
+              );
+            })}
 
-              {/* ── Name ── */}
-              <Input
-                label={COPY.CHECKOUT.NAME_LABEL}
-                placeholder={COPY.CHECKOUT.NAME_PLACEHOLDER}
-                autoComplete="name"
-                {...register('name')}
-                error={errors.name?.message}
-              />
-
-              {/* ── Phone ── */}
-              <div>
-                <Input
-                  label={COPY.CHECKOUT.PHONE_LABEL}
-                  placeholder={COPY.CHECKOUT.PHONE_PLACEHOLDER}
-                  type="tel"
-                  inputMode="tel"
-                  dir="ltr"
-                  autoComplete="tel"
-                  {...register('phone')}
-                  error={errors.phone?.message}
-                />
-                <p className="mt-1 font-tajawal text-xs text-charcoal/50">
-                  {COPY.CHECKOUT.PHONE_HINT}
-                </p>
-              </div>
-
-              {/* ── Submit ── */}
-              <Button
-                type="submit"
-                variant="primary"
-                size="lg"
-                fullWidth
-                loading={submitting}
-                className="h-14 text-base font-black shadow-[0_8px_24px_rgba(15,77,61,0.30)]"
-              >
-                أكّدي الطلب — دفع عند الاستلام
-              </Button>
-
-              <p className="text-center font-tajawal text-[11px] text-charcoal/40 leading-relaxed pb-1">
-                بعد التأكيد بيظهر لكِ عرض 99 SAR لمدة 15 ثانية فقط.
+            {/* ── Instruction — guiding section header ── */}
+            <div className="flex items-center gap-2 py-0.5">
+              <div className="flex-1 h-px bg-stone-200" />
+              <p className="font-tajawal text-[13px] font-bold text-charcoal/60 whitespace-nowrap">
+                اكتبي اسمكِ ورقم جوالكِ
               </p>
-            </form>
-          </div>
+              <div className="flex-1 h-px bg-stone-200" />
+            </div>
+
+            {/* Name */}
+            <Input
+              label={COPY.CHECKOUT.NAME_LABEL}
+              placeholder={COPY.CHECKOUT.NAME_PLACEHOLDER}
+              autoComplete="name"
+              {...register('name')}
+              error={errors.name?.message}
+            />
+
+            {/* Phone */}
+            <div>
+              <Input
+                label={COPY.CHECKOUT.PHONE_LABEL}
+                placeholder={COPY.CHECKOUT.PHONE_PLACEHOLDER}
+                type="tel"
+                inputMode="tel"
+                dir="ltr"
+                autoComplete="tel"
+                {...register('phone')}
+                error={errors.phone?.message}
+              />
+              <p className="mt-1 font-tajawal text-xs text-charcoal/50">{COPY.CHECKOUT.PHONE_HINT}</p>
+            </div>
+
+            {/* Submit */}
+            <Button
+              type="submit"
+              variant="primary"
+              size="lg"
+              fullWidth
+              loading={submitting}
+              className="h-14 text-base font-black shadow-lg shadow-emerald/30"
+            >
+              أكّدي الطلب — دفع عند الاستلام
+            </Button>
+
+            <p className="text-center font-tajawal text-[10px] text-charcoal/35 pb-1">
+              سنتصل بكِ لتأكيد الطلب وأخذ العنوان · بدون بطاقة
+            </p>
+          </form>
         </div>
       </div>
     </>
