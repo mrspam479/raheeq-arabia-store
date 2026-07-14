@@ -67,6 +67,16 @@ export function CheckoutModal() {
     };
   }, [isCheckoutOpen, closeCheckout]);
 
+  // Back-button trap: push a fake history entry so the phone's back button
+  // closes the modal instead of navigating the user away from the page.
+  useEffect(() => {
+    if (!isCheckoutOpen) return;
+    window.history.pushState({ checkoutModal: true }, '');
+    const onPopState = () => closeCheckout();
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, [isCheckoutOpen, closeCheckout]);
+
   const total = totalSar();
 
   const onSubmit = async (values: FormValues) => {
