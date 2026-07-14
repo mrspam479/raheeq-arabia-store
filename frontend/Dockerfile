@@ -1,4 +1,4 @@
-# Multi-stage build for Next.js 15 standalone output
+# Multi-stage build for Next.js 15 standalone output — v2
 
 FROM node:22-alpine AS base
 
