@@ -36,8 +36,9 @@ const OFFER_QUANTITIES: Record<string, number> = {
 };
 
 function formatPhone(raw: string): string {
-  const phone = raw.trim();
+  const phone = raw.trim().replace(/[\s\-().]/g, '');
   if (phone.startsWith('+966')) return phone;
+  if (phone.startsWith('00966')) return `+${phone.slice(2)}`;
   if (phone.startsWith('966')) return `+${phone}`;
   if (phone.startsWith('05')) return `+966${phone.slice(1)}`;
   if (phone.startsWith('5')) return `+966${phone}`;
