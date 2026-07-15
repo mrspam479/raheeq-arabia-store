@@ -54,6 +54,24 @@ async def _save_event_db(
         import logging
         logging.getLogger(__name__).error(f"Error saving tracking event to DB: {e}")
 
+async def _send_capi_events(
+    event_name: str,
+    event_id: str,
+    event_time: int,
+    event_source_url: str | None,
+    ud: UserData,
+    meta_custom: dict,
+    tiktok_custom: dict,
+    snap_custom: dict,
+) -> None:
+    await asyncio.gather(
+        meta_capi.send_event(event_name=event_name, event_id=event_id, event_time=event_time, event_source_url=event_source_url, user_data=ud, custom_data=meta_custom),
+        tiktok_capi.send_event(event_name=event_name, event_id=event_id, event_time=event_time, event_source_url=event_source_url, user_data=ud, custom_data=tiktok_custom),
+        snap_capi.send_event(event_name=event_name, event_id=event_id, event_time=event_time, event_source_url=event_source_url, user_data=ud, custom_data=snap_custom),
+        return_exceptions=True,
+    )
+
+
 @router.post("", response_model=TrackEventOut, status_code=202, dependencies=[Depends(require_api_key)])
 async def track_event(payload: TrackEventIn, request: Request, background_tasks: BackgroundTasks) -> TrackEventOut:
     client_ip = _get_client_ip(request) or payload.client.ip or ""
@@ -102,12 +120,11 @@ async def track_event(payload: TrackEventIn, request: Request, background_tasks:
         "order_id": payload.data.order_id,
     }
 
-    asyncio.create_task(asyncio.gather(
-        meta_capi.send_event(event_name=payload.event_name, event_id=event_id, event_time=event_time, event_source_url=event_source_url, user_data=ud, custom_data=meta_custom),
-        tiktok_capi.send_event(event_name=payload.event_name, event_id=event_id, event_time=event_time, event_source_url=event_source_url, user_data=ud, custom_data=tiktok_custom),
-        snap_capi.send_event(event_name=payload.event_name, event_id=event_id, event_time=event_time, event_source_url=event_source_url, user_data=ud, custom_data=snap_custom),
-        return_exceptions=True,
-    ))
+    background_tasks.add_task(
+        _send_capi_events,
+        payload.event_name, event_id, event_time, event_source_url, ud,
+        meta_custom, tiktok_custom, snap_custom,
+    )
 
     background_tasks.add_task(_save_event_db, payload, client_ip)
 
