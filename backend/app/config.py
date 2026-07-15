@@ -60,7 +60,7 @@ class Settings(BaseSettings):
     MAXMIND_ACCOUNT_ID: str = ""
     MAXMIND_LICENSE_KEY: str = ""
     MAXMIND_DB_PATH: str = ""
-    ENABLE_IP_FRAUD_CHECK: bool = True
+    ENABLE_IP_FRAUD_CHECK: bool = False
     # Comma-separated phones that bypass the IP fraud check (owner / QA testing).
     # 050000001 is the default test number — use it on the live site to make a fake order.
     WHITELISTED_PHONES: str = "0500000001,050000001,050000007,055000000"
