@@ -44,6 +44,13 @@ interface PdpClientProps {
   whyUs: WhyUs;
 }
 
+function getDefaultTier(p: { offers: { code: string; isRecommended: boolean }[] }): 1 | 2 | 3 {
+  const rec = p.offers.find((o) => o.isRecommended);
+  if (!rec) return 1;
+  const n = parseInt(rec.code.replace('T', ''), 10);
+  return (n >= 1 && n <= 3 ? n : 1) as 1 | 2 | 3;
+}
+
 export function PdpClient({
   product,
   benefits,
@@ -53,7 +60,7 @@ export function PdpClient({
 }: PdpClientProps) {
   const { addLine, openCart, openCheckout, isCheckoutOpen, lines } = useCartStore();
   const hasThisProductInCart = lines.some((l) => l.productId === product.slug);
-  const [selectedTier, setSelectedTier] = useState<1 | 2 | 3>(1);
+  const [selectedTier, setSelectedTier] = useState<1 | 2 | 3>(() => getDefaultTier(product));
   const [activeImage, setActiveImage] = useState(0);
 
   const selectedOffer = product.offers.find((o) => o.code === `T${selectedTier}`)!;
@@ -66,7 +73,7 @@ export function PdpClient({
   }, [product.slug, product.nameAr, singleBoxPrice]);
 
   useEffect(() => {
-    setSelectedTier(1);
+    setSelectedTier(getDefaultTier(product));
     setActiveImage(0);
   }, [product.slug]);
 
@@ -292,7 +299,7 @@ export function PdpClient({
                             'font-tajawal text-[11px] mt-0.5',
                             isActive ? 'text-charcoal/65' : 'text-charcoal/45',
                           )}>
-                            {getOfferDuration(tier, isBundle)}
+                            {getOfferDuration(offer.quantity, isBundle, product.gummiesPerBottle ?? 90)}
                           </p>
                           {savings > 0 && (
                             <p className="mt-0.5 font-tajawal text-[11px] font-bold text-[#00A85A]">
@@ -999,13 +1006,20 @@ function getOfferTitle(tier: 1 | 2 | 3, isBundle = false): string {
   return '٣ علب (٢٧٠ علكة)';
 }
 
-function getOfferDuration(tier: 1 | 2 | 3, isBundle = false): string {
+function getOfferDuration(offerQuantity: number, isBundle = false, gummiesPerBottle = 90): string {
   if (isBundle) {
-    if (tier === 1) return 'نضرة + بريق + جذر · تجربة شهر';
-    if (tier === 2) return 'روتين شهرين كامل · قيمة أفضل';
+    if (offerQuantity === 1) return 'نضرة + بريق + جذر · تجربة شهر';
+    if (offerQuantity === 2) return 'روتين شهرين كامل · قيمة أفضل';
     return 'روتين ٣ أشهر · أعلى توفير وأقوى التزام';
   }
-  if (tier === 1) return 'يكفي شهر · تجربة';
-  if (tier === 2) return 'يكفي شهرين · قيمة أفضل';
-  return 'يكفي ٣ أشهر · النتيجة الكاملة';
+  if (gummiesPerBottle === 90) {
+    if (offerQuantity === 1) return 'يكفي شهر · تجربة';
+    if (offerQuantity === 2) return 'يكفي شهرين · قيمة أفضل';
+    return 'يكفي ٣ أشهر · النتيجة الكاملة';
+  }
+  const days = Math.round((offerQuantity * gummiesPerBottle) / 2);
+  if (days <= 12) return `يكفي ${days} أيام · تجربة`;
+  if (days <= 35) return 'يكفي شهر كامل · الأنسب للكورس';
+  if (days <= 55) return 'يكفي شهر ونصف · التوفير الأكبر';
+  return 'يكفي شهرين · النتيجة الكاملة';
 }

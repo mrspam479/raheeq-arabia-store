@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useCartStore } from '@/store/cart';
+import { PRODUCTS } from '@/data/products';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { COPY } from '@/data/copy';
@@ -242,8 +243,10 @@ export function CheckoutModal() {
             {/* ── Order summary — soft premium card ── */}
             {lines.map((line) => {
               const bottles = line.quantity;
-              const gummies = bottles * 90;
-              const months = bottles;
+              const gpb = PRODUCTS.find((p) => p.slug === line.productId)?.gummiesPerBottle ?? 90;
+              const gummies = bottles * gpb;
+              const durationDays = Math.round(gummies / 2);
+              const months = Math.max(1, Math.round(durationDays / 30));
               return (
                 <div key={line.productId} className="rounded-2xl bg-[#F8FAF9] ring-1 ring-black/5 shadow-sm px-3 py-3">
                   <div className="flex items-center gap-3">
@@ -269,7 +272,7 @@ export function CheckoutModal() {
                           {gummies} علكة
                         </span>
                         <span className="rounded-full bg-emerald/10 px-2 py-0.5 font-tajawal text-[10px] font-bold text-emerald">
-                          يكفي {months === 1 ? 'شهر' : `${months} أشهر`}
+                          يكفي {durationDays < 25 ? `${durationDays} يوم` : months === 1 ? 'شهر' : `${months} أشهر`}
                         </span>
                       </div>
                     </div>

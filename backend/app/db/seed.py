@@ -67,6 +67,24 @@ PRODUCTS = [
         "seo_description_ar": "مكوّن إيطالي أعاد نمو الشعر في ٢٥٠ امرأة خلال ٦٠ يومًا + بيوتين ١٠,٠٠٠ مكغ. الدفع عند الاستلام.",
     },
     {
+        "slug": "habba-shilajit",
+        "name_ar": "علكات الشلاجيت وحبة البركة",
+        "working_name": "Shilajit & Black Seed Energy Gummy",
+        "hero_tag_ar": "خمول مستمر وطاقة تخلص قبل ما يخلص يومك؟",
+        "short_description_ar": "تصحى وجسمك تقيل، تركيزك مشتّت، وتحتاج قهوة تلو قهوة حتى تبدأ يومك. المشكلة مش نوم ناقص — هي نقص تغذية على مستوى الخلية. الشلاجيت الجبلي + حبة البركة المباركة يعيدان النشاط من الداخل.",
+        "long_description_ar": "الشلاجيت مادة نادرة تكوّنت على آلاف السنين من الجبال العالية. تحتوي على أكثر من 85 معدناً وحمض الفولفيك — المادة التي تُحسّن قدرة خلاياك على امتصاص الطاقة. دُمج مع زيت الحبة السوداء المباركة، الثابت فعلها علمياً في دعم المناعة والحيوية. علكتان بعد الوجبة يومياً — وبعد أسبوعين تبدأ تحسّ الفرق.",
+        "rating_value": Decimal("4.9"),
+        "review_count": 214,
+        "stock_label_ar": "الكمية محدودة — متبقٍّ 45 كورساً فقط.",
+        "cover_image_url": "/images/products/habba-shilajit/cover.png",
+        "gallery_image_urls": [
+            "/images/products/habba-shilajit/cover.png",
+        ],
+        "sort_order": 4,
+        "seo_title_ar": "علكات الشلاجيت وحبة البركة للطاقة والمناعة · رحيق",
+        "seo_description_ar": "شلاجيت جبلي نقي + زيت الحبة السوداء في علكة واحدة — طاقة طبيعية بدون كافيين، مناعة أقوى. دفع عند الاستلام.",
+    },
+    {
         "slug": "bundle-glow-trio",
         "name_ar": "صندوق الجمال الكامل",
         "working_name": "Glow Trio Bundle",
@@ -111,6 +129,10 @@ INGREDIENTS: dict[str, list[dict]] = {
         {"name_ar": "فيتامين D3", "name_en": "Vitamin D3 (cholecalciferol)", "dose": "20 mcg (800 IU)", "what_it_does_ar": "يدعم صحة البصيلات. ٨٠٪ من السعوديات عندهن نقص — وهذا مرتبط بالتساقط.", "science_source_short": "Rasheed et al., 2013, J Cosmet Dermatol.", "sort_order": 3, "thumb_image_url": None},
         {"name_ar": "حمض الفوليك", "name_en": "Folic Acid (Vitamin B9)", "dose": "400 mcg", "what_it_does_ar": "يُسرّع نمو الشعر من الأساس.", "science_source_short": "EFSA: folate contributes to normal cell division.", "sort_order": 4, "thumb_image_url": None},
     ],
+    "habba-shilajit": [
+        {"name_ar": "مستخلص الشلاجيت الجبلي", "name_en": "Purified Shilajit Extract (Fulvic Acid Complex)", "dose": "أساسي", "what_it_does_ar": "يُزوّد خلاياك بـ 85+ معدناً وحمض الفولفيك لتحسين إنتاج الطاقة الخلوية (ATP) والحدّ من الإجهاد المستمر.", "science_source_short": "Carrasco-Gallardo et al., 2012, PLOS ONE.", "sort_order": 0, "thumb_image_url": None},
+        {"name_ar": "زيت الحبة السوداء", "name_en": "Black Seed Oil (Nigella Sativa)", "dose": "أساسي", "what_it_does_ar": "الحبة السوداء ثابتة علمياً في دعم المناعة، تقليل الالتهابات، ورفع الحيوية العامة. مباركة بالسنة النبوية.", "science_source_short": "Ahmad et al., 2013, Asian Pac J Trop Biomed.", "sort_order": 1, "thumb_image_url": None},
+    ],
     "bundle-glow-trio": [
         {"name_ar": "حبّة نضرة", "name_en": "Habba Nadra — Anti-Wrinkle", "dose": "علبة كاملة", "what_it_does_ar": "أستازانتين + كولاجين بحري + فيتامين سي + هيالورونيك. لبشرة أكثر نضارة وتجاعيد أقل.", "science_source_short": "Tominaga 2017, Choi 2014.", "sort_order": 0, "thumb_image_url": "/images/products/habba-nadra/cover.png"},
         {"name_ar": "حبّة بريق", "name_en": "Habba Bareeq — Dark Circles", "dose": "علبة كاملة", "what_it_does_ar": "فيتامين سي + حديد bisglycinate + نياسيناميد. تهاجم الهالات من 3 جهات.", "science_source_short": "Pinnell 2003, Hallberg 1995.", "sort_order": 1, "thumb_image_url": "/images/products/habba-bareeq/cover.png"},
@@ -126,6 +148,11 @@ OFFERS_TEMPLATE = [
 
 # Per-product offer overrides (slug -> offers). Falls back to OFFERS_TEMPLATE.
 OFFERS_BY_SLUG: dict[str, list[dict]] = {
+    "habba-shilajit": [
+        {"code": "T1", "label_ar": "علبة واحدة (٢٠ علكة — تجربة ١٠ أيام)", "quantity": 1, "price_sar": Decimal("179"), "is_recommended": False, "sort_order": 0},
+        {"code": "T2", "label_ar": "٣ علب (٦٠ علكة — كورس شهر كامل)", "quantity": 3, "price_sar": Decimal("299"), "is_recommended": True, "sort_order": 1},
+        {"code": "T3", "label_ar": "٥ علب (١٠٠ علكة — كورس التوفير)", "quantity": 5, "price_sar": Decimal("389"), "is_recommended": False, "sort_order": 2},
+    ],
     "bundle-glow-trio": [
         {"code": "T1", "label_ar": "صندوق شهر", "quantity": 1, "price_sar": Decimal("499"), "is_recommended": False, "sort_order": 0},
         {"code": "T2", "label_ar": "صندوقين (شهرين)", "quantity": 2, "price_sar": Decimal("899"), "is_recommended": False, "sort_order": 1},
@@ -157,6 +184,11 @@ REVIEWS: dict[str, list[dict]] = {
         {"author_first_name_ar": "العنود", "author_city_ar": "الرياض", "rating": 5, "body_ar": "الكاشيرة في صالون الكوافير سألتني: إيش سرّ شعرك؟ ما توقّعت الجواب تفاح إيطالي.", "sort_order": 1},
         {"author_first_name_ar": "ريم", "author_city_ar": "جدة", "rating": 5, "body_ar": "كنت أجمع شعر قبل الاستحمام حتى لا يسدّ الصرف. بعد شهرين — ما عاد عندي سبب.", "sort_order": 2},
     ],
+    "habba-shilajit": [
+        {"author_first_name_ar": "عبدالله", "author_city_ar": "الرياض", "rating": 5, "body_ar": "بعد شهر من الشلاجيت — التعب اللي كان يصاحبني بعد الظهر خف كثير. ما كنت متوقع الفرق يكون واضح للدرجة هذي.", "sort_order": 0},
+        {"author_first_name_ar": "فهد", "author_city_ar": "جدة", "rating": 5, "body_ar": "جرّبت منتجات طاقة كثير وكلها تعطيك رعشة الكافيين ثم تسقط. هذا شي ثاني — طاقة هادية ومستمرة.", "sort_order": 1},
+        {"author_first_name_ar": "بندر", "author_city_ar": "الدمام", "rating": 5, "body_ar": "الحبة السوداء وحدها ما كانت تعطيني هذا. لمّا اتحدت مع الشلاجيت صارت مختلفة. خذ ٣ علب ما تندم.", "sort_order": 2},
+    ],
 }
 
 FAQS: dict[str, list[dict]] = {
@@ -186,6 +218,13 @@ FAQS: dict[str, list[dict]] = {
         {"question_ar": "هل الحديد يسبّب إمساك؟", "answer_ar": "لا. حديد bisglycinate أعلى امتصاصًا وأقل أعراضًا من الأنواع التقليدية.", "sort_order": 1},
         {"question_ar": "متى يتحسّن اللون؟", "answer_ar": "أفتح قليلًا بعد ٣-٤ أسابيع. فرق واضح بعد ٦٠ يومًا.", "sort_order": 2},
         {"question_ar": "هل آمنة مع الحمل؟", "answer_ar": "لا يُنصح بها — خاصة مع وجود الحديد. استشيري طبيبكِ.", "sort_order": 3},
+    ],
+    "habba-shilajit": [
+        {"question_ar": "متى يبان الفرق؟", "answer_ar": "أول تحسّن بعد ٢-٣ أسابيع. النتيجة الكاملة بعد شهر مستمر. الكورس المُوصى به ٩٠ يومًا.", "sort_order": 0},
+        {"question_ar": "هل يحتوي كافيين أو محفزات؟", "answer_ar": "لا أبداً. الطاقة تأتي من تغذية الخلية بالمعادن وحمض الفولفيك — بدون رعشة أو هبوط.", "sort_order": 1},
+        {"question_ar": "هل المنتج حلال؟", "answer_ar": "نعم ١٠٠٪. نستخدم بيكتين نباتي بدلاً من الجيلاتين الحيواني، والحبة السوداء مباركة بالسنة.", "sort_order": 2},
+        {"question_ar": "هل آمن مع الأدوية؟", "answer_ar": "إذا كنت تأخذ أدوية مزمنة، استشر طبيبك أولاً. للأصحاء البالغين آمن بدون قيود.", "sort_order": 3},
+        {"question_ar": "كيف وقت الأكل؟", "answer_ar": "علكتان بعد وجبة الإفطار أو الغداء. يُفضّل مع الأكل لتحسين الامتصاص.", "sort_order": 4},
     ],
     "bundle-glow-trio": [
         {"question_ar": "كم يكفي الصندوق؟", "answer_ar": "الصندوق يكفي شهر كامل من الـ 3 منتجات. حبّتين بالصباح من كل واحدة.", "sort_order": 0},
