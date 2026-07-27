@@ -75,6 +75,8 @@ export function PdpClient({
   useEffect(() => {
     setSelectedTier(getDefaultTier(product));
     setActiveImage(0);
+    // product object always changes with product.slug; slug is the meaningful trigger
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product.slug]);
 
   const handleAddToCart = () => {

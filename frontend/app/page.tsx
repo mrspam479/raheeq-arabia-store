@@ -219,7 +219,7 @@ export default function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-            {MAIN_PRODUCTS.map((product, idx) => {
+            {MAIN_PRODUCTS.filter((p) => p.slug !== 'habba-shilajit').map((product, idx) => {
               const cards = [
                 { icon: '✨', issue: 'تجاعيد + بهتان', solution: 'أستازانتين + كولاجين بحري' },
                 { icon: '👁️', issue: 'هالات سوداء', solution: 'حديد + حمض فوليك' },
