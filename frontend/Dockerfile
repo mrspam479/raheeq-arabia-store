@@ -1,4 +1,4 @@
-# Multi-stage build for Next.js 15 standalone output — v2
+# Multi-stage build for Next.js 15 standalone output — v3 (cache bust 2026-07-28)
 
 FROM node:22-alpine AS base
 
