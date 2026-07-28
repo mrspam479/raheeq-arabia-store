@@ -15,7 +15,8 @@ import { cn } from '@/lib/cn';
 const COUNTDOWN_SECONDS = 30;
 
 // Tiered upsell config: what to offer based on what they already bought
-const UPSELL_CONFIG: Record<string, { addQty: number; addPrice: number; headline: (m: (a:string,b:string)=>string) => string; sub: (m: (a:string,b:string)=>string) => string }> = {
+type UpsellCfg = { addQty: number; addPrice: number; headline: (m: (a:string,b:string)=>string) => string; sub: (m: (a:string,b:string)=>string) => string };
+const UPSELL_CONFIG: { T1: UpsellCfg; T2: UpsellCfg; T3: UpsellCfg } = {
   T1: {
     addQty: 2,
     addPrice: 100,
@@ -41,8 +42,9 @@ export function UpsellModal() {
   const m = (masculine: string, feminine: string) => isMasc ? masculine : feminine;
 
   // Determine which tier was ordered
-  const orderedTier = lines[0]?.offerCode ?? 'T2';
-  const upsellCfg = UPSELL_CONFIG[orderedTier] ?? UPSELL_CONFIG['T2'];
+  const rawTier = lines[0]?.offerCode ?? 'T2';
+  const orderedTier: 'T1' | 'T2' | 'T3' = (rawTier === 'T1' || rawTier === 'T2' || rawTier === 'T3') ? rawTier : 'T2';
+  const upsellCfg: UpsellCfg = UPSELL_CONFIG[orderedTier];
   const isShilajit = lines[0]?.productId === 'habba-shilajit';
   const upsellPrice = upsellCfg.addPrice;
   const [seconds, setSeconds] = useState(COUNTDOWN_SECONDS);
