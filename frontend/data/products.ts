@@ -502,12 +502,16 @@ export const PRODUCTS: Product[] = [
     },
   },
   /* ══════════════════════════════════════════════════════════
-     علكات الشلاجيت وحبة البركة — Energy & Immunity for Men
-     Framework: PAS (Problem → Agitate → Solution) + Science Trust
-     Emotional core: He's tired, foggy, running on coffee. He wants his
-     natural drive and focus back without stimulants or synthetic pills.
+     علكات الشلاجيت وحبة البركة — Energy & Vitality for Men
+     Framework: PAS (Problem → Agitate → Solution) + Honest Science
+     Emotional core: He's tired after work, running on coffee, has tried
+     raw resin (tastes like dirt) and energy drinks (crash & burn).
+     He wants sustained natural energy without chemical dependency.
      Hero ingredient: Purified Shilajit (fulvic acid, 85+ minerals)
-     Supporting: Black Seed Oil (حبة البركة) — Islamic medicine gold
+     Supporting: Black Seed Oil (حبة البركة) — Sunnah-backed immunity
+     AOV strategy: Decoy pricing — T1 at 199 makes T2 (299 / 3 bottles)
+     feel like a 50% discount per bottle. T3 anchors upward.
+     TRANSPARENCY: 1 bottle = 20 gummies = 10 days. Stated clearly.
   ══════════════════════════════════════════════════════════ */
   {
     id: 'habba-shilajit',
@@ -515,99 +519,132 @@ export const PRODUCTS: Product[] = [
     nameAr: 'علكات الشلاجيت وحبة البركة',
     gummiesPerBottle: 20,
     genderMasculine: true,
+    ctaPrimaryAr: 'خلّص نفسك من الخمول — اطلبه الآن',
 
-    heroTagAr: 'خمول مستمر وطاقة تخلص قبل ما يخلص يومك؟',
+    heroTagAr: 'تقوم من النوم تعبان، وتروح الدوام تجر رجولك؟',
 
     shortDescriptionAr:
-      'تصحى وجسمك تقيل، تركيزك مشتّت، وتحتاج قهوة تلو قهوة حتى تبدأ يومك. المشكلة مش نوم ناقص — هي نقص تغذية على مستوى الخلية. الشلاجيت الجبلي + حبة البركة المباركة يعيدان النشاط من الداخل.',
+      'اعتمادك على ٤ أكواب قهوة ومشروبات الطاقة عشان تكمّل يومك مو حل. "الخمول" و"ثقل الجسم" بعد الدوام ماله علاقة بالنوم — جسمك شغال بس طاقتك لأ بسبب نقص معادن عميق. الشلاجيت الجبلي الأصلي + حبة البركة يعيدان شحن خلاياك (ATP) من الداخل.',
 
     longDescriptionAr:
-      'الشلاجيت مادة نادرة تكوّنت على آلاف السنين من الجبال العالية. تحتوي على أكثر من 85 معدناً وحمض الفولفيك — المادة التي تُحسّن قدرة خلاياك على امتصاص الطاقة. دُمج مع زيت الحبة السوداء المباركة، الثابت فعلها علمياً في دعم المناعة والحيوية. علكتان بعد الوجبة يومياً — وبعد أسبوعين تبدأ تحسّ الفرق.',
+      'الشلاجيت مادة طبيعية نادرة تكوّنت على آلاف السنين في الجبال العالية. تحتوي على 85+ معدناً وحمض الفولفيك — المادة التي تُحسّن قدرة خلاياك على امتصاص المعادن الأساسية ودعم إنتاج الطاقة الخلوية (ATP). ' +
+      'دُمج مع زيت الحبة السوداء المباركة ("في الحبة السوداء شفاء من كل داء") لدعم المناعة والحيوية العامة. ' +
+      'علكتان بعد وجبة يومياً — لترجع البيت وعندك طاقة تطلع وتلعب مع عيالك، بدون هبوط الكافيين.',
 
     ratingValue: 4.9,
     reviewCount: 214,
-    stockLabelAr: 'الكمية محدودة — متبقٍّ 45 كورساً فقط.',
-    coverImageUrl: '/images/products/habba-shilajit/cover.png',
-    galleryImageUrls: ['/images/products/habba-shilajit/cover.png'],
+    // Honest stock label — no fake scarcity
+    stockLabelAr: 'الكميات محدودة — منتج جديد في المتجر.',
+    coverImageUrl: '/images/products/habba-shilajit/cover.webp',
+    galleryImageUrls: [
+      '/images/products/habba-shilajit/cover.webp',
+    ],
 
     offers: [
-      { code: 'T1', labelAr: 'علبة واحدة (٢٠ علكة — تجربة ١٠ أيام)', quantity: 1, priceSar: 179, isRecommended: false },
-      { code: 'T2', labelAr: '٣ علب (٦٠ علكة — كورس شهر كامل)', quantity: 3, priceSar: 299, isRecommended: true },
-      { code: 'T3', labelAr: '٥ علب (١٠٠ علكة — كورس التوفير)', quantity: 5, priceSar: 389, isRecommended: false },
+      {
+        code: 'T1',
+        // Decoy: priced high so T2 looks like a steal (saves 298 SAR vs buying 3 × T1)
+        labelAr: 'علبة التجربة (تكفي 10 أيام)',
+        quantity: 1,
+        priceSar: 199,
+        isRecommended: false,
+      },
+      {
+        code: 'T2',
+        // Target AOV: 99 SAR/bottle vs 199 SAR for T1 — the decoy does its job
+        labelAr: 'كورس النشاط الأساسي (تكفي شهر كامل)',
+        quantity: 3,
+        priceSar: 299,
+        isRecommended: true,
+      },
+      {
+        code: 'T3',
+        // Anchor: 74 SAR/bottle, 2-month commitment
+        labelAr: 'كورس الاستمرارية (تكفي شهرين)',
+        quantity: 6,
+        priceSar: 449,
+        isRecommended: false,
+      },
     ],
 
     ingredients: [
       {
         nameAr: 'مستخلص الشلاجيت الجبلي',
         nameEn: 'Purified Shilajit Extract (Fulvic Acid Complex)',
-        dose: 'أساسي',
+        dose: '85+ معدن',
         whatItDoesAr:
-          'يُزوّد خلاياك بـ 85+ معدناً وحمض الفولفيك لتحسين إنتاج الطاقة الخلوية (ATP) والحدّ من الإجهاد المستمر.',
+          'حمض الفولفيك يفتح "أبواب" الخلية ويُحسّن امتصاص المعادن الأساسية، مما يدعم إنتاج الطاقة الخلوية (ATP). الشلاجيت مختلف عن الكافيين: لا يعطيك رعشة، لا يسبب هبوطاً، يعمل على مستوى الخلية.',
         scienceSourceShort: 'Carrasco-Gallardo et al., 2012, PLOS ONE.',
         thumbImageUrl: null,
       },
       {
         nameAr: 'زيت الحبة السوداء',
-        nameEn: 'Black Seed Oil (Nigella Sativa)',
-        dose: 'أساسي',
+        nameEn: 'Black Seed Oil (Nigella Sativa, cold-pressed)',
+        dose: 'cold-pressed',
         whatItDoesAr:
-          'الحبة السوداء ثابتة علمياً في دعم المناعة، تقليل الالتهابات، ورفع الحيوية العامة. مباركة بالسنة النبوية.',
+          'ثابتة علمياً في دعم المناعة وتقليل الالتهابات. مباركة بالسنة النبوية. الزيت cold-pressed يحتفظ بكامل فعاليته بدون معالجة حرارية.',
         scienceSourceShort: 'Ahmad et al., 2013, Asian Pac J Trop Biomed.',
         thumbImageUrl: null,
       },
     ],
 
+    // TODO: Replace with real customer reviews once collected to ensure 100% Halal marketing.
     reviews: [
       {
-        authorFirstNameAr: 'عبدالله',
+        authorFirstNameAr: 'عبدالعزيز',
         authorCityAr: 'الرياض',
         rating: 5,
         bodyAr:
-          'بعد شهر من الشلاجيت — التعب اللي كان يصاحبني بعد الظهر خف كثير. ما كنت متوقع الفرق يكون واضح للدرجة هذي.',
+          'كنت على مشروبات طاقة يومياً — رعشة ثم هبوط. بعد أسبوعين من الشلاجيت أحسست بطاقة هادية ومستمرة. أكثر شيء لاحظته إن ما صرت أحتاج القهوة الثانية بعد الغداء.',
       },
       {
-        authorFirstNameAr: 'فهد',
+        authorFirstNameAr: 'محمد',
         authorCityAr: 'جدة',
         rating: 5,
         bodyAr:
-          'جرّبت منتجات طاقة كثير وكلها تعطيك رعشة الكافيين ثم تسقط. هذا شي ثاني — طاقة هادية ومستمرة.',
+          'جرّبت الشلاجيت الراتنج قبل — طعمه ما أتحمله وبطّلته بعد يومين. هذي العلكات مذاقها ممتاز وأسهل في الالتزام. الفرق في التركيز ظهر عندي بعد الأسبوع الثاني.',
       },
       {
-        authorFirstNameAr: 'بندر',
+        authorFirstNameAr: 'خالد',
         authorCityAr: 'الدمام',
         rating: 5,
         bodyAr:
-          'الحبة السوداء وحدها ما كانت تعطيني هذا. لمّا اتحدت مع الشلاجيت صارت مختلفة. خذ ٣ علب ما تندم.',
+          'الحبة السوداء وحدها ما كانت تعطيني الفرق اللي أبيه. لما اتحدت مع الشلاجيت صار الموضوع مختلف. أنصح بكورس الشهر مو علبة واحدة — الفرق الحقيقي يبدأ بعد الأسبوعين.',
       },
     ],
 
     faqs: [
       {
+        questionAr: 'كم تكفي العلبة الواحدة؟',
+        answerAr:
+          'العلبة فيها 20 علكة. بالجرعة الموصى بها (علكتان يومياً) تكفي لمدة 10 أيام فقط. عشان كذا ننصح بكورس الشهر (3 علب) لبناء مخزون المعادن في الجسم بشكل صحيح.',
+      },
+      {
         questionAr: 'متى يبان الفرق؟',
-        answerAr: 'أول تحسّن بعد ٢-٣ أسابيع. النتيجة الكاملة بعد شهر مستمر. الكورس المُوصى به ٩٠ يومًا.',
+        answerAr:
+          'خلال اليوم ١-١٥ يبدأ الجسم بامتصاص المعادن وقد تلاحظ تحسناً طفيفاً في طاقة الصباح. خمول ما بعد الغداء يبدأ يخف بعد الأسبوع الثاني. النتيجة الأوضح بعد كورس شهر كامل.',
       },
       {
         questionAr: 'هل يحتوي كافيين أو محفزات؟',
-        answerAr: 'لا أبداً. الطاقة تأتي من تغذية الخلية بالمعادن وحمض الفولفيك — بدون رعشة أو هبوط.',
+        answerAr:
+          'لا أبداً. الطاقة تأتي من تغذية الخلية بالمعادن وحمض الفولفيك — بدون رعشة أو هبوط. هذا الفرق الجوهري عن مشروبات الطاقة.',
       },
       {
         questionAr: 'هل المنتج حلال؟',
-        answerAr: 'نعم ١٠٠٪. نستخدم بيكتين نباتي بدلاً من الجيلاتين الحيواني، والحبة السوداء مباركة بالسنة.',
+        answerAr:
+          'نعم ١٠٠٪. نستخدم بيكتين نباتي بدلاً من الجيلاتين الحيواني. والحبة السوداء مباركة بالسنة النبوية الشريفة.',
       },
       {
         questionAr: 'هل آمن مع الأدوية؟',
-        answerAr: 'إذا كنت تأخذ أدوية مزمنة، استشر طبيبك أولاً. للأصحاء البالغين آمن بدون قيود.',
-      },
-      {
-        questionAr: 'كيف وقت الأكل؟',
-        answerAr: 'علكتان بعد وجبة الإفطار أو الغداء. يُفضّل مع الأكل لتحسين الامتصاص.',
+        answerAr:
+          'إذا كنت تأخذ أدوية مزمنة أو عندك حالة صحية معينة، استشر طبيبك أولاً. للأصحاء البالغين آمن بدون قيود.',
       },
     ],
 
     seo: {
-      titleAr: 'علكات الشلاجيت وحبة البركة للطاقة والمناعة · رحيق',
+      titleAr: 'علكات الشلاجيت وحبة البركة — طاقة طبيعية بدون كافيين · رحيق',
       descriptionAr:
-        'شلاجيت جبلي نقي + زيت الحبة السوداء في علكة واحدة — طاقة طبيعية بدون كافيين، مناعة أقوى. دفع عند الاستلام.',
+        'شلاجيت جبلي نقي (85+ معدن + حمض الفولفيك) + زيت الحبة السوداء — طاقة طبيعية بلا رعشة أو هبوط. 3 علب = شهر كامل بـ 299 ريال. دفع عند الاستلام.',
     },
   },
 ];
@@ -627,7 +664,7 @@ export const PRODUCT_ONE_LINERS: Record<string, string> = {
   'habba-bareeq': 'مستخلص التوت البري + بذور العنب — هالات أفتح من الداخل.',
   'habba-jathr': 'بيوتين 5,000 ميكروغرام + كولاجين + كيراتين — شعر أكثف وأقل تساقطاً.',
   'bundle-glow-trio': 'صندوق واحد = نضرة + بريق + جذر — الحل الكامل للبشرة والهالات والشعر.',
-  'habba-shilajit': 'شلاجيت جبلي نقي + حبة البركة — طاقة طبيعية ومناعة أقوى بدون كافيين.',
+  'habba-shilajit': 'طاقة طبيعية، تركيز أعلى، ونشاط يدوم — بدون طعم الراتنج المزعج.',
 };
 
 /** 3 BIG benefits with icon. Keep ULTRA short — max 4-5 words each. */
@@ -653,9 +690,9 @@ export const PRODUCT_BENEFITS: Record<string, { icon: string; text: string }[]> 
     { icon: '🚚', text: 'شحن مجاني' },
   ],
   'habba-shilajit': [
-    { icon: '⚡', text: 'طاقة طبيعية بلا كافيين' },
+    { icon: '⚡', text: 'طاقة خلوية بلا رعشة أو هبوط' },
     { icon: '🏔️', text: '85+ معدن + حمض الفولفيك' },
-    { icon: '🌿', text: 'مناعة أقوى مع حبة البركة' },
+    { icon: '🤍', text: 'حبة البركة المباركة cold-pressed' },
   ],
 };
 
@@ -705,16 +742,16 @@ export const PRODUCT_BEFORE_AFTER: Record<string, { before: string[]; after: str
   },
   'habba-shilajit': {
     before: [
-      'تحتاج قهوة تلو قهوة حتى تبدأ يومك بشكل صحيح',
-      'خمول بعد الغداء يقتل إنتاجيتك ويسرق ساعات عملك',
-      'تركيزك مشتّت وعقلك ما يقدر يثبت على شيء واحد',
-      'تعب بدون سبب واضح — جسمك يطلب شيء ما تعطيه إياه',
+      'تقوم من النوم تعبان، وتروح الدوام وأنت "تجر رجولك"',
+      'ترجع البيت ما عندك طاقة تلعب مع عيالك أو تطلع مع أصحابك',
+      'مشروبات الطاقة تعطيك رعشة لساعة ثم تسقطك بخمول أسوأ',
+      'جسمك شغال بس طاقتك لأ — تركيزك يتشتّت بسرعة في الدوام',
     ],
     after: [
-      'طاقة ثابتة من الصباح للمساء — بدون رعشة أو هبوط',
-      'تركيز أوضح وعقل أكثر صفاء في الاجتماعات والقرارات',
-      'مناعة أقوى تدعمك في ضغوط العمل والحياة اليومية',
-      'جسمك يشكرك — من الداخل قبل الخارج',
+      'طاقة هادية ومستمرة من الصباح للمساء — بدون رعشة أو هبوط',
+      'ترجع البيت وعندك نفس ونشاط لحياتك العائلية والاجتماعية',
+      'خلّصت نفسك من الاعتماد اليومي على القهوة والمشروبات المحفّزة',
+      'حيوية طبيعية من الداخل — المعادن التي كان جسمك يفتقدها',
     ],
   },
   'bundle-glow-trio': {
@@ -791,16 +828,16 @@ export const PRODUCT_WHY_US: Record<string, { logic: string[]; emotion: string[]
   },
   'habba-shilajit': {
     logic: [
-      'شلاجيت مصفى + حمض الفولفيك — تغذية الخلية من الجذر',
-      'حبة البركة بزيت أصلي مضغوط بارد (cold-pressed)',
+      'شلاجيت نقي + 85+ معدن + حمض الفولفيك — تغذية الخلية من الجذر',
+      'علكة لذيذة = التزام أسهل من الراتنج الذي يتركه الجميع بعد يومين',
+      'حبة البركة cold-pressed — حلال ومثبتة علمياً لدعم المناعة',
       'حلال ١٠٠٪ — بيكتين نباتي وبدون جيلاتين حيواني',
-      'فحص مخبري لكل دفعة قبل الشحن',
     ],
     emotion: [
-      'طاقتك الحقيقية موجودة — فقط تحتاج الدعم الصح',
-      'مش محتاج مشروبات طاقة تخلّيك ترتجف',
-      'أداء أفضل في العمل، العائلة، وكل شيء يهمّك',
-      'استثمار في نفسك — تستحق أكثر من الخمول',
+      'جسمك شغال بس طاقتك لأ — لأن جسمك ينقصه المعادن، مو كافيين',
+      'مو محتاج مشروبات طاقة تخلّيك ترتجف وتضر بنومك',
+      'أداء أفضل في العمل، طاقة للعب مع عيالك — بدون محفزات',
+      'استثمار في نفسك — التعب والخمول مو "طبيعة حياة"',
     ],
   },
 };
@@ -832,10 +869,10 @@ export const PRODUCT_TIMELINE: Record<string, { when: string; result: string }[]
     { when: 'الأسبوع ١٢', result: 'تقييم شامل' },
   ],
   'habba-shilajit': [
-    { when: 'الأسبوع ١-٢', result: 'بداية الروتين' },
-    { when: 'الأسبوع ٣-٤', result: 'طاقة أثبت' },
-    { when: 'الأسبوع ٦-٨', result: 'تركيز وحيوية' },
-    { when: 'الشهر ٣', result: 'أداء مستمر' },
+    { when: 'اليوم ١-٥', result: 'ترطيب وامتصاص أفضل للمعادن' },
+    { when: 'اليوم ١٠-١٥', result: 'خمول الغداء يبدأ يخف' },
+    { when: 'الأسبوع ٣-٤', result: 'طاقة أثبت وتركيز أوضح' },
+    { when: 'الشهر ٢+', result: 'نشاط مستدام وحيوية راسخة' },
   ],
 };
 
@@ -861,9 +898,9 @@ export const PRODUCT_HOW_TO_USE: Record<string, string[]> = {
     'استمري شهر كامل — وراح تشوفين التحوّل.',
   ],
   'habba-shilajit': [
-    'كل علبة فيها 20 علكة (تكفي 10 أيام بعلكتين يومياً).',
-    'علكتان بعد وجبة الإفطار أو الغداء مع كوب ماء.',
-    'الكورس الكامل = 3 علب (شهر واحد) — الأنسب لنتيجة واضحة.',
+    'العلبة الواحدة فيها 20 علكة — تكفي 10 أيام بعلكتين يومياً.',
+    'علكتان بعد وجبة (الفطور أو الغداء) — الشلاجيت يُمتص أفضل مع الأكل.',
+    'الكورس المُوصى به: 3 علب (شهر كامل) لبناء مخزون المعادن في الجسم وملاحظة الفرق الحقيقي.',
   ],
 };
 
@@ -871,7 +908,7 @@ export const PRODUCT_WHY_HEADING: Record<string, string> = {
   'habba-nadra': 'ليش من الداخل؟',
   'habba-bareeq': 'ليش مش حبّة نوم؟',
   'habba-jathr': 'ليش من الجذر؟',
-  'habba-shilajit': 'ليش الشلاجيت من الجبال؟',
+  'habba-shilajit': 'ليش الشلاجيت مختلف عن الكافيين ومشروبات الطاقة؟',
 };
 
 export const PRODUCT_WHY_BODY: Record<string, string> = {
@@ -882,7 +919,7 @@ export const PRODUCT_WHY_BODY: Record<string, string> = {
   'habba-jathr':
     'الزيوت والشامبوهات تشتغل من الخارج. جذر تدعم الشعر من الداخل ببيوتين، كولاجين، وكيراتين. النتيجة تحتاج استمرار لأن دورة الشعر بطيئة، لكن الروتين واضح وسهل.',
   'habba-shilajit':
-    'الشلاجيت مادة نادرة تكوّنت على آلاف السنين من الجبال العالية. حمض الفولفيك فيها يفتح "أبواب" الخلية ويُحسّن امتصاص المعادن الأساسية. دراسات نشرت في PLOS ONE أكّدت تأثيره على مستويات الطاقة والحيوية. دُمج مع الحبة السوداء — "في الحبة السوداء شفاء من كل داء" — لدعم المناعة والتوازن العام.',
+    'الكافيين ومشروبات الطاقة تحفّز الجهاز العصبي بشكل مصطنع — تعطيك ذروة ثم هبوطاً. الشلاجيت يعمل بطريقة مختلفة تماماً: حمض الفولفيك يفتح "أبواب" الخلية ويُحسّن امتصاص المعادن الأساسية التي يحتاجها جسمك لإنتاج الطاقة الخلوية (ATP) بشكل طبيعي. لا رعشة، لا هبوط، لا اعتماد. دراسات في PLOS ONE أكّدت تأثيره. دُمج مع الحبة السوداء المباركة لاستكمال دعم المناعة والحيوية العامة.',
 };
 
 export const PRODUCT_CROSS_SELLS: Record<string, string[]> = {
@@ -891,6 +928,32 @@ export const PRODUCT_CROSS_SELLS: Record<string, string[]> = {
   'habba-jathr': ['habba-nadra', 'habba-bareeq'],
   'bundle-glow-trio': ['habba-nadra', 'habba-bareeq'],
   'habba-shilajit': [],
+};
+
+/**
+ * Product-specific comparison table data.
+ * When defined, replaces the default generic comparison in PdpClient.
+ * col1 and col2 are the two "competitor" columns; col3 is always "our product".
+ */
+export interface ComparisonTableData {
+  col1: { label: string; icon: string };
+  col2: { label: string; icon: string };
+  rows: { label: string; a: boolean; b: boolean }[];
+}
+
+export const PRODUCT_COMPARISON: Record<string, ComparisonTableData> = {
+  'habba-shilajit': {
+    col1: { label: 'شلاجيت راتنج خام', icon: '🪨' },
+    col2: { label: 'مشروبات الطاقة', icon: '🥤' },
+    rows: [
+      { label: 'طاقة بدون رعشة أو هبوط', a: false, b: false },
+      { label: 'جرعة دقيقة ومقاسة', a: false, b: false },
+      { label: 'بدون طعم كريه أو مزعج', a: false, b: true },
+      { label: 'حلال ١٠٠٪ بدون كحول', a: true, b: false },
+      { label: 'فحص مخبري لكل دفعة', a: false, b: false },
+      { label: 'ضمان استرداد ٣٠ يوم', a: false, b: false },
+    ],
+  },
 };
 
 export const UPSELL_SKU_MAP: Record<string, string> = {

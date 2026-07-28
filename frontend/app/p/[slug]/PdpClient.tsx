@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { COPY } from '@/data/copy';
 import { formatSar } from '@/lib/price';
 import { useCartStore } from '@/store/cart';
-import { PRODUCT_CROSS_SELLS, getProductBySlug } from '@/data/products';
+import { PRODUCT_COMPARISON, PRODUCT_CROSS_SELLS, getProductBySlug } from '@/data/products';
 import { showToast } from '@/components/ui/Toast';
 import { trackAddToCart, trackViewContent } from '@/lib/analytics';
 import { cn } from '@/lib/cn';
@@ -145,8 +145,41 @@ export function PdpClient({
                   <p className="font-tajawal text-xs text-charcoal/60 mt-0.5">كل علبة تكفي شهر كامل</p>
                 </div>
               </div>
+            ) : product.slug === 'habba-shilajit' ? (
+              /* Shilajit: Before/After split hero + trust badges */
+              <div className="flex flex-col gap-3">
+                <div
+                  className="relative w-full overflow-hidden rounded-2xl bg-stone-100 shadow-[0_12px_40px_rgba(0,0,0,0.12)]"
+                  style={{ aspectRatio: '1/1' }}
+                >
+                  <Image
+                    src="/images/products/habba-shilajit/hero-split.webp"
+                    alt="الشلاجيت — من إرهاق وخمول إلى طاقة وتركيز"
+                    fill
+                    className="object-cover"
+                    priority
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                  />
+                </div>
+                <div className="grid grid-cols-4 gap-2">
+                  {[
+                    { icon: '💵', text: 'كاش عند الاستلام' },
+                    { icon: '🚚', text: 'شحن ١-٣ أيام' },
+                    { icon: '☪️', text: 'حلال ١٠٠٪' },
+                    { icon: '🛡️', text: 'ضمان ٣٠ يوم' },
+                  ].map((b) => (
+                    <div
+                      key={b.text}
+                      className="flex flex-col items-center gap-1 rounded-xl border border-emerald/20 bg-white p-2 text-center shadow-sm"
+                    >
+                      <span className="text-base leading-none">{b.icon}</span>
+                      <p className="font-tajawal text-[10px] font-bold leading-tight text-emerald">{b.text}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
             ) : (
-              /* Single product: standard image gallery */
+              /* Other single products: standard image gallery */
               <div className="flex flex-col gap-3">
                 <div className="relative aspect-square rounded-2xl overflow-hidden bg-stone-100">
                   <Image
@@ -312,12 +345,6 @@ export function PdpClient({
                               {m('وفّر', 'وفّري')} {savings} ر.س
                             </p>
                           )}
-                          {/* Per-unit price — makes decoy effect visceral */}
-                          {offer.quantity > 1 && (
-                            <p className="mt-0.5 font-tajawal text-[10px] font-bold text-blue-600">
-                              = {Math.round(offer.priceSar / offer.quantity)} ر.س / علبة
-                            </p>
-                          )}
                         </div>
 
                         <div className="shrink-0 text-left">
@@ -327,6 +354,15 @@ export function PdpClient({
                           )}>
                             {offer.priceSar} <span className="text-xs font-bold">ر.س</span>
                           </p>
+                          {/* Per-unit price on the RIGHT — decoy math hits instantly next to the big price */}
+                          {offer.quantity > 1 && (
+                            <p className={cn(
+                              'mt-0.5 font-tajawal text-[11px] font-black whitespace-nowrap',
+                              isActive ? 'text-emerald' : 'text-emerald/50',
+                            )}>
+                              {Math.round(offer.priceSar / offer.quantity)} ر.س/علبة
+                            </p>
+                          )}
                           {savings > 0 && (
                             <p className="mt-0.5 font-tajawal text-[10px] text-charcoal/35 line-through whitespace-nowrap">
                               {fullPrice} ر.س
@@ -352,7 +388,7 @@ export function PdpClient({
                 onClick={handleAddToCart}
                 className="h-16 text-xl shadow-[0_18px_42px_rgba(18,107,82,0.34)]"
               >
-                {m('اطلبه الآن', 'اطلبيها الآن')} · {formatSar(selectedOffer.priceSar)}
+                {product.ctaPrimaryAr ?? m('اطلبه الآن', 'اطلبيها الآن')} · {formatSar(selectedOffer.priceSar)}
               </Button>
 
               {/* Reassurance */}
@@ -477,10 +513,13 @@ export function PdpClient({
           </div>
           <div className="mt-10 rounded-2xl bg-white/10 border border-saffron/40 p-5 text-center backdrop-blur-sm">
             <p className="font-tajawal text-base font-bold text-saffron">
-              ⭐ النتيجة الواقعية تحتاج استمرار ٨-١٢ أسبوع
+              ⭐ {m('النتيجة الواقعية تحتاج استمرار شهر كامل على الأقل', 'النتيجة الواقعية تحتاج استمرار ٨-١٢ أسبوع')}
             </p>
             <p className="mt-1 font-tajawal text-sm text-saffron/70">
-              {m('عشان كذا كورس الشهر (٣ علب) هو الأنسب للالتزام، مو لأننا نبيع أكثر.', 'عشان كذا العلبتين أو ٣ علب هي الأفضل للالتزام، مو لأننا نبيع أكثر.')}
+              {m(
+                'عشان كذا كورس الشهر (٣ علب بـ ٢٩٩ ريال) هو الأنسب للالتزام — وهو الأوفر اقتصادياً بـ ٩٩ ريال/علبة بدل ١٩٩.',
+                'عشان كذا العلبتين أو ٣ علب هي الأفضل للالتزام، مو لأننا نبيع أكثر.',
+              )}
             </p>
           </div>
         </div>
@@ -600,51 +639,62 @@ export function PdpClient({
       </section>
 
       {/* ════ COMPARISON TABLE — Why us vs alternatives ════ */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <div className="text-center mb-10">
-            <p className="font-tajawal text-sm font-bold text-saffron mb-2">قارني بنفسكِ</p>
-            <h2 className="font-tajawal font-black text-3xl md:text-4xl text-emerald">
-              ليش {product.nameAr} أفضل؟
-            </h2>
-          </div>
+      {(() => {
+        // Use product-specific comparison if defined, otherwise fall back to defaults
+        const custom = PRODUCT_COMPARISON[product.slug];
+        const col1 = custom?.col1 ?? { label: 'كريمات خارجية', icon: '🧴' };
+        const col2 = custom?.col2 ?? { label: 'مكمّلات عادية', icon: '💊' };
+        const rows = custom?.rows ?? [
+          { label: 'يوصل للخلايا من الداخل', a: false, b: true },
+          { label: 'جرعات فعّالة ومثبتة', a: false, b: false },
+          { label: 'فحص مخبري لكل دفعة', a: false, b: false },
+          { label: 'طعم لذيذ أو كبسولة سهلة', a: true, b: false },
+          { label: 'حلال ١٠٠٪ بدون جيلاتين', a: true, b: false },
+          { label: 'ضمان استرداد', a: false, b: false },
+        ];
+        return (
+          <section className="py-16 bg-white">
+            <div className="container mx-auto px-4 max-w-4xl">
+              <div className="text-center mb-10">
+                <p className="font-tajawal text-sm font-bold text-saffron mb-2">
+                  {m('قارن بنفسك', 'قارني بنفسكِ')}
+                </p>
+                <h2 className="font-tajawal font-black text-3xl md:text-4xl text-emerald">
+                  ليش {product.nameAr} أفضل؟
+                </h2>
+              </div>
 
-          <div className="overflow-hidden rounded-3xl border border-[#E0D4C0] shadow-sm">
-            <div className="grid grid-cols-4 border-b border-[#E0D4C0] bg-[#FAFAF8]">
-              <div className="p-4" />
-              <div className="border-s border-[#E0D4C0] p-4 text-center">
-                <p className="font-tajawal text-[11px] text-charcoal/50">🧴</p>
-                <p className="font-tajawal text-xs font-bold text-charcoal/70">كريمات خارجية</p>
-              </div>
-              <div className="border-s border-[#E0D4C0] p-4 text-center">
-                <p className="font-tajawal text-[11px] text-charcoal/50">💊</p>
-                <p className="font-tajawal text-xs font-bold text-charcoal/70">مكمّلات عادية</p>
-              </div>
-              <div className="border-s-2 border-emerald bg-emerald/5 p-4 text-center">
-                <p className="font-tajawal text-[11px] text-emerald">🌿</p>
-                <p className="font-tajawal text-xs font-black text-emerald">{product.nameAr}</p>
+              <div className="overflow-hidden rounded-3xl border border-[#E0D4C0] shadow-sm">
+                <div className="grid grid-cols-4 border-b border-[#E0D4C0] bg-[#FAFAF8]">
+                  <div className="p-4" />
+                  <div className="border-s border-[#E0D4C0] p-4 text-center">
+                    <p className="font-tajawal text-[11px] text-charcoal/50">{col1.icon}</p>
+                    <p className="font-tajawal text-xs font-bold text-charcoal/70">{col1.label}</p>
+                  </div>
+                  <div className="border-s border-[#E0D4C0] p-4 text-center">
+                    <p className="font-tajawal text-[11px] text-charcoal/50">{col2.icon}</p>
+                    <p className="font-tajawal text-xs font-bold text-charcoal/70">{col2.label}</p>
+                  </div>
+                  <div className="border-s-2 border-emerald bg-emerald/5 p-4 text-center">
+                    <p className="font-tajawal text-[11px] text-emerald">🌿</p>
+                    <p className="font-tajawal text-xs font-black text-emerald">{product.nameAr}</p>
+                  </div>
+                </div>
+                {rows.map((row, i) => (
+                  <div key={row.label} className={`grid grid-cols-4 ${i % 2 === 0 ? 'bg-white' : 'bg-[#FAFAF8]'}`}>
+                    <div className="flex items-center p-4">
+                      <p className="font-tajawal text-xs font-medium text-charcoal/80">{row.label}</p>
+                    </div>
+                    <CompareCell value={row.a} />
+                    <CompareCell value={row.b} />
+                    <CompareCell value={true} highlight />
+                  </div>
+                ))}
               </div>
             </div>
-            {[
-              { label: 'يوصل للخلايا من الداخل', a: false, b: true, c: true },
-              { label: 'جرعات فعّالة ومثبتة', a: false, b: false, c: true },
-              { label: 'فحص مخبري لكل دفعة', a: false, b: false, c: true },
-              { label: 'طعم لذيذ أو كبسولة سهلة', a: true, b: false, c: true },
-              { label: 'حلال ١٠٠٪ بدون جيلاتين', a: true, b: false, c: true },
-              { label: 'ضمان استرداد', a: false, b: false, c: true },
-            ].map((row, i) => (
-              <div key={row.label} className={`grid grid-cols-4 ${i % 2 === 0 ? 'bg-white' : 'bg-[#FAFAF8]'}`}>
-                <div className="flex items-center p-4">
-                  <p className="font-tajawal text-xs font-medium text-charcoal/80">{row.label}</p>
-                </div>
-                <CompareCell value={row.a} />
-                <CompareCell value={row.b} />
-                <CompareCell value={row.c} highlight />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+          </section>
+        );
+      })()}
 
       {/* ════ HOW TO USE ════ */}
       <section className="py-16 bg-ivory">
@@ -950,7 +1000,7 @@ export function PdpClient({
           >
             {hasThisProductInCart
               ? m(`أكمل طلبك · ${selectedOffer.priceSar} ر.س`, `أكملي طلبكِ · ${selectedOffer.priceSar} ر.س`)
-              : m(`اطلبه الآن · ${selectedOffer.priceSar} ر.س`, `اطلبيها الآن · ${selectedOffer.priceSar} ر.س`)}
+              : `${product.ctaPrimaryAr ?? m(`اطلبه الآن`, `اطلبيها الآن`)} · ${selectedOffer.priceSar} ر.س`}
           </Button>
         </div>
       </section>
@@ -978,7 +1028,7 @@ export function PdpClient({
         >
           {hasThisProductInCart
             ? m(`أكمل طلبك · ${formatSar(selectedOffer.priceSar)}`, `أكملي طلبكِ · ${formatSar(selectedOffer.priceSar)}`)
-            : m(`اطلبه الآن · ${formatSar(selectedOffer.priceSar)}`, `اطلبيها الآن · ${formatSar(selectedOffer.priceSar)}`)}
+            : `${product.ctaPrimaryAr ?? m(`اطلبه الآن`, `اطلبيها الآن`)} · ${formatSar(selectedOffer.priceSar)}`}
         </Button>
         <p className="mt-1.5 text-center font-tajawal text-[11px] font-bold text-emerald">
           🚚 الدفع عند الاستلام · 🛡️ ضمان ٣٠ يوم

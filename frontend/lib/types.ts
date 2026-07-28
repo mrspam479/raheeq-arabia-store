@@ -65,6 +65,9 @@ export type Product = {
   gummiesPerBottle?: number;
   /** True for products targeting a male audience — switches all Arabic gendered copy to masculine */
   genderMasculine?: boolean;
+  /** Override the default CTA label on Add-to-Cart / Sticky bar / Final CTA */
+  ctaPrimaryAr?: string;
+  ctaPrimaryFemAr?: string;
 };
 
 export type OrderLineIn = {
