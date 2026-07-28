@@ -220,26 +220,39 @@ export function CheckoutModal() {
           onClick={(e) => e.stopPropagation()}
         >
           {/* ── Header ── */}
-          <div className="flex items-center justify-between bg-emerald px-5 py-3.5">
-            <div className="flex items-center gap-2">
-              {/* Lock icon — implies security */}
-              <svg className="h-4 w-4 text-saffron shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-              </svg>
-              <div>
-                <p className="font-tajawal text-[10px] font-bold text-saffron tracking-widest">خطوة واحدة فقط</p>
-                <h2 className="font-tajawal text-lg font-black text-white leading-tight">{m('أكمل طلبك الآن', 'أكملي طلبكِ الآن')}</h2>
+          <div className="bg-emerald px-5 py-3.5">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <svg className="h-4 w-4 text-saffron shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+                <div>
+                  <p className="font-tajawal text-[10px] font-bold text-saffron tracking-widest">🔒 خطوة واحدة فقط</p>
+                  <h2 className="font-tajawal text-lg font-black text-white leading-tight">{m('طلبك على وشك يوصلك!', 'طلبكِ على وشك يوصلك!')}</h2>
+                </div>
               </div>
+              <button
+                onClick={closeCheckout}
+                className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-white hover:bg-white/30 transition-colors"
+                aria-label="إغلاق"
+              >
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
             </div>
-            <button
-              onClick={closeCheckout}
-              className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-white hover:bg-white/30 transition-colors"
-              aria-label="إغلاق"
-            >
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
+            {/* 3-step progress */}
+            <div className="mt-3 flex items-center gap-1">
+              {[m('أكمل بياناتك', 'أكملي بياناتكِ'), m('نتصل نأكد', 'نتصل نأكد'), m('استلم وادفع', 'استلمي وادفعي')].map((step, i) => (
+                <div key={step} className="flex items-center gap-1 flex-1">
+                  <div className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-black ${i === 0 ? 'bg-saffron text-emerald' : 'bg-white/20 text-white/60'}`}>
+                    {i + 1}
+                  </div>
+                  <p className={`font-tajawal text-[10px] font-bold truncate ${i === 0 ? 'text-saffron' : 'text-white/50'}`}>{step}</p>
+                  {i < 2 && <div className="flex-1 h-px bg-white/20 mx-1" />}
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* ── Body — fits one screen, no scroll ── */}
@@ -355,6 +368,23 @@ export function CheckoutModal() {
               <p className="mt-1 font-tajawal text-xs text-charcoal/50">{COPY.CHECKOUT.PHONE_HINT}</p>
             </div>
 
+            {/* What happens next */}
+            <div className="rounded-2xl bg-emerald/5 border border-emerald/15 px-3 py-2.5">
+              <p className="font-tajawal text-[11px] font-black text-emerald mb-2">📦 ماذا يصير بعد ما تأكّد؟</p>
+              <div className="flex flex-col gap-1.5">
+                {[
+                  { icon: '📞', text: m('نتصل بك خلال ساعات نأكد الطلب', 'نتصل بكِ خلال ساعات نأكد الطلب') },
+                  { icon: '🚚', text: 'نوصّل خلال ١-٣ أيام عمل' },
+                  { icon: '💵', text: m('تدفع كاش للمندوب — بدون بطاقة', 'تدفعين كاش للمندوب — بدون بطاقة') },
+                ].map((s) => (
+                  <div key={s.icon} className="flex items-center gap-2">
+                    <span className="text-sm shrink-0">{s.icon}</span>
+                    <p className="font-tajawal text-[11px] text-charcoal/70">{s.text}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             {/* Submit */}
             <Button
               type="submit"
@@ -364,12 +394,17 @@ export function CheckoutModal() {
               loading={submitting}
               className="h-14 text-base font-black shadow-lg shadow-emerald/30"
             >
-              {m('أكّد الطلب — دفع عند الاستلام', 'أكّدي الطلب — دفع عند الاستلام')}
+              {m('أكّد الطلب — دفع عند الاستلام', 'أكّدي الطلب — دفع عند الاستلام')} 🔒
             </Button>
 
-            <p className="text-center font-tajawal text-[10px] text-charcoal/35 pb-1">
-              {m('سنتصل بك لتأكيد الطلب وأخذ العنوان · بدون بطاقة', 'سنتصل بكِ لتأكيد الطلب وأخذ العنوان · بدون بطاقة')}
-            </p>
+            {/* Prominent exit link */}
+            <button
+              type="button"
+              onClick={closeCheckout}
+              className="w-full py-1 text-center font-tajawal text-xs text-charcoal/45 hover:text-emerald transition-colors"
+            >
+              ← {m('رجوع لقراءة تفاصيل المنتج', 'رجوع لقراءة تفاصيل المنتج')}
+            </button>
           </form>
         </div>
       </div>

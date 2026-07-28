@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useCartStore } from '@/store/cart';
+import { PRODUCTS } from '@/data/products';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { COPY } from '@/data/copy';
@@ -17,6 +18,11 @@ const COUNTDOWN_SECONDS = 15;
 export function UpsellModal() {
   const { isUpsellOpen, closeUpsell, lastOrderId, upsellToken, upsellSku, clearCart } = useCartStore();
   const router = useRouter();
+
+  // Determine gender from the upsell product
+  const upsellProduct = PRODUCTS.find((p) => p.slug === upsellSku);
+  const isMasc = upsellProduct?.genderMasculine ?? false;
+  const m = (masculine: string, feminine: string) => isMasc ? masculine : feminine;
   const [seconds, setSeconds] = useState(COUNTDOWN_SECONDS);
   const [accepting, setAccepting] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -155,29 +161,38 @@ export function UpsellModal() {
           {/* Content */}
           <div className="flex flex-col gap-4 p-5">
             <div>
-              <p className="mb-1 font-tajawal text-xs font-bold text-saffron">
-                عرض يظهر مرة واحدة
+              <p className="mb-1 font-tajawal text-xs font-bold text-saffron uppercase tracking-wide">
+                ⚡ عرض يظهر مرة واحدة فقط
               </p>
-              <h2 className="font-tajawal text-2xl font-black leading-tight text-emerald">
-                أضيفي المنتج المكمل لطلبك بـ 99 SAR
+              <h2 className="font-tajawal text-xl font-black leading-tight text-emerald">
+                {m(
+                  'قبل ما يوصلك الطلب — أضف كميّة إضافية بسعر خاص',
+                  'قبل ما يوصلك الطلب — أضيفي الكمية الإضافية بسعر خاص',
+                )}
               </h2>
-              <p className="mt-2 font-tajawal text-sm leading-relaxed text-charcoal/75">
-                ينضم لنفس الطلب بدون شحن إضافي. إذا خرجتِ من هنا، ما يرجع العرض.
+              <p className="mt-2 font-tajawal text-sm leading-relaxed text-charcoal/70">
+                {m(
+                  'ينضم لنفس الشحنة بدون رسوم إضافية. لو خرجت من هنا، العرض ما يرجع.',
+                  'ينضم لنفس الشحنة بدون رسوم إضافية. لو خرجتِ من هنا، العرض ما يرجع.',
+                )}
               </p>
             </div>
 
             {/* Price */}
-            <div className="rounded-2xl border border-emerald/10 bg-ivory p-4 text-center">
-              <p className="font-tajawal text-xs font-bold text-saffron">سعر خاص الآن</p>
-              <span className="font-inter text-4xl font-black text-emerald">
+            <div className="rounded-2xl border-2 border-emerald/20 bg-emerald/5 p-4 text-center">
+              <p className="font-tajawal text-xs font-bold text-saffron mb-1">سعر خاص — الآن فقط</p>
+              <span className="font-tajawal text-4xl font-black text-emerald">
                 {formatSar(UPSELL_PRICE)}
               </span>
-              <div className="mt-1 flex items-center justify-center gap-2">
-                <span className="font-tajawal text-sm text-charcoal/45 line-through">
+              <div className="mt-1.5 flex items-center justify-center gap-2">
+                <span className="font-tajawal text-sm text-charcoal/40 line-through">
                   {formatSar(199)}
                 </span>
-                <Badge variant="saffron">وفّري 100 SAR</Badge>
+                <Badge variant="saffron">{m('وفّر 100 ر.س', 'وفّري 100 ر.س')}</Badge>
               </div>
+              <p className="mt-1.5 font-tajawal text-[11px] text-charcoal/55">
+                🚚 {m('يوصلك مع نفس الطلب — بدون شحن زيادة', 'يوصلكِ مع نفس الطلب — بدون شحن زيادة')}
+              </p>
             </div>
 
             <Button
@@ -188,15 +203,15 @@ export function UpsellModal() {
               onClick={handleAccept}
               className="h-16 text-lg touch-manipulation select-none"
             >
-              أضيفيها لطلبي الآن · 99 SAR
+              {m(`أضفه لطلبي · ${formatSar(UPSELL_PRICE)}`, `أضيفيها لطلبي · ${formatSar(UPSELL_PRICE)}`)}
             </Button>
 
             <button
               onClick={handleDecline}
               disabled={accepting}
-              className="w-full py-3 text-center font-tajawal text-xs text-charcoal/50 transition-colors hover:text-charcoal disabled:opacity-40 touch-manipulation"
+              className="w-full py-2 text-center font-tajawal text-xs text-charcoal/40 transition-colors hover:text-charcoal disabled:opacity-40 touch-manipulation"
             >
-              لا شكرًا، كمّلي طلبي بدون العرض
+              {m('لا شكرًا، أكمل بدون العرض', 'لا شكرًا، أكملي بدون العرض')}
             </button>
           </div>
         </div>
