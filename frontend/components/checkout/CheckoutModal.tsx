@@ -173,7 +173,9 @@ export function CheckoutModal() {
       if (isLocalPreview()) {
         const previewOrderId = `preview-${Date.now()}`;
         trackPurchase(previewOrderId, total, values.phone, values.name, uuidv4());
-        openUpsell(previewOrderId, 'preview-upsell-token', 'habba-bareeq', { name: values.name, phone: values.phone });
+        // Use the actual product slug for the preview upsell so gender/image is correct
+        const previewSku = lines[0]?.productId ?? 'habba-bareeq';
+        openUpsell(previewOrderId, 'preview-upsell-token', previewSku, { name: values.name, phone: values.phone });
         return;
       }
 
