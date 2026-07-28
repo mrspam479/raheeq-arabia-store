@@ -514,6 +514,7 @@ export const PRODUCTS: Product[] = [
     slug: 'habba-shilajit',
     nameAr: 'علكات الشلاجيت وحبة البركة',
     gummiesPerBottle: 20,
+    genderMasculine: true,
 
     heroTagAr: 'خمول مستمر وطاقة تخلص قبل ما يخلص يومك؟',
 

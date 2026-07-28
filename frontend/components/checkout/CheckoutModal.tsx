@@ -29,6 +29,10 @@ export function CheckoutModal() {
     useCartStore();
   const [submitting, setSubmitting] = useState(false);
   const [mounted, setMounted] = useState(false);
+
+  // Determine if any cart product targets a male audience
+  const isMasc = lines.some((l) => PRODUCTS.find((p) => p.slug === l.productId)?.genderMasculine);
+  const m = (masculine: string, feminine: string) => isMasc ? masculine : feminine;
   const modalRef = useRef<HTMLDivElement>(null);
   const idempotencyRef = useRef<string>(uuidv4());
 
@@ -222,7 +226,7 @@ export function CheckoutModal() {
               </svg>
               <div>
                 <p className="font-tajawal text-[10px] font-bold text-saffron tracking-widest">خطوة واحدة فقط</p>
-                <h2 className="font-tajawal text-lg font-black text-white leading-tight">أكملي طلبكِ الآن</h2>
+                <h2 className="font-tajawal text-lg font-black text-white leading-tight">{m('أكمل طلبك الآن', 'أكملي طلبكِ الآن')}</h2>
               </div>
             </div>
             <button
@@ -320,7 +324,7 @@ export function CheckoutModal() {
             <div className="flex items-center gap-2 py-0.5">
               <div className="flex-1 h-px bg-stone-200" />
               <p className="font-tajawal text-[13px] font-bold text-charcoal/60 whitespace-nowrap">
-                اكتبي اسمكِ ورقم جوالكِ
+                {m('اكتب اسمك ورقم جوالك', 'اكتبي اسمكِ ورقم جوالكِ')}
               </p>
               <div className="flex-1 h-px bg-stone-200" />
             </div>
@@ -358,11 +362,11 @@ export function CheckoutModal() {
               loading={submitting}
               className="h-14 text-base font-black shadow-lg shadow-emerald/30"
             >
-              أكّدي الطلب — دفع عند الاستلام
+              {m('أكّد الطلب — دفع عند الاستلام', 'أكّدي الطلب — دفع عند الاستلام')}
             </Button>
 
             <p className="text-center font-tajawal text-[10px] text-charcoal/35 pb-1">
-              سنتصل بكِ لتأكيد الطلب وأخذ العنوان · بدون بطاقة
+              {m('سنتصل بك لتأكيد الطلب وأخذ العنوان · بدون بطاقة', 'سنتصل بكِ لتأكيد الطلب وأخذ العنوان · بدون بطاقة')}
             </p>
           </form>
         </div>

@@ -63,6 +63,10 @@ export function PdpClient({
   const [selectedTier, setSelectedTier] = useState<1 | 2 | 3>(() => getDefaultTier(product));
   const [activeImage, setActiveImage] = useState(0);
 
+  // Gender-aware copy helper — returns masculine or feminine Arabic form
+  const isMasc = !!product.genderMasculine;
+  const m = (masculine: string, feminine: string) => isMasc ? masculine : feminine;
+
   const selectedOffer = product.offers.find((o) => o.code === `T${selectedTier}`)!;
   const singleBoxPrice = product.offers.find((o) => o.code === 'T1')?.priceSar ?? 199;
   const isBundle = product.slug === 'bundle-glow-trio';
@@ -237,7 +241,7 @@ export function PdpClient({
               <div>
                 <div className="mb-3 flex items-center justify-between">
                   <p className="font-tajawal font-bold text-base text-emerald">
-                    اختاري عرضكِ:
+                    {m('اختر عرضك:', 'اختاري عرضكِ:')}
                   </p>
                   <span className="rounded-full bg-red-50 px-2.5 py-0.5 font-tajawal text-[11px] font-bold text-red-600">
                     ⏳ عرض محدود
@@ -305,7 +309,13 @@ export function PdpClient({
                           </p>
                           {savings > 0 && (
                             <p className="mt-0.5 font-tajawal text-[11px] font-bold text-[#00A85A]">
-                              وفّري {savings} ر.س
+                              {m('وفّر', 'وفّري')} {savings} ر.س
+                            </p>
+                          )}
+                          {/* Per-unit price — makes decoy effect visceral */}
+                          {offer.quantity > 1 && (
+                            <p className="mt-0.5 font-tajawal text-[10px] font-bold text-blue-600">
+                              = {Math.round(offer.priceSar / offer.quantity)} ر.س / علبة
                             </p>
                           )}
                         </div>
@@ -342,7 +352,7 @@ export function PdpClient({
                 onClick={handleAddToCart}
                 className="h-16 text-xl shadow-[0_18px_42px_rgba(18,107,82,0.34)]"
               >
-                اطلبيها الآن · {formatSar(selectedOffer.priceSar)}
+                {m('اطلبه الآن', 'اطلبيها الآن')} · {formatSar(selectedOffer.priceSar)}
               </Button>
 
               {/* Reassurance */}
@@ -351,7 +361,7 @@ export function PdpClient({
                   💵 الدفع عند الاستلام — بدون بطاقة
                 </p>
                 <p className="mt-1 font-tajawal text-xs text-charcoal/70">
-                  نتّصل بكِ نأكد الطلب · نوصّل خلال ١-٣ أيام · ادفعي كاش للمندوب
+                  {m('نتّصل بك نأكد الطلب · نوصّل خلال ١-٣ أيام · ادفع كاش للمندوب', 'نتّصل بكِ نأكد الطلب · نوصّل خلال ١-٣ أيام · ادفعي كاش للمندوب')}
                 </p>
               </div>
 
@@ -373,10 +383,10 @@ export function PdpClient({
         <div className="container mx-auto px-4 max-w-4xl">
           <div className="text-center mb-8">
             <h2 className="font-tajawal font-black text-3xl md:text-4xl text-charcoal">
-              هل تعانين من هذي الأعراض؟
+              {m('هل تعاني من هذي الأعراض؟', 'هل تعانين من هذي الأعراض؟')}
             </h2>
             <p className="mt-2 font-tajawal text-sm text-charcoal/60">
-              إذا قلتي &ldquo;أيوه&rdquo; على واحدة — {product.nameAr} صُنعت لكِ
+              {m(`إذا قلت "أيوه" على واحد — ${product.nameAr} صُنع لك`, `إذا قلتي "أيوه" على واحدة — ${product.nameAr} صُنعت لكِ`)}
             </p>
           </div>
 
@@ -396,7 +406,7 @@ export function PdpClient({
 
           <div className="mt-8 rounded-3xl border-2 border-emerald/20 bg-emerald/5 p-6 text-center">
             <p className="font-tajawal text-base font-black text-emerald">
-              ✨ {product.nameAr} تعالج هذي المشاكل من جذورها — من الداخل.
+              {m(`✨ ${product.nameAr} يعالج هذي المشاكل من جذورها — من الداخل.`, `✨ ${product.nameAr} تعالج هذي المشاكل من جذورها — من الداخل.`)}
             </p>
           </div>
 
@@ -426,7 +436,7 @@ export function PdpClient({
                   · {product.reviews[2].authorCityAr}
                 </span>
                 <span className="ms-auto rounded-full bg-emerald/8 px-2 py-0.5 font-tajawal text-[10px] font-bold text-emerald border border-emerald/20">
-                  مشترية موثّقة ✓
+                  {m('مشترٍ موثّق ✓', 'مشترية موثّقة ✓')}
                 </span>
               </div>
             </div>
@@ -439,12 +449,12 @@ export function PdpClient({
         <div className="absolute -top-20 -right-20 h-60 w-60 rounded-full bg-saffron/15 blur-3xl" />
         <div className="container mx-auto px-4 max-w-5xl relative">
           <div className="text-center mb-10">
-            <p className="font-tajawal text-sm font-bold text-saffron mb-2">السؤال اللي تسأله كل وحدة</p>
+            <p className="font-tajawal text-sm font-bold text-saffron mb-2">{m('السؤال اللي يسأله كل واحد', 'السؤال اللي تسأله كل وحدة')}</p>
             <h2 className="font-tajawal font-black text-3xl md:text-4xl text-saffron">
               متى أشوف نتيجة؟
             </h2>
             <p className="mt-3 font-tajawal text-base text-saffron/80 max-w-xl mx-auto">
-              مرحلة بمرحلة — هذا اللي راح يصير لكِ
+              {m('مرحلة بمرحلة — هذا اللي راح يصير لك', 'مرحلة بمرحلة — هذا اللي راح يصير لكِ')}
             </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -470,7 +480,7 @@ export function PdpClient({
               ⭐ النتيجة الواقعية تحتاج استمرار ٨-١٢ أسبوع
             </p>
             <p className="mt-1 font-tajawal text-sm text-saffron/70">
-              عشان كذا العلبتين أو ٣ علب هي الأفضل للالتزام، مو لأننا نبيع أكثر.
+              {m('عشان كذا كورس الشهر (٣ علب) هو الأنسب للالتزام، مو لأننا نبيع أكثر.', 'عشان كذا العلبتين أو ٣ علب هي الأفضل للالتزام، مو لأننا نبيع أكثر.')}
             </p>
           </div>
         </div>
@@ -484,7 +494,7 @@ export function PdpClient({
               التحوّل الحقيقي
             </span>
             <h2 className="font-tajawal font-black text-3xl md:text-4xl text-charcoal leading-tight">
-              حياتكِ <span className="text-red-500">قبل</span> و<span className="text-emerald">بعد</span> {product.nameAr}
+              {m('حياتك', 'حياتكِ')} <span className="text-red-500">قبل</span> و<span className="text-emerald">بعد</span> {product.nameAr}
             </h2>
           </div>
 
@@ -495,7 +505,7 @@ export function PdpClient({
                 <div className="mb-5 flex items-center gap-3">
                   <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-red-500/20 text-lg">😔</span>
                   <div>
-                    <p className="font-tajawal text-lg font-black text-white">حياتكِ اليوم</p>
+                    <p className="font-tajawal text-lg font-black text-white">{m('حياتك اليوم', 'حياتكِ اليوم')}</p>
                     <p className="font-tajawal text-[11px] text-white/50">بدون {product.nameAr}</p>
                   </div>
                 </div>
@@ -514,12 +524,12 @@ export function PdpClient({
               {/* AFTER */}
               <div className="bg-gradient-to-br from-emerald to-[#00A85A] p-8 md:p-10 relative">
                 <div className="absolute top-4 left-4 rounded-full bg-saffron px-3 py-1 font-tajawal text-[10px] font-black text-emerald shadow-lg">
-                  ⭐ هدفكِ
+                  {m('⭐ هدفك', '⭐ هدفكِ')}
                 </div>
                 <div className="mb-5 flex items-center gap-3">
                   <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/20 text-lg">✨</span>
                   <div>
-                    <p className="font-tajawal text-lg font-black text-white">حياتكِ بعد الاستمرار</p>
+                    <p className="font-tajawal text-lg font-black text-white">{m('حياتك بعد الاستمرار', 'حياتكِ بعد الاستمرار')}</p>
                     <p className="font-tajawal text-[11px] text-saffron/90">مع {product.nameAr}</p>
                   </div>
                 </div>
@@ -547,16 +557,19 @@ export function PdpClient({
               <span className="text-6xl">🛡️</span>
             </div>
             <p className="mb-2 font-tajawal text-sm font-black uppercase tracking-widest text-saffron">
-              وعد رحيق لكِ
+              {m('وعد رحيق لك', 'وعد رحيق لكِ')}
             </p>
             <h2
               className="font-tajawal font-black leading-tight text-emerald"
               style={{ fontSize: 'clamp(1.8rem, 5vw, 3rem)' }}
             >
-              ضمان ٣٠ يوم كامل — أو فلوسكِ ترجع
+              {m('ضمان ٣٠ يوم كامل — أو فلوسك ترجع', 'ضمان ٣٠ يوم كامل — أو فلوسكِ ترجع')}
             </h2>
             <p className="mx-auto mt-5 max-w-xl font-tajawal text-lg leading-relaxed text-charcoal/75">
-              جرّبي لمدة ٣٠ يوم. إذا ما لاحظتي فرق أو ما عجبكِ لأي سبب — <span className="font-black text-emerald">نرجّع فلوسكِ كاملة. بدون أسئلة. بدون شروط.</span>
+              {m(
+                'جرّب لمدة ٣٠ يوم. إذا ما لاحظت فرق أو ما عجبك لأي سبب —',
+                'جرّبي لمدة ٣٠ يوم. إذا ما لاحظتي فرق أو ما عجبكِ لأي سبب —',
+              )} <span className="font-black text-emerald">{m('نرجّع فلوسك كاملة. بدون أسئلة. بدون شروط.', 'نرجّع فلوسكِ كاملة. بدون أسئلة. بدون شروط.')}</span>
             </p>
 
             <div className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-4 md:grid-cols-3">
@@ -579,7 +592,7 @@ export function PdpClient({
 
             <div className="mx-auto mt-8 max-w-lg rounded-2xl bg-saffron/10 border border-saffron/30 p-4">
               <p className="font-tajawal text-sm font-bold text-charcoal/80">
-                💬 يعني ببساطة: اطلبي، جرّبي ٣٠ يوم، لو ما عجبكِ — نرجّع فلوسكِ. انتهى.
+                {m('💬 يعني ببساطة: اطلب، جرّب ٣٠ يوم، لو ما عجبك — نرجّع فلوسك. انتهى.', '💬 يعني ببساطة: اطلبي، جرّبي ٣٠ يوم، لو ما عجبكِ — نرجّع فلوسكِ. انتهى.')}
               </p>
             </div>
           </div>
@@ -638,7 +651,7 @@ export function PdpClient({
         <div className="container mx-auto px-4 max-w-4xl">
           <div className="text-center mb-10">
             <h2 className="font-tajawal font-black text-3xl md:text-4xl text-emerald">
-              كيف تستخدمينها؟
+              {m('كيف تستخدمه؟', 'كيف تستخدمينها؟')}
             </h2>
             <p className="mt-2 font-tajawal text-base text-charcoal/60">أبسط روتين ممكن</p>
           </div>
@@ -713,9 +726,9 @@ export function PdpClient({
       <section className="py-16 bg-ivory">
         <div className="container mx-auto px-4 max-w-3xl">
           <div className="text-center mb-10">
-            <p className="mb-2 font-tajawal text-sm font-bold text-saffron">عميلات قرأن المكونات قبل ما يطلبن</p>
+            <p className="mb-2 font-tajawal text-sm font-bold text-saffron">{m('عملاء قرأوا المكونات قبل الشراء', 'عميلات قرأن المكونات قبل ما يطلبن')}</p>
             <h2 className="font-tajawal font-black text-3xl md:text-4xl text-emerald">
-              اختيار النساء اللي ما يصدّقن أي إعلان
+              {m('اختيار من يبحث قبل ما يشتري', 'اختيار النساء اللي ما يصدّقن أي إعلان')}
             </h2>
             <div className="mt-3 inline-flex items-center gap-2">
               <StarRating value={product.ratingValue} showValue reviewCount={product.reviewCount} size="md" />
@@ -740,7 +753,7 @@ export function PdpClient({
                   <span className="font-tajawal text-[11px] text-charcoal/50">
                     · {review.authorCityAr}
                   </span>
-                  <Badge variant="ivory" className="ms-auto text-[10px]">مشترية موثّقة</Badge>
+                  <Badge variant="ivory" className="ms-auto text-[10px]">{m('مشترٍ موثّق', 'مشترية موثّقة')}</Badge>
                 </div>
               </div>
             ))}
@@ -774,8 +787,8 @@ export function PdpClient({
         </div>
       </section>
 
-      {/* ════ BUNDLE UPSELL — only on non-bundle PDPs ════ */}
-      {product.slug !== 'bundle-glow-trio' && (
+      {/* ════ BUNDLE UPSELL — only on women's non-bundle PDPs ════ */}
+      {product.slug !== 'bundle-glow-trio' && !product.genderMasculine && (
       <section className="py-16 bg-gradient-to-br from-[#FFF7E6] via-ivory to-[#FFEFD9]">
         <div className="container mx-auto px-4 max-w-5xl">
           <div className="text-center mb-8">
@@ -921,13 +934,13 @@ export function PdpClient({
       <section className="py-16 bg-emerald text-ivory text-center">
         <div className="container mx-auto px-4 max-w-2xl">
           <p className="font-tajawal text-sm font-bold text-saffron mb-3">
-            🛡️ ضمان ٣٠ يوم كامل · دفع عند الاستلام · ما عندكِ شي تخسرينه
+            {m('🛡️ ضمان ٣٠ يوم كامل · دفع عند الاستلام · ما عندك شي تخسره', '🛡️ ضمان ٣٠ يوم كامل · دفع عند الاستلام · ما عندكِ شي تخسرينه')}
           </p>
           <h2 className="font-tajawal font-black text-3xl md:text-4xl mb-4">
-            جاهزة تجرّبين {product.nameAr}؟
+            {m(`جاهز تجرّب ${product.nameAr}؟`, `جاهزة تجرّبين ${product.nameAr}؟`)}
           </h2>
           <p className="font-tajawal text-base text-white/80 mb-8">
-            حبّتين بالصباح · مؤشرات أولية خلال ٤-٨ أسابيع · شحن ١-٣ أيام
+            علكتان بعد الوجبة · مؤشرات أولية خلال أسبوعين · شحن ١-٣ أيام
           </p>
           <Button
             variant="primary"
@@ -936,8 +949,8 @@ export function PdpClient({
             className="h-16 text-xl px-12 shadow-[0_18px_42px_rgba(0,0,0,0.3)]"
           >
             {hasThisProductInCart
-              ? `أكملي طلبكِ · ${selectedOffer.priceSar} ر.س`
-              : `اطلبيها الآن · ${selectedOffer.priceSar} ر.س`}
+              ? m(`أكمل طلبك · ${selectedOffer.priceSar} ر.س`, `أكملي طلبكِ · ${selectedOffer.priceSar} ر.س`)
+              : m(`اطلبه الآن · ${selectedOffer.priceSar} ر.س`, `اطلبيها الآن · ${selectedOffer.priceSar} ر.س`)}
           </Button>
         </div>
       </section>
@@ -964,8 +977,8 @@ export function PdpClient({
           className="h-14 text-lg font-black cta-pulse"
         >
           {hasThisProductInCart
-            ? `أكملي طلبكِ · ${formatSar(selectedOffer.priceSar)}`
-            : `اطلبيها الآن · ${formatSar(selectedOffer.priceSar)}`}
+            ? m(`أكمل طلبك · ${formatSar(selectedOffer.priceSar)}`, `أكملي طلبكِ · ${formatSar(selectedOffer.priceSar)}`)
+            : m(`اطلبه الآن · ${formatSar(selectedOffer.priceSar)}`, `اطلبيها الآن · ${formatSar(selectedOffer.priceSar)}`)}
         </Button>
         <p className="mt-1.5 text-center font-tajawal text-[11px] font-bold text-emerald">
           🚚 الدفع عند الاستلام · 🛡️ ضمان ٣٠ يوم

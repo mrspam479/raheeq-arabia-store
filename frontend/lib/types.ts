@@ -63,6 +63,8 @@ export type Product = {
   faqs: Faq[];
   seo: ProductSeo;
   gummiesPerBottle?: number;
+  /** True for products targeting a male audience — switches all Arabic gendered copy to masculine */
+  genderMasculine?: boolean;
 };
 
 export type OrderLineIn = {
