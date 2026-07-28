@@ -110,7 +110,7 @@ async def check_ip(ip: str, phone: str | None = None) -> GeoCheckResult:
     url = MAXMIND_INSIGHTS_URL.format(ip=ip)
 
     try:
-        async with httpx.AsyncClient(timeout=8.0) as client:
+        async with httpx.AsyncClient(timeout=2.5) as client:
             resp = await client.get(
                 url,
                 auth=(settings.MAXMIND_ACCOUNT_ID, settings.MAXMIND_LICENSE_KEY),
@@ -174,9 +174,10 @@ async def check_ip(ip: str, phone: str | None = None) -> GeoCheckResult:
         return res
 
     except httpx.TimeoutException:
-        # Fail-CLOSED on timeout to prevent fraud bypass
-        logger.warning("MaxMind timeout for IP %s — blocking (fail-closed)", ip)
-        return GeoCheckResult(allowed=False, reason="maxmind_timeout")
+        # Fail-OPEN on timeout: losing a real Saudi customer costs more than the
+        # rare fraud case that slips through on a 2.5 s MaxMind outage.
+        logger.warning("MaxMind timeout for IP %s — allowing (fail-open)", ip)
+        return GeoCheckResult(allowed=True, reason="maxmind_timeout_failopen")
     except Exception as exc:
         logger.error("MaxMind error for IP %s: %s — blocking (fail-closed)", ip, exc)
         return GeoCheckResult(allowed=False, reason="maxmind_exception")

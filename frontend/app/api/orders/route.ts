@@ -20,6 +20,7 @@ const PRODUCT_NAMES: Record<string, string> = {
   'habba-bareeq': 'حبّة بريق',
   'habba-jathr': 'حبّة جذر',
   'bundle-glow-trio': 'صندوق الجمال الكامل',
+  'habba-shilajit': 'حبّة شيلاجيت',
 };
 
 const PRODUCT_SKUS: Record<string, string> = {
@@ -27,12 +28,7 @@ const PRODUCT_SKUS: Record<string, string> = {
   'habba-bareeq': 'RHQ-BRQ-001',
   'habba-jathr': 'RHQ-JTR-001',
   'bundle-glow-trio': 'RHQ-BND-001',
-};
-
-const OFFER_QUANTITIES: Record<string, number> = {
-  T1: 1,
-  T2: 2,
-  T3: 3,
+  'habba-shilajit': 'RHQ-SHJ-001',
 };
 
 function formatPhone(raw: string): string {
@@ -52,15 +48,23 @@ function todayFormatted(): string {
   return `${dd}/${mm}/${now.getFullYear()}`;
 }
 
-async function sendToSheet(orderInput: {
-  customer: { full_name: string; phone: string };
-  lines: { product_slug: string; offer_code: string }[];
-}, totalSar: number) {
+async function sendToSheet(
+  orderInput: {
+    customer: { full_name: string; phone: string };
+    lines: { product_slug: string; offer_code: string }[];
+  },
+  totalSar: number,
+  orderLines?: { product_slug: string; quantity: number; is_upsell: boolean }[],
+) {
   if (!SHEET_WEBHOOK_URL) return;
 
   const products = orderInput.lines.map((l) => PRODUCT_NAMES[l.product_slug] || l.product_slug);
   const skus = orderInput.lines.map((l) => PRODUCT_SKUS[l.product_slug] || l.product_slug);
-  const quantities = orderInput.lines.map((l) => String(OFFER_QUANTITIES[l.offer_code] || 1));
+  // Use actual quantities from the backend order response (correct for all products)
+  const quantities = orderInput.lines.map((l) => {
+    const matched = orderLines?.find((ol) => ol.product_slug === l.product_slug && !ol.is_upsell);
+    return String(matched?.quantity ?? 1);
+  });
 
   const payload = {
     date: todayFormatted(),
@@ -118,7 +122,7 @@ export async function POST(req: NextRequest) {
     if (res.status === 201 && !parsed.honeypot) {
       const orderRes = JSON.parse(data);
       const totalSar = orderRes?.order?.total_sar ?? 0;
-      sendToSheet(parsed, totalSar);
+      sendToSheet(parsed, totalSar, orderRes?.order?.lines ?? []);
     }
 
     return new NextResponse(data, {

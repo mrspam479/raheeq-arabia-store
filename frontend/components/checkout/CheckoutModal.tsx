@@ -50,11 +50,13 @@ export function CheckoutModal() {
     defaultValues: { name: '', phone: '', honeypot: '' },
   });
 
-  // Reset idempotency key each open
+  // Reset idempotency key each open + pre-warm MaxMind geo cache so the
+  // order POST hits the in-memory cache and returns in < 50 ms.
   useEffect(() => {
     if (isCheckoutOpen) {
       idempotencyRef.current = uuidv4();
       reset();
+      void fetch('/api/geo/warm').catch(() => {});
     }
   }, [isCheckoutOpen, reset]);
 

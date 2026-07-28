@@ -35,6 +35,18 @@ def _get_client_ip(request: Request) -> str:
     return ""
 
 
+@router.get("/geo-warm", status_code=204, include_in_schema=False)
+async def geo_warm(request: Request) -> None:
+    """
+    Lightweight endpoint called by the frontend when the checkout modal opens.
+    Pre-warms the MaxMind IP cache so the actual order POST hits the cache
+    and returns in < 50 ms instead of waiting 200-600 ms for MaxMind.
+    """
+    client_ip = _get_client_ip(request)
+    if client_ip:
+        asyncio.create_task(geocheck_ip(client_ip))
+
+
 @router.post("", response_model=OrderCreateOut, status_code=201)
 async def create_order(
     payload: OrderCreateIn,
