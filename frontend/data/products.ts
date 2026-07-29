@@ -536,6 +536,7 @@ export const PRODUCTS: Product[] = [
     // Honest stock label — no fake scarcity
     stockLabelAr: 'الكميات محدودة — منتج جديد في المتجر.',
     coverImageUrl: '/images/products/habba-shilajit/cover.webp',
+    offerThumbnailUrl: '/images/products/habba-shilajit/bottle.webp',
     galleryImageUrls: [
       '/images/products/habba-shilajit/cover.webp',
     ],

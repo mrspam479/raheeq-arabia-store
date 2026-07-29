@@ -68,6 +68,8 @@ export type Product = {
   /** Override the default CTA label on Add-to-Cart / Sticky bar / Final CTA */
   ctaPrimaryAr?: string;
   ctaPrimaryFemAr?: string;
+  /** Custom thumbnail shown inside the offer cards (stack view). Falls back to coverImageUrl. */
+  offerThumbnailUrl?: string;
 };
 
 export type OrderLineIn = {

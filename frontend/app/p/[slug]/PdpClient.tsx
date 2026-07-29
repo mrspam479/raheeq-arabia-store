@@ -304,27 +304,27 @@ export function PdpClient({
                           </span>
                         )}
 
-                        {/* Thumbnails — max 2 shown for T3 to avoid overflow */}
-                        <div className="flex shrink-0 items-center gap-1">
-                          {Array.from({ length: Math.min(offer.quantity, 2) }, (_, idx) => (
+                        {/* Thumbnails: show up to 3 bottles so T1=1, T2=3, T3=3+badge */}
+                        <div className="flex shrink-0 items-center gap-0.5">
+                          {Array.from({ length: Math.min(offer.quantity, 3) }, (_, idx) => (
                             <div
                               key={idx}
                               className={cn(
-                                'relative overflow-hidden rounded-lg bg-stone-100',
-                                isBundle ? 'h-11 w-12 border border-emerald/15' : 'h-11 w-9',
+                                'relative overflow-hidden rounded-lg',
+                                isBundle ? 'h-11 w-12 bg-stone-100 border border-emerald/15' : 'h-12 w-8 bg-transparent',
                               )}
                             >
                               <Image
-                                src={product.coverImageUrl}
+                                src={product.offerThumbnailUrl ?? product.coverImageUrl}
                                 alt={product.nameAr}
                                 fill
-                                className={isBundle ? 'object-contain p-1' : 'object-cover'}
-                                sizes="44px"
+                                className="object-contain"
+                                sizes="36px"
                               />
                             </div>
                           ))}
-                          {offer.quantity > 2 && (
-                            <span className="flex h-11 w-9 items-center justify-center rounded-lg bg-emerald/10 font-tajawal text-sm font-black text-emerald">
+                          {offer.quantity > 3 && (
+                            <span className="flex h-11 w-8 items-center justify-center rounded-lg bg-emerald/10 font-tajawal text-sm font-black text-emerald">
                               ×{offer.quantity}
                             </span>
                           )}
