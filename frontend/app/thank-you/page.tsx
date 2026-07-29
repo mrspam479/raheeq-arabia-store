@@ -108,27 +108,80 @@ export default function ThankYouPage() {
 
             {/* Items */}
             <div className="bg-white px-5 py-4 space-y-3 border-b border-stone-100">
-              {lastOrderSummary.lines.map((line) => (
-                <div key={line.productId} className="flex items-center gap-3">
-                  <div className="relative h-14 w-11 shrink-0 overflow-hidden rounded-xl bg-stone-50 ring-1 ring-black/5">
-                    <Image src={line.imageUrl} alt={line.nameAr} fill className="object-contain p-1" sizes="44px" />
+              {lastOrderSummary.lines.map((line, idx) => {
+                const isUpsellLine = idx > 0; // first line = original order, rest = upsell
+                return (
+                  <div key={`${line.productId}-${idx}`}>
+                    {isUpsellLine && (
+                      <div className="flex items-center gap-2 mb-2 mt-1">
+                        <div className="flex-1 h-px bg-stone-100" />
+                        <span className="rounded-full bg-[#F5C842]/20 px-2 py-0.5 font-tajawal text-[10px] font-black text-amber-700">
+                          ⚡ عرض خاص أُضيف
+                        </span>
+                        <div className="flex-1 h-px bg-stone-100" />
+                      </div>
+                    )}
+                    <div className="flex items-center gap-3">
+                      <div className="relative h-14 w-11 shrink-0 overflow-hidden rounded-xl bg-stone-50 ring-1 ring-black/5">
+                        <Image src={line.imageUrl} alt={line.nameAr} fill className="object-contain p-1" sizes="44px" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-tajawal text-sm font-black text-charcoal line-clamp-2 leading-snug">
+                          {isUpsellLine ? (
+                            <>
+                              علكات الشلاجيت{' '}
+                              <span className="text-[#0A2A1A]">× {line.quantity} علب</span>
+                            </>
+                          ) : (
+                            line.nameAr
+                          )}
+                        </p>
+                        <p className="font-tajawal text-xs text-charcoal/45 mt-0.5">
+                          {line.quantity === 1 ? 'علبة واحدة' : `${line.quantity} علب`}
+                          {isUpsellLine && (
+                            <span className="mr-1 text-amber-600 font-bold"> · عرض محدود</span>
+                          )}
+                        </p>
+                      </div>
+                      <div className="shrink-0 text-left">
+                        <p className={`font-tajawal text-base font-black leading-none ${isUpsellLine ? 'text-amber-600' : 'text-charcoal'}`}>
+                          {formatSar(line.totalPrice)}
+                        </p>
+                        {isUpsellLine && (
+                          <p className="font-tajawal text-[10px] text-charcoal/35 line-through text-left mt-0.5">
+                            398 ر.س
+                          </p>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-tajawal text-sm font-black text-charcoal line-clamp-1">{line.nameAr}</p>
-                    <p className="font-tajawal text-xs text-charcoal/45 mt-0.5">
-                      {line.quantity === 1 ? 'علبة واحدة' : `${line.quantity} علب`}
-                    </p>
-                  </div>
-                  <p className="font-tajawal text-base font-black text-charcoal shrink-0">{formatSar(line.totalPrice)}</p>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
-            {/* Total row */}
+            {/* Subtotal breakdown — visible only if upsell was accepted */}
+            {lastOrderSummary.lines.length > 1 && (
+              <div className="bg-stone-50 px-5 py-3 border-b border-stone-100 space-y-1.5">
+                {lastOrderSummary.lines.map((line, idx) => (
+                  <div key={`sub-${idx}`} className="flex items-center justify-between">
+                    <p className="font-tajawal text-xs text-charcoal/50">
+                      {idx === 0
+                        ? `الطلب الأصلي (${line.quantity} علب)`
+                        : `عرض خاص (${line.quantity} علب)`}
+                    </p>
+                    <p className="font-tajawal text-xs font-bold text-charcoal">{formatSar(line.totalPrice)}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Shipping row */}
             <div className="bg-white px-5 py-3 border-b border-stone-100 flex items-center justify-between">
               <p className="font-tajawal text-sm text-charcoal/50">الشحن</p>
               <p className="font-tajawal text-sm font-bold text-[#4ADE80]">مجاني 🎁</p>
             </div>
+
+            {/* Total */}
             <div className="bg-[#0A2A1A] px-5 py-4 flex items-center justify-between">
               <p className="font-tajawal text-sm font-black text-white/70">المجموع الكلي</p>
               <div className="text-left">

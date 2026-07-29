@@ -19,8 +19,10 @@ const UPSELL_NORMAL_PRICE = 398; // 2 × T1 price (199 SAR each)
 const SAVINGS = UPSELL_NORMAL_PRICE - UPSELL_ADD_PRICE; // 299 SAR
 
 export function UpsellModal() {
-  const { isUpsellOpen, closeUpsell, lastOrderId, upsellToken, upsellSku, clearCart, lines } =
-    useCartStore();
+  const {
+    isUpsellOpen, closeUpsell, lastOrderId, upsellToken, upsellSku,
+    clearCart, lines, lastOrderSummary, setLastOrderSummary,
+  } = useCartStore();
   const router = useRouter();
 
   const cartProduct = PRODUCTS.find((p) => p.slug === lines[0]?.productId);
@@ -29,6 +31,12 @@ export function UpsellModal() {
 
   const isShilajit = lines[0]?.productId === 'habba-shilajit';
   const orderedTier = lines[0]?.offerCode ?? 'T2';
+
+  // Compute early so handleAccept can reference them before the mounted guard
+  const bottleImgEarly = isShilajit
+    ? '/images/products/habba-shilajit/bottle.webp'
+    : `/images/products/${upsellSku || 'habba-bareeq'}/cover.webp`;
+  const productShortNameEarly = isShilajit ? 'الشلاجيت' : (cartProduct?.nameAr ?? 'المنتج');
 
   const [mounted, setMounted] = useState(false);
   const [seconds, setSeconds] = useState(COUNTDOWN_SECONDS);
@@ -111,6 +119,24 @@ export function UpsellModal() {
       }
     } else if (upsellToken === 'preview-upsell-token') {
       showToast(COPY.UPSELL.SUCCESS_TOAST, 'success');
+    }
+
+    // Append upsell line to the receipt so thank-you page shows the full order
+    if (lastOrderSummary) {
+      setLastOrderSummary({
+        ...lastOrderSummary,
+        lines: [
+          ...lastOrderSummary.lines,
+          {
+            productId: lines[0]?.productId ?? 'habba-shilajit',
+            nameAr: `${productShortNameEarly} — عرض خاص × ٢`,
+            imageUrl: bottleImgEarly,
+            quantity: 2,
+            totalPrice: UPSELL_ADD_PRICE,
+          },
+        ],
+        totalSar: lastOrderSummary.totalSar + UPSELL_ADD_PRICE,
+      });
     }
 
     // Always navigate — regardless of token presence
