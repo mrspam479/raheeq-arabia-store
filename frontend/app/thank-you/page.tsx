@@ -5,11 +5,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useCartStore } from '@/store/cart';
 import { PRODUCTS } from '@/data/products';
-import { Button } from '@/components/ui/Button';
 import { formatSar } from '@/lib/price';
 
 export default function ThankYouPage() {
-  // Zustand persists to sessionStorage — wait one tick for hydration
   const [hydrated, setHydrated] = useState(false);
   useEffect(() => setHydrated(true), []);
 
@@ -20,20 +18,14 @@ export default function ThankYouPage() {
   const [phoneSaved, setPhoneSaved] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
-  // Gender-aware copy based on the products ordered
   const orderedProductIds = lastOrderSummary?.lines.map((l) => l.productId) ?? [];
-  const isMasc = orderedProductIds.some(
-    (id) => PRODUCTS.find((p) => p.slug === id)?.genderMasculine,
-  );
+  const isMasc = orderedProductIds.some((id) => PRODUCTS.find((p) => p.slug === id)?.genderMasculine);
   const m = (masc: string, fem: string) => (isMasc ? masc : fem);
 
   const handlePhoneSave = () => {
     if (newPhone.trim().length < 9) return;
     if (typeof sessionStorage !== 'undefined') {
-      sessionStorage.setItem(
-        'phone_correction',
-        JSON.stringify({ orderId: lastOrderId, correctedPhone: newPhone.trim() }),
-      );
+      sessionStorage.setItem('phone_correction', JSON.stringify({ orderId: lastOrderId, correctedPhone: newPhone.trim() }));
     }
     setPhoneSaved(true);
   };
@@ -49,151 +41,147 @@ export default function ThankYouPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#F7F5F0]" dir="rtl">
+    <div className="min-h-screen bg-[#F0EDE8]" dir="rtl">
 
-      {/* ── HERO ──────────────────────────────────────────────── */}
-      <div className="bg-emerald px-4 pt-10 pb-8 text-center">
-        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-white/20">
-          <svg className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      {/* ══ DARK HERO — same DNA as upsell popup ══════════════════ */}
+      <div className="bg-[#0A2A1A] px-5 pt-10 pb-8 text-center">
+        {/* Animated checkmark circle */}
+        <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-[#4ADE80]/15 ring-4 ring-[#4ADE80]/30">
+          <svg className="h-10 w-10 text-[#4ADE80]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
           </svg>
         </div>
-        <h1 className="font-tajawal text-2xl font-black text-white">
-          {m('تم استلام طلبك بنجاح ✓', 'تم استلام طلبكِ بنجاح ✓')}
+        <p className="font-tajawal text-xs font-black text-[#F5C842] tracking-widest mb-1">
+          ✅ تم تأكيد الطلب
+        </p>
+        <h1 className="font-tajawal text-2xl font-black text-white leading-snug">
+          {m('طلبك وصلنا — شكراً لك!', 'طلبكِ وصلنا — شكراً لكِ!')}
         </h1>
-        <p className="mt-1 font-tajawal text-sm text-white/80">
+        <p className="mt-2 font-tajawal text-sm text-white/60">
           فريقنا بيتصل خلال{' '}
-          <span className="font-black text-saffron">٢٤ ساعة</span>{' '}
+          <span className="font-black text-[#F5C842]">٢٤ ساعة</span>{' '}
           {m('لتأكيد طلبك', 'لتأكيد طلبكِ')}
+        </p>
+
+        {/* "What happens next" — inside dark header */}
+        <div className="mt-6 flex items-stretch justify-center gap-2">
+          {[
+            { icon: '📞', step: '١', title: 'نتصل نأكد', sub: 'خلال ٢٤ س' },
+            { icon: '🚚', step: '٢', title: 'نشحن طلبك', sub: '١–٣ أيام' },
+            { icon: '💵', step: '٣', title: 'تدفع عند الاستلام', sub: 'كاش فقط' },
+          ].map((s, i) => (
+            <div key={i} className="relative flex flex-1 flex-col items-center gap-1.5 rounded-2xl bg-white/5 ring-1 ring-white/10 px-2 py-3">
+              <span className="text-xl">{s.icon}</span>
+              <p className="font-tajawal text-[11px] font-black text-white leading-tight text-center">{s.title}</p>
+              <p className="font-tajawal text-[10px] text-white/40 text-center">{s.sub}</p>
+              {i < 2 && (
+                <div className="absolute -left-1.5 top-1/2 -translate-y-1/2 text-white/20 text-xs font-black">›</div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        <p className="mt-3 font-tajawal text-xs font-bold text-[#F5C842]/80">
+          📞 {m('ردّ على مكالمة التأكيد — بدونها ما نقدر نشحن', 'ردّي على مكالمة التأكيد — بدونها ما نقدر نشحن')}
         </p>
       </div>
 
       <div className="mx-auto max-w-md space-y-4 px-4 py-5">
 
-        {/* ── ORDER SUMMARY ─────────────────────────────────────── */}
+        {/* ══ RECEIPT / ORDER SUMMARY ════════════════════════════ */}
         {hydrated && lastOrderSummary && lastOrderSummary.lines.length > 0 && (
-          <div className="rounded-2xl bg-white border border-stone-200 overflow-hidden shadow-sm">
-            <div className="px-5 py-4 border-b border-stone-100">
-              <p className="font-tajawal text-xs font-bold text-charcoal/50 uppercase mb-3">
-                ملخّص {m('طلبك', 'طلبكِ')}
-              </p>
-              <div className="space-y-3">
-                {lastOrderSummary.lines.map((line) => (
-                  <div key={line.productId} className="flex items-center gap-3">
-                    <div className="relative h-14 w-11 shrink-0 overflow-hidden rounded-xl bg-stone-50 ring-1 ring-black/5">
-                      <Image
-                        src={line.imageUrl}
-                        alt={line.nameAr}
-                        fill
-                        className="object-contain p-1"
-                        sizes="44px"
-                      />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="font-tajawal text-sm font-black text-charcoal line-clamp-1">
-                        {line.nameAr}
-                      </p>
-                      <p className="font-tajawal text-xs text-charcoal/50 mt-0.5">
-                        {line.quantity === 1 ? 'علبة واحدة' : `${line.quantity} علب`}
-                      </p>
-                    </div>
-                    <p className="font-tajawal text-base font-black text-emerald shrink-0 whitespace-nowrap">
-                      {formatSar(line.totalPrice)}
+          <div className="overflow-hidden rounded-2xl shadow-lg ring-1 ring-black/10">
+            {/* Receipt header */}
+            <div className="bg-[#0A2A1A] px-5 py-3.5 flex items-center justify-between">
+              <div>
+                <p className="font-tajawal text-[10px] font-bold text-[#F5C842]/70 uppercase tracking-widest">
+                  وصل الطلب
+                </p>
+                {hydrated && lastOrderId && (
+                  <p className="font-mono text-[10px] text-white/30 mt-0.5">#{lastOrderId}</p>
+                )}
+              </div>
+              <span className="rounded-full bg-[#4ADE80]/15 px-3 py-1 font-tajawal text-xs font-black text-[#4ADE80]">
+                مؤكّد ✓
+              </span>
+            </div>
+
+            {/* Items */}
+            <div className="bg-white px-5 py-4 space-y-3 border-b border-stone-100">
+              {lastOrderSummary.lines.map((line) => (
+                <div key={line.productId} className="flex items-center gap-3">
+                  <div className="relative h-14 w-11 shrink-0 overflow-hidden rounded-xl bg-stone-50 ring-1 ring-black/5">
+                    <Image src={line.imageUrl} alt={line.nameAr} fill className="object-contain p-1" sizes="44px" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-tajawal text-sm font-black text-charcoal line-clamp-1">{line.nameAr}</p>
+                    <p className="font-tajawal text-xs text-charcoal/45 mt-0.5">
+                      {line.quantity === 1 ? 'علبة واحدة' : `${line.quantity} علب`}
                     </p>
                   </div>
-                ))}
+                  <p className="font-tajawal text-base font-black text-charcoal shrink-0">{formatSar(line.totalPrice)}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Total row */}
+            <div className="bg-white px-5 py-3 border-b border-stone-100 flex items-center justify-between">
+              <p className="font-tajawal text-sm text-charcoal/50">الشحن</p>
+              <p className="font-tajawal text-sm font-bold text-[#4ADE80]">مجاني 🎁</p>
+            </div>
+            <div className="bg-[#0A2A1A] px-5 py-4 flex items-center justify-between">
+              <p className="font-tajawal text-sm font-black text-white/70">المجموع الكلي</p>
+              <div className="text-left">
+                <p className="font-tajawal text-3xl font-black text-[#F5C842] leading-none">
+                  {lastOrderSummary.totalSar}
+                </p>
+                <p className="font-tajawal text-[10px] font-bold text-[#F5C842]/60 text-left">ريال سعودي</p>
               </div>
             </div>
-            <div className="px-5 py-3 bg-emerald/5 flex items-center justify-between">
-              <p className="font-tajawal text-sm font-black text-charcoal">المجموع الكلي</p>
-              <p className="font-tajawal text-lg font-black text-emerald">
-                {formatSar(lastOrderSummary.totalSar)}
+
+            {/* Payment note */}
+            <div className="bg-[#0A2A1A]/5 px-5 py-3 flex items-center gap-2">
+              <span className="text-base">💵</span>
+              <p className="font-tajawal text-xs font-bold text-charcoal/60">
+                الدفع نقداً عند الاستلام — لا تحويل، لا بطاقة
               </p>
             </div>
           </div>
         )}
 
-        {/* ── WHAT HAPPENS NEXT ─────────────────────────────────── */}
-        <div className="rounded-2xl bg-white border border-stone-200 px-5 py-4 shadow-sm">
-          <p className="font-tajawal text-xs font-bold text-charcoal/50 uppercase mb-4">
-            ماذا سيحدث الآن؟
-          </p>
-          <div className="space-y-3">
-            {[
-              {
-                icon: '📞',
-                title: m('سنتصل بك قريباً', 'سنتصل بكِ قريباً'),
-                sub: 'لتأكيد الطلب والعنوان',
-              },
-              {
-                icon: '🚚',
-                title: 'سيتم شحن طلبك',
-                sub: 'خلال ١–٣ أيام عمل',
-              },
-              {
-                icon: '💵',
-                title: 'الدفع نقداً عند الاستلام',
-                sub: 'لا بطاقة، لا تحويل — فقط كاش للمندوب',
-              },
-            ].map((step, i) => (
-              <div key={i} className="flex items-start gap-3">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald/10 text-lg">
-                  {step.icon}
-                </div>
-                <div>
-                  <p className="font-tajawal text-sm font-black text-charcoal">{step.title}</p>
-                  <p className="font-tajawal text-xs text-charcoal/50">{step.sub}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-          <p className="mt-4 rounded-xl bg-saffron/10 px-3 py-2 text-center font-tajawal text-xs font-bold text-emerald">
-            📞 {m('ردّ على مكالمة التأكيد — بدونها ما نقدر نشحن', 'ردّي على مكالمة التأكيد — بدونها ما نقدر نشحن')}
-          </p>
-        </div>
-
-        {/* ── CONFIRMATION CARD ─────────────────────────────────── */}
+        {/* ══ CUSTOMER INFO CARD ═════════════════════════════════ */}
         {hydrated && (
-          <div className="rounded-2xl bg-white border border-stone-200 overflow-hidden shadow-sm">
-            <div className="px-5 py-4 border-b border-stone-100">
-              <p className="font-tajawal text-xs font-bold text-charcoal/50 uppercase mb-3">
-                {m('تأكّد من بياناتك', 'تأكّدي من بياناتكِ')}
+          <div className="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-black/5">
+            <div className="bg-[#0A2A1A] px-5 py-3">
+              <p className="font-tajawal text-[10px] font-bold text-[#F5C842]/70 uppercase tracking-widest">
+                {m('بياناتك', 'بياناتكِ')}
               </p>
-              <div className="space-y-2">
-                <Row label="الاسم" value={lastOrderCustomer?.name ?? '—'} />
-                <Row label="الجوال" value={lastOrderCustomer?.phone ?? '—'} mono />
-              </div>
             </div>
-            <div className="px-5 py-3 bg-stone-50">
+            <div className="px-5 py-4 space-y-2.5">
+              <InfoRow label="الاسم" value={lastOrderCustomer?.name ?? '—'} />
+              <InfoRow label="الجوال" value={lastOrderCustomer?.phone ?? '—'} mono />
+            </div>
+            <div className="px-5 py-3 bg-stone-50 border-t border-stone-100">
               {!phoneSaved ? (
                 !showPhoneEdit ? (
                   <button
                     onClick={() => setShowPhoneEdit(true)}
-                    className="font-tajawal text-sm font-bold text-red-600 underline underline-offset-2"
+                    className="font-tajawal text-sm font-bold text-red-500 underline underline-offset-2"
                   >
                     {m('الرقم مو صح؟ صحّحه هنا', 'الرقم مو صح؟ صحّحيه هنا')}
                   </button>
                 ) : (
                   <div className="flex items-center gap-2">
                     <input
-                      type="tel"
-                      dir="ltr"
-                      placeholder="05xxxxxxxx"
-                      value={newPhone}
-                      onChange={(e) => setNewPhone(e.target.value)}
-                      className="flex-1 rounded-xl border border-stone-300 bg-white px-3 py-2 font-mono text-sm outline-none focus:border-emerald"
+                      type="tel" dir="ltr" placeholder="05xxxxxxxx"
+                      value={newPhone} onChange={(e) => setNewPhone(e.target.value)}
+                      className="flex-1 rounded-xl border border-stone-300 bg-white px-3 py-2 font-mono text-sm outline-none focus:border-[#0A2A1A]"
                       autoFocus
                     />
-                    <button
-                      onClick={handlePhoneSave}
-                      className="rounded-xl bg-emerald px-4 py-2 font-tajawal text-sm font-black text-white"
-                    >
+                    <button onClick={handlePhoneSave} className="rounded-xl bg-[#0A2A1A] px-4 py-2 font-tajawal text-sm font-black text-white">
                       حفظ
                     </button>
-                    <button
-                      onClick={() => setShowPhoneEdit(false)}
-                      className="rounded-xl border border-stone-200 px-3 py-2 font-tajawal text-sm text-charcoal/60"
-                    >
+                    <button onClick={() => setShowPhoneEdit(false)} className="rounded-xl border border-stone-200 px-3 py-2 font-tajawal text-sm text-charcoal/60">
                       إلغاء
                     </button>
                   </div>
@@ -201,77 +189,67 @@ export default function ThankYouPage() {
               ) : (
                 <div className="flex items-center gap-2">
                   <span className="text-lg">✅</span>
-                  <p className="font-tajawal text-sm font-bold text-emerald">
-                    سجّلنا الرقم الجديد — فريقنا بيتصل عليه
-                  </p>
+                  <p className="font-tajawal text-sm font-bold text-[#0A2A1A]">سجّلنا الرقم — فريقنا بيتصل عليه</p>
                 </div>
               )}
             </div>
           </div>
         )}
 
-        {/* ── FAQ ACCORDION ─────────────────────────────────────── */}
-        <div className="rounded-2xl bg-white border border-stone-200 overflow-hidden shadow-sm">
-          <p className="px-5 pt-4 pb-2 font-tajawal text-xs font-bold text-charcoal/50 uppercase">
-            أسئلة شائعة
-          </p>
+        {/* ══ FAQ ════════════════════════════════════════════════ */}
+        <div className="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-black/5">
+          <div className="bg-[#0A2A1A] px-5 py-3">
+            <p className="font-tajawal text-[10px] font-bold text-[#F5C842]/70 uppercase tracking-widest">
+              أسئلة شائعة
+            </p>
+          </div>
           {faqs.map((faq, i) => (
             <button
               key={i}
               onClick={() => setOpenFaq(openFaq === i ? null : i)}
-              className="w-full text-right px-5 py-3 border-t border-stone-100 hover:bg-stone-50 transition-colors"
+              className="w-full text-right px-5 py-3.5 border-t border-stone-100 hover:bg-stone-50 transition-colors"
             >
               <div className="flex items-center justify-between gap-3">
                 <p className="font-tajawal text-sm font-black text-charcoal">{faq.q}</p>
-                <span
-                  className={`text-emerald text-lg font-bold transition-transform shrink-0 ${openFaq === i ? 'rotate-45' : ''}`}
-                >
+                <span className={`text-[#0A2A1A] text-xl font-black transition-transform shrink-0 ${openFaq === i ? 'rotate-45' : ''}`}>
                   +
                 </span>
               </div>
               {openFaq === i && (
-                <p className="mt-2 font-tajawal text-sm leading-relaxed text-charcoal/65 text-right">
-                  {faq.a}
-                </p>
+                <p className="mt-2 font-tajawal text-sm leading-relaxed text-charcoal/60 text-right">{faq.a}</p>
               )}
             </button>
           ))}
         </div>
 
-        {/* ── GUARANTEE STRIP ───────────────────────────────────── */}
-        <div className="flex items-center gap-3 rounded-2xl border border-emerald/20 bg-emerald/5 px-4 py-3">
+        {/* ══ GUARANTEE ══════════════════════════════════════════ */}
+        <div className="flex items-center gap-3 rounded-2xl bg-[#0A2A1A]/5 ring-1 ring-[#0A2A1A]/10 px-4 py-3.5">
           <span className="text-2xl shrink-0">🛡️</span>
           <div>
-            <p className="font-tajawal text-sm font-black text-emerald">ضمان ٣٠ يوم</p>
-            <p className="font-tajawal text-xs text-charcoal/60">
+            <p className="font-tajawal text-sm font-black text-[#0A2A1A]">ضمان ٣٠ يوم</p>
+            <p className="font-tajawal text-xs text-charcoal/55">
               {m('لو ما عجبك — بنرجّع فلوسك بدون أسئلة.', 'لو ما عجبكِ — بنرجّع فلوسكِ بدون أسئلة.')}
             </p>
           </div>
         </div>
 
-        {/* ── CTA ───────────────────────────────────────────────── */}
-        <Button variant="primary" size="lg" asChild className="w-full h-12 font-black">
-          <Link href="/">العودة للرئيسية</Link>
-        </Button>
-
-        {hydrated && lastOrderId && (
-          <p className="text-center font-mono text-[10px] text-charcoal/30 break-all">
-            #{lastOrderId}
-          </p>
-        )}
+        {/* ══ CTA ════════════════════════════════════════════════ */}
+        <Link
+          href="/"
+          className="flex h-13 w-full items-center justify-center rounded-2xl bg-[#0A2A1A] px-6 py-4 font-tajawal text-sm font-black text-white shadow-lg transition-opacity hover:opacity-90"
+        >
+          العودة للرئيسية
+        </Link>
       </div>
     </div>
   );
 }
 
-function Row({ label, value, mono = false }: { label: string; value: string; mono?: boolean }) {
+function InfoRow({ label, value, mono = false }: { label: string; value: string; mono?: boolean }) {
   return (
     <div className="flex items-center justify-between">
-      <span className="font-tajawal text-sm text-charcoal/50">{label}</span>
-      <span
-        className={`font-tajawal text-sm font-black text-charcoal ${mono ? 'font-mono' : ''}`}
-        dir={mono ? 'ltr' : 'auto'}
-      >
+      <span className="font-tajawal text-sm text-charcoal/45">{label}</span>
+      <span className={`font-tajawal text-sm font-black text-charcoal ${mono ? 'font-mono' : ''}`} dir={mono ? 'ltr' : 'auto'}>
         {value}
       </span>
     </div>

@@ -30,28 +30,18 @@ export function CheckoutModal() {
   const [submitting, setSubmitting] = useState(false);
   const [mounted, setMounted] = useState(false);
 
-  // Determine if any cart product targets a male audience
   const isMasc = lines.some((l) => PRODUCTS.find((p) => p.slug === l.productId)?.genderMasculine);
-  const m = (masculine: string, feminine: string) => isMasc ? masculine : feminine;
+  const m = (masculine: string, feminine: string) => (isMasc ? masculine : feminine);
   const modalRef = useRef<HTMLDivElement>(null);
   const idempotencyRef = useRef<string>(uuidv4());
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  useEffect(() => { setMounted(true); }, []);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm<FormValues>({
+  const { register, handleSubmit, formState: { errors }, reset } = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: { name: '', phone: '', honeypot: '' },
   });
 
-  // Reset idempotency key each open + pre-warm MaxMind geo cache so the
-  // order POST hits the in-memory cache and returns in < 50 ms.
   useEffect(() => {
     if (isCheckoutOpen) {
       idempotencyRef.current = uuidv4();
@@ -62,9 +52,7 @@ export function CheckoutModal() {
 
   useEffect(() => {
     if (!isCheckoutOpen) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') closeCheckout();
-    };
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') closeCheckout(); };
     window.addEventListener('keydown', onKey);
     modalRef.current?.focus();
     document.body.style.overflow = 'hidden';
@@ -74,8 +62,6 @@ export function CheckoutModal() {
     };
   }, [isCheckoutOpen, closeCheckout]);
 
-  // Back-button trap: push a fake history entry so the phone's back button
-  // closes the modal instead of navigating the user away from the page.
   useEffect(() => {
     if (!isCheckoutOpen) return;
     window.history.pushState({ checkoutModal: true }, '');
@@ -98,7 +84,6 @@ export function CheckoutModal() {
         customer: { full_name: values.name, phone: values.phone },
         lines: lines.map((l) => ({
           product_slug: l.productId,
-          // Fallback: derive offer_code from tier if old cart item lacks it
           offer_code: l.offerCode ?? (l.tier === 1 ? 'T1' : l.tier === 2 ? 'T2' : 'T3'),
         })),
         tracking: {
@@ -124,10 +109,7 @@ export function CheckoutModal() {
 
       const res = await fetch('/api/orders', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Idempotency-Key': idempotencyRef.current,
-        },
+        headers: { 'Content-Type': 'application/json', 'Idempotency-Key': idempotencyRef.current },
         body: JSON.stringify(payload),
       });
 
@@ -152,9 +134,7 @@ export function CheckoutModal() {
           } else if (rawText) {
             msg = `خطأ ${res.status}`;
           }
-        } catch {
-          msg = `خطأ ${res.status}`;
-        }
+        } catch { msg = `خطأ ${res.status}`; }
         throw new Error(msg);
       }
 
@@ -168,13 +148,7 @@ export function CheckoutModal() {
       const upsellSku = data.upsell?.sku ?? '';
 
       setLastOrderSummary({
-        lines: lines.map((l) => ({
-          productId: l.productId,
-          nameAr: l.nameAr,
-          imageUrl: l.imageUrl,
-          quantity: l.quantity,
-          totalPrice: l.totalPrice,
-        })),
+        lines: lines.map((l) => ({ productId: l.productId, nameAr: l.nameAr, imageUrl: l.imageUrl, quantity: l.quantity, totalPrice: l.totalPrice })),
         totalSar: total,
         orderId,
       });
@@ -184,13 +158,7 @@ export function CheckoutModal() {
       if (isLocalPreview()) {
         const previewOrderId = `preview-${Date.now()}`;
         setLastOrderSummary({
-          lines: lines.map((l) => ({
-            productId: l.productId,
-            nameAr: l.nameAr,
-            imageUrl: l.imageUrl,
-            quantity: l.quantity,
-            totalPrice: l.totalPrice,
-          })),
+          lines: lines.map((l) => ({ productId: l.productId, nameAr: l.nameAr, imageUrl: l.imageUrl, quantity: l.quantity, totalPrice: l.totalPrice })),
           totalSar: total,
           orderId: previewOrderId,
         });
@@ -199,11 +167,7 @@ export function CheckoutModal() {
         openUpsell(previewOrderId, 'preview-upsell-token', previewSku, { name: values.name, phone: values.phone });
         return;
       }
-
-      showToast(
-        err instanceof Error ? err.message : COPY.ERROR_PAGES.GENERIC,
-        'error',
-      );
+      showToast(err instanceof Error ? err.message : COPY.ERROR_PAGES.GENERIC, 'error');
     } finally {
       setSubmitting(false);
     }
@@ -214,7 +178,7 @@ export function CheckoutModal() {
       {/* Backdrop */}
       <div
         className={cn(
-          'fixed inset-0 z-[290] bg-black/40 backdrop-blur-sm transition-opacity duration-300',
+          'fixed inset-0 z-[290] bg-black/70 backdrop-blur-sm transition-opacity duration-300',
           isCheckoutOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none',
         )}
         onClick={closeCheckout}
@@ -235,133 +199,135 @@ export function CheckoutModal() {
         )}
       >
         <div
+          dir="rtl"
           className={cn(
-            'w-full max-w-md overflow-hidden bg-white shadow-2xl transition-all duration-300',
+            'w-full max-w-sm overflow-hidden shadow-2xl transition-all duration-300',
             'rounded-t-[28px] sm:rounded-[28px]',
             isCheckoutOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4',
           )}
           onClick={(e) => e.stopPropagation()}
         >
-          {/* ── Header ── */}
-          <div className="bg-emerald px-5 py-3.5">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <svg className="h-4 w-4 text-saffron shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                </svg>
-                <div>
-                  <p className="font-tajawal text-[10px] font-bold text-saffron tracking-widest">🔒 خطوة واحدة فقط</p>
-                  <h2 className="font-tajawal text-lg font-black text-white leading-tight">{m('طلبك على وشك يوصلك!', 'طلبكِ على وشك يوصلك!')}</h2>
-                </div>
+          {/* ── Dark header ── */}
+          <div className="bg-[#0A2A1A] px-5 pt-5 pb-4">
+            {/* Top row: label + close */}
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-1.5">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#4ADE80] animate-pulse" />
+                <span className="font-tajawal text-xs font-black text-[#F5C842] tracking-wide">
+                  🔒 خطوة واحدة فقط
+                </span>
               </div>
               <button
                 onClick={closeCheckout}
-                className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-white hover:bg-white/30 transition-colors"
+                className="flex h-7 w-7 items-center justify-center rounded-full bg-white/10 text-white/70 hover:bg-white/20 transition-colors"
                 aria-label="إغلاق"
               >
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
             </div>
-            {/* 3-step progress */}
-            <div className="mt-3 flex items-center gap-1">
-              {[m('أكمل بياناتك', 'أكملي بياناتكِ'), m('نتصل نأكد', 'نتصل نأكد'), m('استلم وادفع', 'استلمي وادفعي')].map((step, i) => (
-                <div key={step} className="flex items-center gap-1 flex-1">
-                  <div className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-black ${i === 0 ? 'bg-saffron text-emerald' : 'bg-white/20 text-white/60'}`}>
-                    {i + 1}
-                  </div>
-                  <p className={`font-tajawal text-[10px] font-bold truncate ${i === 0 ? 'text-saffron' : 'text-white/50'}`}>{step}</p>
-                  {i < 2 && <div className="flex-1 h-px bg-white/20 mx-1" />}
-                </div>
-              ))}
-            </div>
-          </div>
 
-          {/* ── Body — fits one screen, no scroll ── */}
-          <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-3 p-4 bg-white">
-            <input {...register('honeypot')} type="text" autoComplete="off" tabIndex={-1} aria-hidden="true" style={{ display: 'none' }} />
-
-            {/* ── Order summary — soft premium card ── */}
+            {/* Product summary — one card per line */}
             {lines.map((line) => {
-              const bottles = line.quantity;
               const gpb = PRODUCTS.find((p) => p.slug === line.productId)?.gummiesPerBottle ?? 90;
-              const gummies = bottles * gpb;
+              const gummies = line.quantity * gpb;
               const durationDays = Math.round(gummies / 2);
               const months = Math.max(1, Math.round(durationDays / 30));
+              const durationLabel = durationDays < 25
+                ? `${durationDays} يوم`
+                : months === 1 ? 'شهر' : `${months} أشهر`;
+
               return (
-                <div key={line.productId} className="rounded-2xl bg-[#F8FAF9] ring-1 ring-black/5 shadow-sm px-3 py-3">
-                  <div className="flex items-center gap-3">
-                    {/* Product image — soft, rounded */}
-                    <div className="relative h-[72px] w-14 shrink-0 overflow-hidden rounded-2xl bg-white shadow ring-1 ring-black/8">
-                      <Image
-                        src={line.imageUrl}
-                        alt={line.nameAr}
-                        fill
-                        className="object-cover"
-                        sizes="56px"
-                      />
-                    </div>
-
-                    {/* Info */}
-                    <div className="flex-1 min-w-0">
-                      <p className="font-tajawal text-[13px] font-black text-charcoal line-clamp-2 leading-snug">{line.nameAr}</p>
-                      <div className="mt-1.5 flex flex-wrap gap-1">
-                        <span className="rounded-full bg-emerald/10 px-2 py-0.5 font-tajawal text-[10px] font-bold text-emerald">
-                          {bottles === 1 ? 'علبة واحدة' : `${bottles} علب`}
-                        </span>
-                        <span className="rounded-full bg-emerald/10 px-2 py-0.5 font-tajawal text-[10px] font-bold text-emerald">
-                          {gummies} علكة
-                        </span>
-                        <span className="rounded-full bg-emerald/10 px-2 py-0.5 font-tajawal text-[10px] font-bold text-emerald">
-                          يكفي {durationDays < 25 ? `${durationDays} يوم` : months === 1 ? 'شهر' : `${months} أشهر`}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Price — luxurious layout */}
-                    <div className="shrink-0 text-left">
-                      <p className="font-tajawal text-2xl font-black text-emerald leading-none whitespace-nowrap">
-                        {mounted ? line.totalPrice : 0}
-                      </p>
-                      <p className="font-tajawal text-[11px] font-bold text-emerald/60 text-left mt-0.5">ر.س</p>
+                <div key={line.productId} className="flex items-center gap-3 mb-3">
+                  {/* Product image */}
+                  <div className="relative h-16 w-12 shrink-0 overflow-hidden rounded-xl bg-white/10 ring-1 ring-white/20">
+                    <Image
+                      src={line.imageUrl}
+                      alt={line.nameAr}
+                      fill
+                      className="object-contain p-1"
+                      sizes="48px"
+                    />
+                  </div>
+                  {/* Name + badges */}
+                  <div className="flex-1 min-w-0">
+                    <p className="font-tajawal text-sm font-black text-white leading-snug line-clamp-2">
+                      {line.nameAr}
+                    </p>
+                    <div className="mt-1.5 flex flex-wrap gap-1">
+                      <span className="rounded-full bg-white/10 px-2 py-0.5 font-tajawal text-[10px] font-bold text-white/70">
+                        {line.quantity === 1 ? 'علبة واحدة' : `${line.quantity} علب`}
+                      </span>
+                      <span className="rounded-full bg-white/10 px-2 py-0.5 font-tajawal text-[10px] font-bold text-white/70">
+                        {gummies} علكة
+                      </span>
+                      <span className="rounded-full bg-white/10 px-2 py-0.5 font-tajawal text-[10px] font-bold text-white/70">
+                        يكفي {durationLabel}
+                      </span>
                     </div>
                   </div>
-
-                  {/* Trust row — with icons */}
-                  <div className="mt-2.5 pt-2.5 border-t border-black/6 flex items-center justify-center gap-3">
-                    <span className="flex items-center gap-1">
-                      {/* Hand/cash icon */}
-                      <svg className="h-3 w-3 text-emerald shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
-                      </svg>
-                      <span className="font-tajawal text-[10px] font-bold text-charcoal/70">دفع عند الاستلام</span>
-                    </span>
-                    <span className="text-stone-300">|</span>
-                    <span className="flex items-center gap-1">
-                      {/* Truck icon */}
-                      <svg className="h-3 w-3 text-emerald shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
-                      </svg>
-                      <span className="font-tajawal text-[10px] font-bold text-charcoal/70">شحن مجاني</span>
-                    </span>
-                    <span className="text-stone-300">|</span>
-                    <span className="flex items-center gap-1">
-                      {/* Shield icon */}
-                      <svg className="h-3 w-3 text-emerald shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                      </svg>
-                      <span className="font-tajawal text-[10px] font-bold text-charcoal/70">ضمان 30 يوم</span>
-                    </span>
+                  {/* Price — big saffron */}
+                  <div className="shrink-0 text-left">
+                    <p className="font-tajawal text-3xl font-black text-[#F5C842] leading-none">
+                      {mounted ? line.totalPrice : 0}
+                    </p>
+                    <p className="font-tajawal text-[10px] font-bold text-[#F5C842]/60 text-left">ر.س</p>
                   </div>
                 </div>
               );
             })}
 
-            {/* ── Instruction — guiding section header ── */}
-            <div className="flex items-center gap-2 py-0.5">
+            {/* Trust badges row */}
+            <div className="flex items-center justify-center gap-3 mt-1 pt-3 border-t border-white/10">
+              {[
+                { icon: '💵', label: 'دفع عند الاستلام' },
+                { icon: '🚚', label: 'شحن مجاني' },
+                { icon: '🛡️', label: 'ضمان 30 يوم' },
+              ].map((b) => (
+                <span key={b.label} className="flex items-center gap-1">
+                  <span className="text-xs">{b.icon}</span>
+                  <span className="font-tajawal text-[10px] font-bold text-white/60">{b.label}</span>
+                </span>
+              ))}
+            </div>
+
+            {/* 3-step progress */}
+            <div className="mt-4 flex items-center">
+              {[
+                m('أكمل بياناتك', 'أكملي بياناتكِ'),
+                m('نتصل نأكد', 'نتصل نأكد'),
+                m('استلم وادفع', 'استلمي وادفعي'),
+              ].map((step, i) => (
+                <div key={step} className="flex items-center flex-1">
+                  <div className="flex flex-col items-center gap-1">
+                    <div className={cn(
+                      'flex h-6 w-6 items-center justify-center rounded-full text-[10px] font-black',
+                      i === 0 ? 'bg-[#F5C842] text-[#0A2A1A]' : 'bg-white/10 text-white/40',
+                    )}>
+                      {i + 1}
+                    </div>
+                    <p className={cn(
+                      'font-tajawal text-[9px] font-bold whitespace-nowrap',
+                      i === 0 ? 'text-[#F5C842]' : 'text-white/30',
+                    )}>
+                      {step}
+                    </p>
+                  </div>
+                  {i < 2 && <div className="flex-1 h-px bg-white/10 mx-1 mb-3" />}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ── Form body ── */}
+          <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-3 p-4 bg-white">
+            <input {...register('honeypot')} type="text" autoComplete="off" tabIndex={-1} aria-hidden="true" style={{ display: 'none' }} />
+
+            {/* Section divider */}
+            <div className="flex items-center gap-2">
               <div className="flex-1 h-px bg-stone-200" />
-              <p className="font-tajawal text-[13px] font-bold text-charcoal/60 whitespace-nowrap">
+              <p className="font-tajawal text-xs font-bold text-charcoal/50 whitespace-nowrap">
                 {m('اكتب اسمك ورقم جوالك', 'اكتبي اسمكِ ورقم جوالكِ')}
               </p>
               <div className="flex-1 h-px bg-stone-200" />
@@ -391,13 +357,13 @@ export function CheckoutModal() {
               <p className="mt-1 font-tajawal text-xs text-charcoal/50">{COPY.CHECKOUT.PHONE_HINT}</p>
             </div>
 
-            {/* What happens next */}
-            <div className="rounded-2xl bg-emerald/5 border border-emerald/15 px-3 py-2.5">
-              <p className="font-tajawal text-[11px] font-black text-emerald mb-2">📦 ماذا يصير بعد ما تأكّد؟</p>
+            {/* What happens next — compact */}
+            <div className="rounded-2xl bg-[#0A2A1A]/5 border border-[#0A2A1A]/10 px-3 py-2.5">
+              <p className="font-tajawal text-[11px] font-black text-[#0A2A1A] mb-2">📦 {m('ماذا يصير بعد ما تأكّد؟', 'ماذا يصير بعد ما تأكّدي؟')}</p>
               <div className="flex flex-col gap-1.5">
                 {[
                   { icon: '📞', text: m('نتصل بك خلال ساعات نأكد الطلب', 'نتصل بكِ خلال ساعات نأكد الطلب') },
-                  { icon: '🚚', text: 'نوصّل خلال ١-٣ أيام عمل' },
+                  { icon: '🚚', text: 'نوصّل خلال ١–٣ أيام عمل' },
                   { icon: '💵', text: m('تدفع كاش للمندوب — بدون بطاقة', 'تدفعين كاش للمندوب — بدون بطاقة') },
                 ].map((s) => (
                   <div key={s.icon} className="flex items-center gap-2">
@@ -415,16 +381,16 @@ export function CheckoutModal() {
               size="lg"
               fullWidth
               loading={submitting}
-              className="h-14 text-base font-black shadow-lg shadow-emerald/30"
+              className="h-14 text-base font-black shadow-xl shadow-emerald/30"
             >
               {m('أكّد الطلب — دفع عند الاستلام', 'أكّدي الطلب — دفع عند الاستلام')} 🔒
             </Button>
 
-            {/* Prominent exit link */}
+            {/* Exit link */}
             <button
               type="button"
               onClick={closeCheckout}
-              className="w-full py-1 text-center font-tajawal text-xs text-charcoal/45 hover:text-emerald transition-colors"
+              className="w-full py-1 text-center font-tajawal text-xs text-charcoal/40 hover:text-charcoal/70 transition-colors"
             >
               ← {m('رجوع لقراءة تفاصيل المنتج', 'رجوع لقراءة تفاصيل المنتج')}
             </button>
