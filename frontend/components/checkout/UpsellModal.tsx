@@ -12,25 +12,13 @@ import { formatSar } from '@/lib/price';
 import { showToast } from '@/components/ui/Toast';
 import { cn } from '@/lib/cn';
 
-const COUNTDOWN_SECONDS = 30;
+const COUNTDOWN_SECONDS = 25;
 
-// Tiered upsell config: what to offer based on what they already bought
-type UpsellCfg = { addQty: number; addPrice: number; headline: (m: (a:string,b:string)=>string) => string; sub: (m: (a:string,b:string)=>string) => string };
-const UPSELL_CONFIG: { T1: UpsellCfg; T2: UpsellCfg; T3: UpsellCfg } = {
-  T1: {
-    addQty: 2,
-    addPrice: 100,
-    headline: (m) => m('أضف علبتين وكمّل كورس شهر كامل', 'أضيفي علبتين وكمّلي كورس شهر كامل'),
-    sub: (m) => m('بـ 100 ريال فقط — يوصلك مع نفس الطلب بدون شحن زيادة', 'بـ 100 ريال فقط — يوصلكِ مع نفس الطلب بدون شحن زيادة'),
-  },
-  T2: {
-    addQty: 3,
-    addPrice: 150,
-    headline: (m) => m('أضف 3 علب وكمّل كورس شهرين كاملين', 'أضيفي 3 علب وكمّلي كورس شهرين كاملين'),
-    sub: (m) => m('بـ 150 ريال فقط — يوصلك مع نفس الطلب بدون شحن زيادة', 'بـ 150 ريال فقط — يوصلكِ مع نفس الطلب بدون شحن زيادة'),
-  },
-  T3: { addQty: 0, addPrice: 0, headline: () => '', sub: () => '' },
-};
+// Flat upsell: 2 extra bottles for 99 SAR regardless of tier
+// Cost: ~26 SAR/bottle × 2 = 52 SAR → profit: 47 SAR (47% margin) ✅
+const UPSELL_ADD_QTY = 2;
+const UPSELL_ADD_PRICE = 99;
+const UPSELL_NORMAL_PRICE = 398; // 2 × T1 price (199 SAR each)
 
 export function UpsellModal() {
   const { isUpsellOpen, closeUpsell, lastOrderId, upsellToken, upsellSku, clearCart, lines } = useCartStore();
@@ -41,12 +29,8 @@ export function UpsellModal() {
   const isMasc = cartProduct?.genderMasculine ?? false;
   const m = (masculine: string, feminine: string) => isMasc ? masculine : feminine;
 
-  // Determine which tier was ordered
-  const rawTier = lines[0]?.offerCode ?? 'T2';
-  const orderedTier: 'T1' | 'T2' | 'T3' = (rawTier === 'T1' || rawTier === 'T2' || rawTier === 'T3') ? rawTier : 'T2';
-  const upsellCfg: UpsellCfg = UPSELL_CONFIG[orderedTier];
   const isShilajit = lines[0]?.productId === 'habba-shilajit';
-  const upsellPrice = upsellCfg.addPrice;
+  const orderedTier = lines[0]?.offerCode ?? 'T2';
   const [seconds, setSeconds] = useState(COUNTDOWN_SECONDS);
   const [accepting, setAccepting] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -123,14 +107,18 @@ export function UpsellModal() {
   };
 
   const progressPct = ((COUNTDOWN_SECONDS - seconds) / COUNTDOWN_SECONDS) * 100;
+  const savings = UPSELL_NORMAL_PRICE - UPSELL_ADD_PRICE;
+  const savingsPct = Math.round((savings / UPSELL_NORMAL_PRICE) * 100);
 
-  // T3 buyers get no upsell — skip straight to thank-you
+  // T3 buyers already have max supply — skip upsell
   if (isUpsellOpen && orderedTier === 'T3') {
     handleDecline();
   }
 
-  const normalPricePerBottle = cartProduct?.offers.find((o) => o.code === 'T1')?.priceSar ?? 199;
-  const normalTotal = upsellCfg.addQty * normalPricePerBottle;
+  const productName = cartProduct?.nameAr ?? 'المنتج';
+  const bottleImg = isShilajit
+    ? '/images/products/habba-shilajit/bottle.webp'
+    : `/images/products/${upsellSku || 'habba-bareeq'}/cover.webp`;
 
   return (
     <>
@@ -175,8 +163,8 @@ export function UpsellModal() {
             <div className="flex items-center justify-between relative">
               <div>
                 <p className="font-tajawal text-[11px] font-bold text-saffron mb-0.5">⚡ عرض لمرة واحدة فقط</p>
-                <h2 className="font-tajawal text-lg font-black text-white leading-snug max-w-[220px]">
-                  {upsellCfg.headline(m)}
+                <h2 className="font-tajawal text-xl font-black text-white leading-snug max-w-[230px]">
+                  {m('أضف علبتين للشحنة بـ 99 ريال فقط!', 'أضيفي علبتين للشحنة بـ 99 ريال فقط!')}
                 </h2>
               </div>
               {/* Countdown */}
@@ -185,33 +173,32 @@ export function UpsellModal() {
                 <span className="font-tajawal text-[9px] font-bold text-emerald/70 leading-none">ثانية</span>
               </div>
             </div>
-            <p className="mt-2 font-tajawal text-sm text-white/70 relative">{upsellCfg.sub(m)}</p>
+            <p className="mt-2 font-tajawal text-sm text-white/75 relative">
+              {m('توصّل مع نفس الطلب — بدون شحن زيادة. العرض ما يرجع.', 'توصّل مع نفس الطلب — بدون شحن زيادة. العرض ما يرجع.')}
+            </p>
           </div>
 
           {/* Product + price */}
           <div className="flex items-center gap-4 px-5 py-4 border-b border-stone-100">
-            {/* Bottle image */}
             <div className="relative h-20 w-16 shrink-0 overflow-hidden rounded-2xl bg-stone-50">
               <Image
-                src={isShilajit ? '/images/products/habba-shilajit/bottle.webp' : `/images/products/${upsellSku || 'habba-bareeq'}/cover.webp`}
-                alt="المنتج"
+                src={bottleImg}
+                alt={productName}
                 fill
                 className="object-contain p-1"
                 sizes="64px"
               />
             </div>
             <div className="flex-1">
-              <p className="font-tajawal text-sm font-black text-charcoal">{cartProduct?.nameAr ?? 'المنتج'}</p>
+              <p className="font-tajawal text-sm font-black text-charcoal">{productName}</p>
               <p className="font-tajawal text-[11px] text-charcoal/55 mt-0.5">
-                {upsellCfg.addQty} {m('علب إضافية', 'علب إضافية')} · {m('توصّل معك', 'توصّل معكِ')} بدون رسوم
+                {UPSELL_ADD_QTY} {m('علب إضافية', 'علب إضافية')} · {m('توصّل معك', 'توصّل معكِ')} بدون رسوم
               </p>
             </div>
             <div className="shrink-0 text-left">
-              <p className="font-tajawal text-2xl font-black text-emerald leading-none">{upsellPrice}</p>
+              <p className="font-tajawal text-2xl font-black text-emerald leading-none">{UPSELL_ADD_PRICE}</p>
               <p className="font-tajawal text-[11px] font-bold text-emerald/60">ر.س</p>
-              {normalTotal > upsellPrice && (
-                <p className="font-tajawal text-[10px] text-charcoal/35 line-through">{normalTotal} ر.س</p>
-              )}
+              <p className="font-tajawal text-[10px] text-charcoal/35 line-through">{UPSELL_NORMAL_PRICE} ر.س</p>
             </div>
           </div>
 
@@ -220,10 +207,10 @@ export function UpsellModal() {
             <div className="flex items-center gap-2">
               <span className="text-lg">💰</span>
               <p className="font-tajawal text-sm font-bold text-charcoal">
-                {m('توفّر', 'توفّري')} {normalTotal - upsellPrice} ر.س مقارنة بالشراء لاحقاً
+                {m('توفّر', 'توفّري')} {savings} ر.س مقارنة بالشراء لاحقاً
               </p>
             </div>
-            <Badge variant="saffron">{Math.round(((normalTotal - upsellPrice) / normalTotal) * 100)}%</Badge>
+            <Badge variant="saffron">{savingsPct}%</Badge>
           </div>
 
           <div className="flex flex-col gap-3 px-5 pb-5 pt-3">
@@ -235,7 +222,7 @@ export function UpsellModal() {
               onClick={handleAccept}
               className="h-14 text-base font-black touch-manipulation select-none shadow-lg shadow-emerald/25"
             >
-              {m(`أضفها لطلبي · ${formatSar(upsellPrice)}`, `أضيفيها لطلبي · ${formatSar(upsellPrice)}`)} 🔒
+              {m(`أضفها لطلبي · ${formatSar(UPSELL_ADD_PRICE)}`, `أضيفيها لطلبي · ${formatSar(UPSELL_ADD_PRICE)}`)} 🔒
             </Button>
 
             <button
