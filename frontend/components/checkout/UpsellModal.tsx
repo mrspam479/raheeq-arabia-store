@@ -86,13 +86,14 @@ export function UpsellModal() {
 
   const handleAccept = async () => {
     if (acceptedRef.current || accepting) return;
-    if (!lastOrderId || !upsellToken) return;
     acceptedRef.current = true;
     if (intervalRef.current) clearInterval(intervalRef.current);
 
-    setAccepting(true);
-    try {
-      if (upsellToken !== 'preview-upsell-token') {
+    // Call upsell API only when we have a real server token
+    const hasRealToken = upsellToken && upsellToken !== 'preview-upsell-token';
+    if (hasRealToken && lastOrderId) {
+      setAccepting(true);
+      try {
         const res = await fetch(`/api/orders/${lastOrderId}/upsell`, {
           method: 'PATCH',
           headers: {
@@ -102,16 +103,20 @@ export function UpsellModal() {
           body: JSON.stringify({ token: upsellToken, sku: upsellSku ?? '' }),
         });
         if (!res.ok) throw new Error(COPY.UPSELL.ERROR);
+        showToast(COPY.UPSELL.SUCCESS_TOAST, 'success');
+      } catch {
+        showToast(COPY.UPSELL.ERROR, 'error');
+      } finally {
+        setAccepting(false);
       }
+    } else if (upsellToken === 'preview-upsell-token') {
       showToast(COPY.UPSELL.SUCCESS_TOAST, 'success');
-    } catch {
-      showToast(COPY.UPSELL.ERROR, 'error');
-    } finally {
-      setAccepting(false);
-      clearCart();
-      closeUpsell();
-      router.push('/thank-you');
     }
+
+    // Always navigate — regardless of token presence
+    clearCart();
+    closeUpsell();
+    router.push('/thank-you');
   };
 
   if (!mounted) return null;

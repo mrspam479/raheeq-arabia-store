@@ -320,8 +320,31 @@ export function CheckoutModal() {
             </div>
           </div>
 
+          {/* ── Processing overlay — shown immediately on submit ── */}
+          {submitting && (
+            <div className="flex flex-col items-center justify-center gap-4 bg-white px-5 py-12">
+              <div className="relative flex h-16 w-16 items-center justify-center">
+                <div className="absolute inset-0 rounded-full border-4 border-[#0A2A1A]/10" />
+                <div className="absolute inset-0 animate-spin rounded-full border-4 border-transparent border-t-[#F5C842]" />
+                <span className="text-2xl">🔒</span>
+              </div>
+              <div className="text-center">
+                <p className="font-tajawal text-base font-black text-[#0A2A1A]">جاري تأكيد طلبك...</p>
+                <p className="font-tajawal text-sm text-charcoal/50 mt-1">ثانية وتكمل ✓</p>
+              </div>
+              <div className="flex items-center gap-3 rounded-2xl bg-[#0A2A1A]/5 px-4 py-2.5 mt-1">
+                {[{ icon: '💵', label: 'دفع عند الاستلام' }, { icon: '🚚', label: 'شحن مجاني' }].map((b) => (
+                  <span key={b.label} className="flex items-center gap-1">
+                    <span className="text-sm">{b.icon}</span>
+                    <span className="font-tajawal text-xs font-bold text-charcoal/60">{b.label}</span>
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* ── Form body ── */}
-          <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-3 p-4 bg-white">
+          <form onSubmit={handleSubmit(onSubmit)} noValidate className={`flex flex-col gap-3 p-4 bg-white${submitting ? ' hidden' : ''}`}>
             <input {...register('honeypot')} type="text" autoComplete="off" tabIndex={-1} aria-hidden="true" style={{ display: 'none' }} />
 
             {/* Section divider */}
