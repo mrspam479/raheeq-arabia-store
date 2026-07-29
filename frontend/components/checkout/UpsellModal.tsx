@@ -14,7 +14,6 @@ const COUNTDOWN_SECONDS = 25;
 
 // Flat upsell: 2 extra bottles for 99 SAR
 // Cost: ~26 SAR/bottle × 2 = 52 SAR → profit: 47 SAR ✅
-const UPSELL_ADD_QTY = 2;
 const UPSELL_ADD_PRICE = 99;
 const UPSELL_NORMAL_PRICE = 398; // 2 × T1 price (199 SAR each)
 const SAVINGS = UPSELL_NORMAL_PRICE - UPSELL_ADD_PRICE; // 299 SAR
