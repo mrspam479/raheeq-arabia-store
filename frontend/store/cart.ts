@@ -8,6 +8,20 @@ import { recomputeLineForTier } from '@/lib/price';
 import { PRODUCTS } from '@/data/products';
 import type { CartLine, OfferCode } from '@/lib/types';
 
+export type OrderSummaryLine = {
+  productId: string;
+  nameAr: string;
+  imageUrl: string;
+  quantity: number;
+  totalPrice: number;
+};
+
+export type LastOrderSummary = {
+  lines: OrderSummaryLine[];
+  totalSar: number;
+  orderId: string;
+};
+
 interface CartState {
   lines: CartLine[];
   isCartOpen: boolean;
@@ -15,6 +29,7 @@ interface CartState {
   isUpsellOpen: boolean;
   lastOrderId: string | null;
   lastOrderCustomer: { name: string; phone: string } | null;
+  lastOrderSummary: LastOrderSummary | null;
   upsellToken: string | null;
   upsellSku: string | null;
 
@@ -28,6 +43,7 @@ interface CartState {
   closeCheckout: () => void;
   openUpsell: (orderId: string, token: string, sku: string, customer?: { name: string; phone: string }) => void;
   closeUpsell: () => void;
+  setLastOrderSummary: (summary: LastOrderSummary) => void;
   totalSar: () => number;
   totalItems: () => number;
 }
@@ -41,6 +57,7 @@ export const useCartStore = create<CartState>()(
       isUpsellOpen: false,
       lastOrderId: null,
       lastOrderCustomer: null,
+      lastOrderSummary: null,
       upsellToken: null,
       upsellSku: null,
 
@@ -106,6 +123,7 @@ export const useCartStore = create<CartState>()(
       openUpsell: (orderId, token, sku, customer) =>
         set({ isUpsellOpen: true, isCheckoutOpen: false, lastOrderId: orderId, upsellToken: token, upsellSku: sku, ...(customer ? { lastOrderCustomer: customer } : {}) }),
       closeUpsell: () => set({ isUpsellOpen: false }),
+      setLastOrderSummary: (summary) => set({ lastOrderSummary: summary }),
 
       totalSar: () => get().lines.reduce((sum, l) => sum + l.totalPrice, 0),
       totalItems: () => get().lines.reduce((sum, l) => sum + l.quantity, 0),
@@ -117,6 +135,7 @@ export const useCartStore = create<CartState>()(
         lines: state.lines,
         lastOrderId: state.lastOrderId,
         lastOrderCustomer: state.lastOrderCustomer,
+        lastOrderSummary: state.lastOrderSummary,
         upsellToken: state.upsellToken,
         upsellSku: state.upsellSku,
       }),

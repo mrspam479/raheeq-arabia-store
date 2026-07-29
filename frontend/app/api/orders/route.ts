@@ -104,18 +104,27 @@ export async function POST(req: NextRequest) {
 
     const idempotencyKey = req.headers.get('idempotency-key') ?? '';
 
-    const res = await fetch(`${BACKEND}/api/orders`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Idempotency-Key': idempotencyKey,
-        'X-Real-Client-IP': realUserIp,
-        'X-Forwarded-For': realUserIp,
-        'X-Real-IP': realUserIp,
-        'User-Agent': req.headers.get('user-agent') ?? '',
-      },
-      body,
-    });
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 9000);
+
+    let res: Response;
+    try {
+      res = await fetch(`${BACKEND}/api/orders`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Idempotency-Key': idempotencyKey,
+          'X-Real-Client-IP': realUserIp,
+          'X-Forwarded-For': realUserIp,
+          'X-Real-IP': realUserIp,
+          'User-Agent': req.headers.get('user-agent') ?? '',
+        },
+        body,
+        signal: controller.signal,
+      });
+    } finally {
+      clearTimeout(timeoutId);
+    }
 
     const data = await res.text();
 

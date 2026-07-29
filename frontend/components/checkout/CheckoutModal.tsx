@@ -25,7 +25,7 @@ const schema = z.object({
 type FormValues = z.infer<typeof schema>;
 
 export function CheckoutModal() {
-  const { isCheckoutOpen, closeCheckout, lines, openUpsell, totalSar } =
+  const { isCheckoutOpen, closeCheckout, lines, openUpsell, totalSar, setLastOrderSummary } =
     useCartStore();
   const [submitting, setSubmitting] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -167,13 +167,34 @@ export function CheckoutModal() {
       const upsellToken = data.upsell?.token ?? '';
       const upsellSku = data.upsell?.sku ?? '';
 
+      setLastOrderSummary({
+        lines: lines.map((l) => ({
+          productId: l.productId,
+          nameAr: l.nameAr,
+          imageUrl: l.imageUrl,
+          quantity: l.quantity,
+          totalPrice: l.totalPrice,
+        })),
+        totalSar: total,
+        orderId,
+      });
       trackPurchase(orderId, total, values.phone, values.name, purchaseEventId);
       openUpsell(orderId, upsellToken, upsellSku, { name: values.name, phone: values.phone });
     } catch (err) {
       if (isLocalPreview()) {
         const previewOrderId = `preview-${Date.now()}`;
+        setLastOrderSummary({
+          lines: lines.map((l) => ({
+            productId: l.productId,
+            nameAr: l.nameAr,
+            imageUrl: l.imageUrl,
+            quantity: l.quantity,
+            totalPrice: l.totalPrice,
+          })),
+          totalSar: total,
+          orderId: previewOrderId,
+        });
         trackPurchase(previewOrderId, total, values.phone, values.name, uuidv4());
-        // Use the actual product slug for the preview upsell so gender/image is correct
         const previewSku = lines[0]?.productId ?? 'habba-bareeq';
         openUpsell(previewOrderId, 'preview-upsell-token', previewSku, { name: values.name, phone: values.phone });
         return;
