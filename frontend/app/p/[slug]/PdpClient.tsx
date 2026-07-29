@@ -304,14 +304,22 @@ export function PdpClient({
                           </span>
                         )}
 
-                        {/* Thumbnails: show up to 3 bottles so T1=1, T2=3, T3=3+badge */}
-                        <div className="flex shrink-0 items-center gap-0.5">
-                          {Array.from({ length: Math.min(offer.quantity, 3) }, (_, idx) => (
+                        {/* Thumbnails: T1=1, T2=3 in a row, T3=6 in a 2×3 grid */}
+                        <div className={cn(
+                          'flex shrink-0 gap-0.5',
+                          offer.quantity > 3
+                            ? 'flex-wrap w-[72px] content-start'
+                            : 'flex-row items-center',
+                        )}>
+                          {Array.from({ length: offer.quantity }, (_, idx) => (
                             <div
                               key={idx}
                               className={cn(
-                                'relative overflow-hidden rounded-lg',
-                                isBundle ? 'h-11 w-12 bg-stone-100 border border-emerald/15' : 'h-12 w-8 bg-transparent',
+                                'relative overflow-hidden rounded',
+                                offer.quantity > 3
+                                  ? 'h-9 w-[22px]'
+                                  : 'h-12 w-8',
+                                isBundle ? 'bg-stone-100 border border-emerald/15' : 'bg-transparent',
                               )}
                             >
                               <Image
@@ -319,15 +327,10 @@ export function PdpClient({
                                 alt={product.nameAr}
                                 fill
                                 className="object-contain"
-                                sizes="36px"
+                                sizes="24px"
                               />
                             </div>
                           ))}
-                          {offer.quantity > 3 && (
-                            <span className="flex h-11 w-8 items-center justify-center rounded-lg bg-emerald/10 font-tajawal text-sm font-black text-emerald">
-                              ×{offer.quantity}
-                            </span>
-                          )}
                         </div>
 
                         <div className="mx-2 min-w-0 flex-1">
@@ -385,7 +388,7 @@ export function PdpClient({
                 variant="primary"
                 size="lg"
                 fullWidth
-                onClick={handleAddToCart}
+                onClick={handleBuyNow}
                 className="h-16 text-xl shadow-[0_18px_42px_rgba(18,107,82,0.34)]"
               >
                 {product.ctaPrimaryAr ?? m('اطلبه الآن', 'اطلبيها الآن')} · {formatSar(selectedOffer.priceSar)}
@@ -995,12 +998,10 @@ export function PdpClient({
           <Button
             variant="primary"
             size="lg"
-            onClick={hasThisProductInCart ? handleBuyNow : handleAddToCart}
+            onClick={handleBuyNow}
             className="h-16 text-xl px-12 shadow-[0_18px_42px_rgba(0,0,0,0.3)]"
           >
-            {hasThisProductInCart
-              ? m(`أكمل طلبك · ${selectedOffer.priceSar} ر.س`, `أكملي طلبكِ · ${selectedOffer.priceSar} ر.س`)
-              : `${product.ctaPrimaryAr ?? m(`اطلبه الآن`, `اطلبيها الآن`)} · ${selectedOffer.priceSar} ر.س`}
+            {`${product.ctaPrimaryAr ?? m(`اطلبه الآن`, `اطلبيها الآن`)} · ${selectedOffer.priceSar} ر.س`}
           </Button>
         </div>
       </section>
@@ -1023,12 +1024,10 @@ export function PdpClient({
           variant="primary"
           size="lg"
           fullWidth
-          onClick={hasThisProductInCart ? handleBuyNow : handleAddToCart}
+          onClick={handleBuyNow}
           className="h-14 text-lg font-black cta-pulse"
         >
-          {hasThisProductInCart
-            ? m(`أكمل طلبك · ${formatSar(selectedOffer.priceSar)}`, `أكملي طلبكِ · ${formatSar(selectedOffer.priceSar)}`)
-            : `${product.ctaPrimaryAr ?? m(`اطلبه الآن`, `اطلبيها الآن`)} · ${formatSar(selectedOffer.priceSar)}`}
+          {`${product.ctaPrimaryAr ?? m(`اطلبه الآن`, `اطلبيها الآن`)} · ${formatSar(selectedOffer.priceSar)}`}
         </Button>
         <p className="mt-1.5 text-center font-tajawal text-[11px] font-bold text-emerald">
           🚚 الدفع عند الاستلام · 🛡️ ضمان ٣٠ يوم
