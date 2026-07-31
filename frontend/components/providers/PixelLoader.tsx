@@ -157,43 +157,21 @@ function loadSnapPixel(pixelId: string): void {
 
 export function PixelLoader(): null {
   useEffect(() => {
-    // Start fetching config immediately. By the time the user scrolls or 3 s
-    // elapse this tiny request will already have resolved.
-    const configPromise = fetchPixelConfig();
-
+    // Fire pixels immediately on mount — no deferral.
+    // For paid TikTok/Meta ads, the PageView event must fire the instant the
+    // page loads so the algorithm sees every bounce and can optimize correctly.
+    // Deferring pixels (waiting for scroll or 3 s idle) causes a 90%+ drop in
+    // "Landing Page View" attribution, starving the algorithm of signal data.
     async function loadAllPixels(): Promise<void> {
       if (window._pixelsLoaded) return;
       window._pixelsLoaded = true;
-      const { meta, tiktok, snap } = await configPromise;
+      const { meta, tiktok, snap } = await fetchPixelConfig();
       loadMetaPixel(meta);
       loadTikTokPixel(tiktok);
       loadSnapPixel(snap);
     }
 
-    const events = ['scroll', 'pointerdown', 'keydown', 'touchstart'] as const;
-    function onInteraction() {
-      void loadAllPixels();
-      events.forEach((e) => window.removeEventListener(e, onInteraction));
-    }
-    events.forEach((e) =>
-      window.addEventListener(e, onInteraction, { passive: true, once: true }),
-    );
-
-    let idleId: number | ReturnType<typeof setTimeout>;
-    if ('requestIdleCallback' in window) {
-      idleId = requestIdleCallback(() => void loadAllPixels(), { timeout: 3000 });
-    } else {
-      idleId = setTimeout(() => void loadAllPixels(), 3000);
-    }
-
-    return () => {
-      events.forEach((e) => window.removeEventListener(e, onInteraction));
-      if ('cancelIdleCallback' in window) {
-        cancelIdleCallback(idleId as number);
-      } else {
-        clearTimeout(idleId as ReturnType<typeof setTimeout>);
-      }
-    };
+    void loadAllPixels();
   }, []);
 
   return null;
