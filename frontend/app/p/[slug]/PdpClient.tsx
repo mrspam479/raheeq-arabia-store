@@ -58,8 +58,7 @@ export function PdpClient({
   howToUse,
   beforeAfter,
 }: PdpClientProps) {
-  const { addLine, openCart, openCheckout, isCheckoutOpen, lines } = useCartStore();
-  const hasThisProductInCart = lines.some((l) => l.productId === product.slug);
+  const { addLine, openCheckout, isCheckoutOpen } = useCartStore();
   const [selectedTier, setSelectedTier] = useState<1 | 2 | 3>(() => getDefaultTier(product));
   const [activeImage, setActiveImage] = useState(0);
 
@@ -82,21 +81,6 @@ export function PdpClient({
     // product object always changes with product.slug; slug is the meaningful trigger
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product.slug]);
-
-  const handleAddToCart = () => {
-    addLine({
-      productId: product.slug,
-      nameAr: product.nameAr,
-      tier: selectedTier,
-      quantity: selectedOffer.quantity,
-      unitPrice: selectedOffer.priceSar / selectedOffer.quantity,
-      imageUrl: product.coverImageUrl,
-      offerCode: selectedOffer.code,
-    });
-    openCart();
-    showToast(COPY.TOAST.ADDED, 'success');
-    trackAddToCart(product.slug, selectedOffer.priceSar, selectedOffer.quantity);
-  };
 
   // Bottom CTA — skips cart drawer and goes straight to checkout
   const handleBuyNow = () => {
