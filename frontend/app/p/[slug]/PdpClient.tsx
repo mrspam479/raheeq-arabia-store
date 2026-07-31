@@ -10,7 +10,6 @@ import { COPY } from '@/data/copy';
 import { formatSar } from '@/lib/price';
 import { useCartStore } from '@/store/cart';
 import { PRODUCT_COMPARISON, PRODUCT_CROSS_SELLS, getProductBySlug } from '@/data/products';
-import { showToast } from '@/components/ui/Toast';
 import { trackAddToCart, trackViewContent } from '@/lib/analytics';
 import { cn } from '@/lib/cn';
 import type { Product } from '@/lib/types';
