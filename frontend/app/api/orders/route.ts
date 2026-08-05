@@ -11,92 +11,17 @@
  * CF-Connecting-IP on the *incoming* request always carries the real user IP from Cloudflare.
  * We forward it as X-Real-Client-IP so the backend can still read the true client IP even
  * though the TCP connection now comes from the frontend container.
+ *
+ * Google Sheets webhook and CAPI events are handled entirely by the Python backend
+ * as FastAPI BackgroundTasks — no duplicate sheet calls from this proxy.
  */
 import { type NextRequest, NextResponse } from 'next/server';
 
 const BACKEND = process.env.BACKEND_URL || 'https://api.raheeqarabia.com';
-const SHEET_WEBHOOK_URL = process.env.SHEET_WEBHOOK_URL || '';
-
-const PRODUCT_NAMES: Record<string, string> = {
-  'habba-nadra': 'حبّة نضرة',
-  'habba-bareeq': 'حبّة بريق',
-  'habba-jathr': 'حبّة جذر',
-  'bundle-glow-trio': 'صندوق الجمال الكامل',
-  'habba-shilajit': 'حبّة شيلاجيت',
-};
-
-const PRODUCT_SKUS: Record<string, string> = {
-  'habba-nadra': 'RHQ-NDR-001',
-  'habba-bareeq': 'RHQ-BRQ-001',
-  'habba-jathr': 'RHQ-JTR-001',
-  'bundle-glow-trio': 'RHQ-BND-001',
-  'habba-shilajit': 'RHQ-SHJ-001',
-};
-
-function formatPhone(raw: string): string {
-  const phone = raw.trim().replace(/[\s\-().]/g, '');
-  if (phone.startsWith('+966')) return phone;
-  if (phone.startsWith('00966')) return `+${phone.slice(2)}`;
-  if (phone.startsWith('966')) return `+${phone}`;
-  if (phone.startsWith('05')) return `+966${phone.slice(1)}`;
-  if (phone.startsWith('5')) return `+966${phone}`;
-  return phone;
-}
-
-function todayFormatted(): string {
-  const now = new Date();
-  const dd = String(now.getDate()).padStart(2, '0');
-  const mm = String(now.getMonth() + 1).padStart(2, '0');
-  return `${dd}/${mm}/${now.getFullYear()}`;
-}
-
-async function sendToSheet(
-  orderInput: {
-    customer: { full_name: string; phone: string };
-    lines: { product_slug: string; offer_code: string }[];
-  },
-  totalSar: number,
-  orderLines?: { product_slug: string; quantity: number; is_upsell: boolean }[],
-) {
-  if (!SHEET_WEBHOOK_URL) return;
-
-  const products = orderInput.lines.map((l) => PRODUCT_NAMES[l.product_slug] || l.product_slug);
-  const skus = orderInput.lines.map((l) => PRODUCT_SKUS[l.product_slug] || l.product_slug);
-  // Use actual quantities from the backend order response (correct for all products)
-  const quantities = orderInput.lines.map((l) => {
-    const matched = orderLines?.find((ol) => ol.product_slug === l.product_slug && !ol.is_upsell);
-    return String(matched?.quantity ?? 1);
-  });
-
-  const payload = {
-    date: todayFormatted(),
-    country: 'KSA',
-    name: orderInput.customer.full_name,
-    phone: formatPhone(orderInput.customer.phone),
-    product: products.join('/'),
-    sku: skus.join('/'),
-    quantity: quantities.join('/'),
-    totalprice: totalSar,
-    currency: 'SAR',
-    status: '',
-  };
-
-  try {
-    await fetch(SHEET_WEBHOOK_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ kind: 'order', payload }),
-      redirect: 'follow',
-    });
-  } catch {
-    // best-effort, don't block the order response
-  }
-}
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.text();
-    const parsed = JSON.parse(body);
 
     const realUserIp =
       req.headers.get('cf-connecting-ip') ||
@@ -129,12 +54,6 @@ export async function POST(req: NextRequest) {
     }
 
     const data = await res.text();
-
-    if (res.status === 201 && !parsed.honeypot) {
-      const orderRes = JSON.parse(data);
-      const totalSar = orderRes?.order?.total_sar ?? 0;
-      sendToSheet(parsed, totalSar, orderRes?.order?.lines ?? []);
-    }
 
     return new NextResponse(data, {
       status: res.status,

@@ -3,7 +3,7 @@ from __future__ import annotations
 import asyncio
 import uuid
 
-from fastapi import APIRouter, Depends, Header, HTTPException, Request, Response
+from fastapi import APIRouter, BackgroundTasks, Depends, Header, HTTPException, Request, Response
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
@@ -52,6 +52,7 @@ async def geo_warm(request: Request) -> Response:
 async def create_order(
     payload: OrderCreateIn,
     request: Request,
+    background_tasks: BackgroundTasks,
     db: AsyncSession = Depends(get_db),
     _rl: None = Depends(rate_limit_orders),
     idempotency_key: str | None = Header(default=None),
@@ -107,8 +108,8 @@ async def create_order(
             detail={"code": code, "message": str(exc)},
         ) from exc
 
-    # Enqueue background jobs (best-effort)
-    asyncio.create_task(_fanout(order_out, payload, client_ip, str(payload.tracking.event_id)))
+    # Enqueue background jobs — runs strictly after response is sent to client
+    background_tasks.add_task(_fanout, order_out, payload, client_ip, str(payload.tracking.event_id))
 
     return OrderCreateOut(order=order_out, upsell=upsell)
 
@@ -117,6 +118,7 @@ async def create_order(
 async def attach_upsell(
     order_id: uuid.UUID,
     payload: UpsellIn,
+    background_tasks: BackgroundTasks,
     db: AsyncSession = Depends(get_db),
 ) -> UpsellAttachOut:
     try:
@@ -132,8 +134,8 @@ async def attach_upsell(
     except ValueError as exc:
         raise HTTPException(status_code=422, detail={"code": "VALIDATION_ERROR", "message": str(exc)}) from exc
 
-    # Enqueue upsell sheet + CAPI
-    asyncio.create_task(_upsell_fanout(order_out, payload.sku, str(order_id)))
+    # Enqueue upsell sheet + CAPI — runs strictly after response is sent to client
+    background_tasks.add_task(_upsell_fanout, order_out, payload.sku, str(order_id))
 
     return UpsellAttachOut(order=order_out)
 
