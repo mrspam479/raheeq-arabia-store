@@ -17,14 +17,23 @@ export async function PATCH(
     const body = await req.text();
     const upsellToken = req.headers.get('x-upsell-token') ?? '';
 
-    const res = await fetch(`${BACKEND}/api/orders/${orderId}/upsell`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Upsell-Token': upsellToken,
-      },
-      body,
-    });
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 9000);
+
+    let res: Response;
+    try {
+      res = await fetch(`${BACKEND}/api/orders/${orderId}/upsell`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Upsell-Token': upsellToken,
+        },
+        body,
+        signal: controller.signal,
+      });
+    } finally {
+      clearTimeout(timeoutId);
+    }
 
     const data = await res.text();
     return new NextResponse(data, {

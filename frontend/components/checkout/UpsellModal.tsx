@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 import { useCartStore } from '@/store/cart';
 import { PRODUCTS } from '@/data/products';
 import { Button } from '@/components/ui/Button';
-import { showToast } from '@/components/ui/Toast';
 import { COPY } from '@/data/copy';
 import { cn } from '@/lib/cn';
 
@@ -40,7 +39,6 @@ export function UpsellModal() {
 
   const [mounted, setMounted] = useState(false);
   const [seconds, setSeconds] = useState(COUNTDOWN_SECONDS);
-  const [accepting, setAccepting] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const acceptedRef = useRef(false);
 
@@ -92,34 +90,10 @@ export function UpsellModal() {
     };
   }, [isUpsellOpen, orderedTier, handleExpire]);
 
-  const handleAccept = async () => {
+  const handleAccept = () => {
     if (acceptedRef.current || accepting) return;
     acceptedRef.current = true;
     if (intervalRef.current) clearInterval(intervalRef.current);
-
-    // Call upsell API only when we have a real server token
-    const hasRealToken = upsellToken && upsellToken !== 'preview-upsell-token';
-    if (hasRealToken && lastOrderId) {
-      setAccepting(true);
-      try {
-        const res = await fetch(`/api/orders/${lastOrderId}/upsell`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Upsell-Token': upsellToken,
-          },
-          body: JSON.stringify({ token: upsellToken, sku: upsellSku ?? '' }),
-        });
-        if (!res.ok) throw new Error(COPY.UPSELL.ERROR);
-        showToast(COPY.UPSELL.SUCCESS_TOAST, 'success');
-      } catch {
-        showToast(COPY.UPSELL.ERROR, 'error');
-      } finally {
-        setAccepting(false);
-      }
-    } else if (upsellToken === 'preview-upsell-token') {
-      showToast(COPY.UPSELL.SUCCESS_TOAST, 'success');
-    }
 
     // Append upsell line to the receipt so thank-you page shows the full order
     if (lastOrderSummary) {
@@ -139,10 +113,25 @@ export function UpsellModal() {
       });
     }
 
-    // Always navigate — regardless of token presence
+    // Navigate immediately — don't make the user wait for the backend call
     clearCart();
     closeUpsell();
     router.push('/thank-you');
+
+    // Fire the upsell API in the background after navigation
+    const hasRealToken = upsellToken && upsellToken !== 'preview-upsell-token';
+    if (hasRealToken && lastOrderId) {
+      void fetch(`/api/orders/${lastOrderId}/upsell`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Upsell-Token': upsellToken,
+        },
+        body: JSON.stringify({ token: upsellToken, sku: upsellSku ?? '' }),
+      }).catch(() => {
+        // Silently ignore — order is already confirmed, upsell will be handled manually
+      });
+    }
   };
 
   if (!mounted) return null;
@@ -281,7 +270,6 @@ export function UpsellModal() {
               variant="primary"
               size="lg"
               fullWidth
-              loading={accepting}
               onClick={handleAccept}
               className="h-14 text-base font-black touch-manipulation select-none shadow-xl shadow-emerald/30"
             >
@@ -293,8 +281,7 @@ export function UpsellModal() {
 
             <button
               onClick={handleDecline}
-              disabled={accepting}
-              className="w-full py-2.5 text-center font-tajawal text-sm text-charcoal/50 transition-colors hover:text-charcoal/80 disabled:opacity-40 touch-manipulation"
+              className="w-full py-2.5 text-center font-tajawal text-sm text-charcoal/50 transition-colors hover:text-charcoal/80 touch-manipulation"
             >
               {m('لا شكراً، أكمل طلبي بدون العرض', 'لا شكراً، أكملي طلبي بدون العرض')}
             </button>
