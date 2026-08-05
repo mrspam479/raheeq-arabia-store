@@ -118,10 +118,27 @@ Click **+ New Service** → **App**
 ### Environment Variables (set as **Build** AND **Runtime** vars)
 
 ```
-BACKEND_URL = https://api.raheeqarabia.com
+BACKEND_URL = http://raheeqarabia_backend:8000
 NEXT_PUBLIC_SITE_URL = https://raheeqarabia.com
 NEXT_PUBLIC_ENABLE_PIXELS = false
 ```
+
+> **Why `http://raheeqarabia_backend:8000` and not the public URL?**
+>
+> The Next.js container calls the backend on every order submission. If `BACKEND_URL` is set to
+> the public `https://api.raheeqarabia.com`, that request leaves the server, goes through
+> Cloudflare, and comes back in — Cloudflare often blocks or rate-limits this hairpin traffic,
+> causing a 9-second timeout and showing users **"تعذّر الاتصال بالخادم"**.
+>
+> Using the EasyPanel-internal hostname (`http://raheeqarabia_backend:8000`) keeps traffic inside
+> the Docker network: it is faster (~1 ms vs ~200 ms+), never touches Cloudflare, and bypasses
+> any WAF rules that would otherwise block the server-to-server call.
+>
+> **Finding your backend's internal hostname in EasyPanel:**
+> Go to your project → click on the backend service → **Domains** tab → copy the
+> **"Internal domain"** shown there (format: `<project>_<service>:<port>`).
+> If your backend service is named `backend` inside the `raheeqarabia` project, it will be
+> `raheeqarabia_backend:8000`.
 
 Click **Deploy**.
 
@@ -148,8 +165,25 @@ The Postgres service is not ready yet or the hostname is wrong.
 Check: `DATABASE_URL` hostname must be `raheeqarabia_database` (project name + `_database`).
 
 ### Frontend shows "تعذّر الاتصال بالخادم"
-The `BACKEND_URL` variable is wrong or backend is not running.
-Check: `https://api.raheeqarabia.com/health` in browser.
+This means the Next.js API route could not reach the Python backend at all (TCP-level failure,
+not an application error). Follow these steps in order:
+
+1. **Check `BACKEND_URL` is the internal hostname** — it must be
+   `http://raheeqarabia_backend:8000` (or whatever EasyPanel shows as the internal domain for
+   your backend service). If it is still set to `https://api.raheeqarabia.com`, Cloudflare is
+   almost certainly blocking the hairpin request. Change it and redeploy the frontend.
+
+2. **Confirm the backend is running** — open `https://api.raheeqarabia.com/health` in a browser.
+   It must return `{"status":"ok"}`. If it is down, check the backend service logs in EasyPanel.
+
+3. **Read the frontend logs for the exact error** — in EasyPanel, open the frontend service logs
+   and search for `[api/orders] backend fetch failed`. The line will show either:
+   - `AbortError: The operation was aborted` → 9-second timeout hit (wrong `BACKEND_URL`).
+   - `ECONNREFUSED` → backend container is down or the hostname is wrong.
+   - `ENOTFOUND` → DNS cannot resolve the hostname (wrong service name in EasyPanel).
+
+4. **Check the CORS_ORIGINS on the backend** — the backend's `CORS_ORIGINS` env var only needs
+   to include the public frontend URL (`https://raheeqarabia.com`), not the internal hostname.
 
 ### Orders fail with 403 GEO_BLOCKED
 MaxMind is not configured (expected — it will allow all orders by default).

@@ -1,5 +1,8 @@
 /**
  * Server-side proxy for PATCH /api/orders/:orderId/upsell
+ *
+ * BACKEND_URL must be the internal Docker/EasyPanel hostname (e.g. http://raheeqarabia_backend:8000)
+ * — see orders/route.ts for the full explanation.
  */
 import { type NextRequest, NextResponse } from 'next/server';
 
@@ -28,7 +31,9 @@ export async function PATCH(
       status: res.status,
       headers: { 'Content-Type': 'application/json' },
     });
-  } catch {
+  } catch (err) {
+    const msg = err instanceof Error ? `${err.name}: ${err.message}` : String(err);
+    console.error('[api/orders/upsell] backend fetch failed — BACKEND_URL:', process.env.BACKEND_URL ?? '(not set)', '—', msg);
     return NextResponse.json(
       { detail: { code: 'NETWORK_ERROR', message: 'تعذّر الاتصال بالخادم، حاولي مرة أخرى.' } },
       { status: 503 },

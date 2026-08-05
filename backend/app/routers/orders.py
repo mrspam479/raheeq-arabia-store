@@ -3,7 +3,7 @@ from __future__ import annotations
 import asyncio
 import uuid
 
-from fastapi import APIRouter, Depends, Header, HTTPException, Request
+from fastapi import APIRouter, Depends, Header, HTTPException, Request, Response
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
@@ -35,8 +35,8 @@ def _get_client_ip(request: Request) -> str:
     return ""
 
 
-@router.get("/geo-warm", status_code=204, include_in_schema=False)
-async def geo_warm(request: Request) -> None:
+@router.get("/geo-warm", include_in_schema=False)
+async def geo_warm(request: Request) -> Response:
     """
     Lightweight endpoint called by the frontend when the checkout modal opens.
     Pre-warms the MaxMind IP cache so the actual order POST hits the cache
@@ -45,6 +45,7 @@ async def geo_warm(request: Request) -> None:
     client_ip = _get_client_ip(request)
     if client_ip:
         asyncio.create_task(geocheck_ip(client_ip))
+    return Response(status_code=204)
 
 
 @router.post("", response_model=OrderCreateOut, status_code=201)

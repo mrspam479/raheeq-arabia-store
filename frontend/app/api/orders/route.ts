@@ -2,13 +2,15 @@
  * Server-side proxy for POST /api/orders
  *
  * IP forwarding note:
- * The chain is: Browser → Cloudflare → EasyPanel(frontend) → Cloudflare → EasyPanel(backend)
- * When this proxy calls the backend, Cloudflare replaces X-Forwarded-For with the
- * frontend container IP, so MaxMind gets a data center IP → fail-open → geo check bypassed.
+ * The ideal chain is: Browser → Cloudflare → EasyPanel(frontend) → EasyPanel(backend) [internal]
+ * BACKEND_URL must be set to the internal Docker/EasyPanel hostname (e.g. http://raheeqarabia_backend:8000)
+ * so this proxy talks directly to the backend container without going back through Cloudflare.
+ * Going via the public URL causes Cloudflare to block or slow the server-to-server request,
+ * resulting in a 9 s timeout and the "تعذّر الاتصال بالخادم" error.
  *
- * Fix: Cloudflare always sets CF-Connecting-IP on the *incoming* request with the
- * real user IP. We read it here and forward it as X-Real-Client-IP (a custom header
- * that Cloudflare passes through unchanged). The backend reads X-Real-Client-IP first.
+ * CF-Connecting-IP on the *incoming* request always carries the real user IP from Cloudflare.
+ * We forward it as X-Real-Client-IP so the backend can still read the true client IP even
+ * though the TCP connection now comes from the frontend container.
  */
 import { type NextRequest, NextResponse } from 'next/server';
 
@@ -138,7 +140,9 @@ export async function POST(req: NextRequest) {
       status: res.status,
       headers: { 'Content-Type': 'application/json' },
     });
-  } catch {
+  } catch (err) {
+    const msg = err instanceof Error ? `${err.name}: ${err.message}` : String(err);
+    console.error('[api/orders] backend fetch failed — BACKEND_URL:', process.env.BACKEND_URL ?? '(not set)', '—', msg);
     return NextResponse.json(
       { detail: { code: 'NETWORK_ERROR', message: 'تعذّر الاتصال بالخادم، حاولي مرة أخرى.' } },
       { status: 503 },
