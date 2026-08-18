@@ -7,10 +7,10 @@ import { Button } from '@/components/ui/Button';
 import { StarRating } from '@/components/ui/StarRating';
 import Link from 'next/link';
 import { COPY } from '@/data/copy';
-import { formatSar } from '@/lib/price';
+import { formatSar, formatPrice } from '@/lib/price';
 import { useCartStore } from '@/store/cart';
 import { PRODUCT_COMPARISON, PRODUCT_CROSS_SELLS, getProductBySlug } from '@/data/products';
-import { trackAddToCart, trackViewContent } from '@/lib/analytics';
+import { trackAddToCart, trackViewContent, trackInitiateCheckout } from '@/lib/analytics';
 import { cn } from '@/lib/cn';
 import type { Product } from '@/lib/types';
 
@@ -68,11 +68,12 @@ export function PdpClient({
   const selectedOffer = product.offers.find((o) => o.code === `T${selectedTier}`)!;
   const singleBoxPrice = product.offers.find((o) => o.code === 'T1')?.priceSar ?? 199;
   const isBundle = product.slug === 'bundle-glow-trio';
+  const currency = product.currency ?? 'SAR';
+  const currencySymbol = product.currencySymbolAr ?? 'ر.س';
 
   useEffect(() => {
-    // Pass singleBoxPrice as value so Meta/TikTok can calculate ROAS on ViewContent
-    trackViewContent(product.slug, product.nameAr, singleBoxPrice);
-  }, [product.slug, product.nameAr, singleBoxPrice]);
+    trackViewContent(product.slug, product.nameAr, singleBoxPrice, currency);
+  }, [product.slug, product.nameAr, singleBoxPrice, currency]);
 
   useEffect(() => {
     setSelectedTier(getDefaultTier(product));
@@ -93,7 +94,12 @@ export function PdpClient({
       offerCode: selectedOffer.code,
     });
     openCheckout();
-    trackAddToCart(product.slug, selectedOffer.priceSar, selectedOffer.quantity);
+    trackAddToCart(product.slug, selectedOffer.priceSar, selectedOffer.quantity, currency);
+    trackInitiateCheckout(
+      selectedOffer.priceSar,
+      [{ slug: product.slug, quantity: selectedOffer.quantity, unitPrice: selectedOffer.priceSar / selectedOffer.quantity }],
+      currency,
+    );
   };
 
   return (
@@ -328,7 +334,7 @@ export function PdpClient({
                           </p>
                           {savings > 0 && (
                             <p className="mt-0.5 font-tajawal text-[11px] font-bold text-[#00A85A]">
-                              {m('وفّر', 'وفّري')} {savings} ر.س
+                              {m('وفّر', 'وفّري')} {savings} {currencySymbol}
                             </p>
                           )}
                         </div>
@@ -338,20 +344,19 @@ export function PdpClient({
                             'font-tajawal text-base font-black whitespace-nowrap',
                             isActive ? 'text-[#00A85A]' : 'text-charcoal/50',
                           )}>
-                            {offer.priceSar} <span className="text-xs font-bold">ر.س</span>
+                            {offer.priceSar} <span className="text-xs font-bold">{currencySymbol}</span>
                           </p>
-                          {/* Per-unit price on the RIGHT — decoy math hits instantly next to the big price */}
                           {offer.quantity > 1 && (
                             <p className={cn(
                               'mt-0.5 font-tajawal text-[11px] font-black whitespace-nowrap',
                               isActive ? 'text-emerald' : 'text-emerald/50',
                             )}>
-                              {Math.round(offer.priceSar / offer.quantity)} ر.س/علبة
+                              {Math.round(offer.priceSar / offer.quantity)} {currencySymbol}/قطعة
                             </p>
                           )}
                           {savings > 0 && (
                             <p className="mt-0.5 font-tajawal text-[10px] text-charcoal/35 line-through whitespace-nowrap">
-                              {fullPrice} ر.س
+                              {fullPrice} {currencySymbol}
                             </p>
                           )}
                         </div>
@@ -374,7 +379,7 @@ export function PdpClient({
                 onClick={handleBuyNow}
                 className="h-16 text-xl shadow-[0_18px_42px_rgba(18,107,82,0.34)]"
               >
-                {product.ctaPrimaryAr ?? m('اطلبه الآن', 'اطلبيها الآن')} · {formatSar(selectedOffer.priceSar)}
+                {product.ctaPrimaryAr ?? m('اطلبه الآن', 'اطلبيها الآن')} · {formatPrice(selectedOffer.priceSar, currency)}
               </Button>
 
               {/* Reassurance */}
@@ -984,7 +989,7 @@ export function PdpClient({
             onClick={handleBuyNow}
             className="h-16 text-xl px-12 shadow-[0_18px_42px_rgba(0,0,0,0.3)]"
           >
-            {`${product.ctaPrimaryAr ?? m(`اطلبه الآن`, `اطلبيها الآن`)} · ${selectedOffer.priceSar} ر.س`}
+            {`${product.ctaPrimaryAr ?? m(`اطلبه الآن`, `اطلبيها الآن`)} · ${selectedOffer.priceSar} ${currencySymbol}`}
           </Button>
         </div>
       </section>
@@ -1010,7 +1015,7 @@ export function PdpClient({
           onClick={handleBuyNow}
           className="h-14 text-lg font-black cta-pulse"
         >
-          {`${product.ctaPrimaryAr ?? m(`اطلبه الآن`, `اطلبيها الآن`)} · ${formatSar(selectedOffer.priceSar)}`}
+          {`${product.ctaPrimaryAr ?? m(`اطلبه الآن`, `اطلبيها الآن`)} · ${formatPrice(selectedOffer.priceSar, currency)}`}
         </Button>
         <p className="mt-1.5 text-center font-tajawal text-[11px] font-bold text-emerald">
           🚚 الدفع عند الاستلام · 🛡️ ضمان ٣٠ يوم

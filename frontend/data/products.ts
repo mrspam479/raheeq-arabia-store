@@ -648,6 +648,139 @@ export const PRODUCTS: Product[] = [
         'شلاجيت جبلي نقي (85+ معدن + حمض الفولفيك) + زيت الحبة السوداء — طاقة طبيعية بلا رعشة أو هبوط. 3 علب = شهر كامل بـ 299 ريال. دفع عند الاستلام.',
     },
   },
+
+  /* ══════════════════════════════════════════════════════════
+     جهاز استنساخ الريموت الذكي — Universal Remote Duplicator
+     UAE market — COD, AED currency.
+     Pain: paying 200-300 AED to a technician to program a new gate remote.
+     Solution: clone it yourself in 3 seconds.
+     Offer structure: T1 decoy (199), T2 default (279 for 2), T3 best value (349 for 3).
+  ══════════════════════════════════════════════════════════ */
+  {
+    id: 'smart-remote-duplicator',
+    slug: 'smart-remote-duplicator',
+    nameAr: 'جهاز استنساخ الريموت الذكي',
+    genderMasculine: true,
+    currency: 'AED',
+    currencySymbolAr: 'د.إ',
+    ctaPrimaryAr: 'اطلبه الآن — الدفع عند الاستلام',
+
+    heroTagAr: 'ضاع ريموت الكراج؟ لا تدفع ٣٠٠ درهم للمبرمج — انسخه بنفسك في ٣ ثوانٍ!',
+
+    shortDescriptionAr:
+      'ريموت الكراج أو البوابة ضاع أو تبي نسخة لأهلك؟ المبرمجين يطلبون ٢٠٠-٣٠٠ درهم على ريموت واحد. هذا الجهاز ينسخ أي ريموت بتردد 433MHz في ٣ ثوانٍ فقط — بدون فني وبدون برمجة معقدة.',
+
+    longDescriptionAr:
+      'جهاز استنساخ الريموت الذكي يعمل مع أغلب بوابات الكراجات والأبواب الإلكترونية بتردد 433 ميجاهرتز (الأكثر شيوعاً في الإمارات). فقط ضع الريموت الأصلي بجانب الجهاز، اضغط على الزر، وخلال ثوانٍ يتم نسخ الكود. تصميم معدني متين وصغير الحجم يدخل الجيب. مثالي لتوزيع نسخ على أفراد العائلة بدلاً من دفع مبالغ لكل ريموت.',
+
+    ratingValue: 4.8,
+    reviewCount: 156,
+    stockLabelAr: 'الكمية محدودة — ٢٠٠ قطعة فقط.',
+    coverImageUrl: '/images/products/remote/cover.webp',
+    galleryImageUrls: [
+      '/images/products/remote/cover.webp',
+      '/images/products/remote/gallery-1.webp',
+      '/images/products/remote/gallery-2.webp',
+    ],
+
+    offers: [
+      {
+        code: 'T1',
+        labelAr: 'ريموت واحد',
+        quantity: 1,
+        priceSar: 199,
+        isRecommended: false,
+      },
+      {
+        code: 'T2',
+        labelAr: 'ريموتين (الأكثر طلباً)',
+        quantity: 2,
+        priceSar: 279,
+        isRecommended: true,
+        badge: 'الأكثر طلباً',
+      },
+      {
+        code: 'T3',
+        labelAr: '٣ ريموتات (أفضل قيمة)',
+        quantity: 3,
+        priceSar: 349,
+        isRecommended: false,
+        badge: 'أفضل قيمة',
+      },
+    ],
+
+    ingredients: [
+      {
+        nameAr: 'نسخ فوري',
+        nameEn: 'Instant Cloning',
+        dose: '433MHz',
+        whatItDoesAr: 'ينسخ كود الريموت الأصلي في أقل من ٣ ثوانٍ — بدون أدوات أو فني.',
+        scienceSourceShort: 'Fixed code 433MHz compatible',
+        thumbImageUrl: null,
+      },
+      {
+        nameAr: 'توافق واسع',
+        nameEn: 'Wide Compatibility',
+        dose: '99%',
+        whatItDoesAr: 'متوافق مع أغلب بوابات الكراجات والأبواب في الإمارات والخليج.',
+        scienceSourceShort: 'Fixed code remotes only',
+        thumbImageUrl: null,
+      },
+      {
+        nameAr: 'تصميم معدني',
+        nameEn: 'Metal Build',
+        dose: 'premium',
+        whatItDoesAr: 'هيكل معدني متين مقاوم للصدمات — مو بلاستيك رخيص.',
+        scienceSourceShort: 'Zinc alloy shell',
+        thumbImageUrl: null,
+      },
+    ],
+
+    reviews: [
+      {
+        authorFirstNameAr: 'سعيد',
+        authorCityAr: 'دبي',
+        rating: 5,
+        bodyAr: 'ضاع ريموت الكراج وطلبوا مني ٢٨٠ درهم عشان يبرمجون واحد جديد. هذا الجهاز نسخ الريموت في ثوانٍ وأخذت ٣ نسخ لكل فرد في العائلة.',
+      },
+      {
+        authorFirstNameAr: 'أحمد',
+        authorCityAr: 'أبوظبي',
+        rating: 5,
+        bodyAr: 'سهل جداً — حتى أبوي اللي ما يفهم بالتكنولوجيا قدر ينسخ الريموت بنفسه.',
+      },
+      {
+        authorFirstNameAr: 'محمد',
+        authorCityAr: 'الشارقة',
+        rating: 5,
+        bodyAr: 'طلبت ٣ حبات ووزّعتهم على السيارات. الحين ما عاد نتخانق مين ياخذ الريموت.',
+      },
+    ],
+
+    faqs: [
+      {
+        questionAr: 'هل يبرمج ريموت سيارتي؟',
+        answerAr: 'يعمل مع بوابات الكراج والأبواب بتردد 433MHz الثابت (Fixed Code). لا يعمل مع ريموتات السيارات الحديثة (Rolling Code).',
+      },
+      {
+        questionAr: 'هل أحتاج فني لبرمجته؟',
+        answerAr: 'لا! تقدر تبرمجه بنفسك في أقل من ١٠ ثوانٍ. الخطوات مشروحة بالتفصيل.',
+      },
+      {
+        questionAr: 'متى يوصلني الطلب؟',
+        answerAr: 'التوصيل مجاني خلال ١-٣ أيام عمل داخل الإمارات. الدفع كاش عند الاستلام.',
+      },
+      {
+        questionAr: 'كم ريموت أقدر أنسخ بجهاز واحد؟',
+        answerAr: 'كل جهاز يحفظ كود ريموت واحد. إذا تبي أكثر من نسخة، اطلب أكثر من جهاز.',
+      },
+    ],
+
+    seo: {
+      titleAr: 'جهاز استنساخ الريموت الذكي — انسخ ريموت الكراج في ٣ ثوانٍ',
+      descriptionAr: 'انسخ ريموت الكراج أو البوابة بنفسك بدون فني. ٢ ريموت بـ ٢٧٩ درهم. توصيل مجاني والدفع عند الاستلام.',
+    },
+  },
 ];
 
 /* ─────────────────────────────────────────────────────────────
@@ -666,6 +799,7 @@ export const PRODUCT_ONE_LINERS: Record<string, string> = {
   'habba-jathr': 'بيوتين 5,000 ميكروغرام + كولاجين + كيراتين — شعر أكثف وأقل تساقطاً.',
   'bundle-glow-trio': 'صندوق واحد = نضرة + بريق + جذر — الحل الكامل للبشرة والهالات والشعر.',
   'habba-shilajit': 'طاقة طبيعية، تركيز أعلى، ونشاط يدوم — بدون طعم الراتنج المزعج.',
+  'smart-remote-duplicator': 'انسخ ريموت الكراج في ٣ ثوانٍ — بدون فني وبدون مبالغ.',
 };
 
 /** 3 BIG benefits with icon. Keep ULTRA short — max 4-5 words each. */
@@ -694,6 +828,11 @@ export const PRODUCT_BENEFITS: Record<string, { icon: string; text: string }[]> 
     { icon: '⚡', text: 'طاقة خلوية بلا رعشة أو هبوط' },
     { icon: '🏔️', text: '85+ معدن + حمض الفولفيك' },
     { icon: '🤍', text: 'حبة البركة المباركة cold-pressed' },
+  ],
+  'smart-remote-duplicator': [
+    { icon: '⚡', text: 'نسخ فوري في ٣ ثوانٍ' },
+    { icon: '🔧', text: 'بدون فني أو برمجة' },
+    { icon: '🏠', text: 'متوافق مع ٩٩٪ من البوابات' },
   ],
 };
 
@@ -753,6 +892,20 @@ export const PRODUCT_BEFORE_AFTER: Record<string, { before: string[]; after: str
       'ترجع البيت وعندك نفس ونشاط لحياتك العائلية والاجتماعية',
       'خلّصت نفسك من الاعتماد اليومي على القهوة والمشروبات المحفّزة',
       'حيوية طبيعية من الداخل — المعادن التي كان جسمك يفتقدها',
+    ],
+  },
+  'smart-remote-duplicator': {
+    before: [
+      'ضاع ريموت الكراج وتدفع ٢٠٠-٣٠٠ درهم كل مرة للمبرمج',
+      'فرد واحد بالعائلة عنده الريموت والكل يتصل فيه يفتح لهم',
+      'تستنى الفني يجي ويتأخر ويطلب سعر مبالغ فيه',
+      'ريموت البوابة خربان وتخاف تشتري واحد غلط من النت',
+    ],
+    after: [
+      'نسخة لكل فرد بالعائلة — ما عاد أحد يتصل يسأل "افتح لي"',
+      'وفّرت مئات الدراهم بدل ما تدفع للمبرمج كل مرة',
+      'نسخ الريموت بنفسك في ٣ ثوانٍ بدون فني',
+      'جهاز معدني متين يدوم سنين — مو بلاستيك رخيص',
     ],
   },
   'bundle-glow-trio': {
@@ -841,6 +994,20 @@ export const PRODUCT_WHY_US: Record<string, { logic: string[]; emotion: string[]
       'استثمار في نفسك — التعب والخمول مو "طبيعة حياة"',
     ],
   },
+  'smart-remote-duplicator': {
+    logic: [
+      'تردد 433MHz — الأكثر استخداماً في بوابات الإمارات',
+      'نسخ في ٣ ثوانٍ — بدون أدوات أو خبرة تقنية',
+      'هيكل معدني متين — مو بلاستيك رخيص يخرب بعد شهر',
+      'توصيل مجاني — الدفع كاش عند الاستلام',
+    ],
+    emotion: [
+      'كل فرد بالعائلة يستحق ريموت خاص فيه',
+      'لا تدفع ٣٠٠ درهم للمبرمج — انسخه بنفسك',
+      'حل ذكي يوفّر عليك وقت ومال',
+      'ريموت احتياطي = راحة بال دائمة',
+    ],
+  },
 };
 
 /** Result timeline — answers "متى أشوف نتيجة؟" visually. */
@@ -875,6 +1042,12 @@ export const PRODUCT_TIMELINE: Record<string, { when: string; result: string }[]
     { when: 'الأسبوع ٣-٤', result: 'طاقة أثبت وتركيز أوضح' },
     { when: 'الشهر ٢+', result: 'نشاط مستدام وحيوية راسخة' },
   ],
+  'smart-remote-duplicator': [
+    { when: 'الخطوة ١', result: 'امسح الذاكرة القديمة' },
+    { when: 'الخطوة ٢', result: 'قرّب الريموت الأصلي' },
+    { when: 'الخطوة ٣', result: 'اضغط وانسخ الكود' },
+    { when: 'جاهز!', result: 'استخدمه فوراً' },
+  ],
 };
 
 export const PRODUCT_HOW_TO_USE: Record<string, string[]> = {
@@ -903,6 +1076,11 @@ export const PRODUCT_HOW_TO_USE: Record<string, string[]> = {
     'علكتان بعد وجبة (الفطور أو الغداء) — الشلاجيت يُمتص أفضل مع الأكل.',
     'الكورس المُوصى به: 3 علب (شهر كامل) لبناء مخزون المعادن في الجسم وملاحظة الفرق الحقيقي.',
   ],
+  'smart-remote-duplicator': [
+    'اضغط على زرين معاً لمدة ٣ ثوانٍ لمسح الذاكرة (يومض الضوء).',
+    'ضع الريموت الأصلي بجانب الجهاز الجديد.',
+    'اضغط على الزر المراد نسخه في كلا الريموتين — خلاص تم!',
+  ],
 };
 
 export const PRODUCT_WHY_HEADING: Record<string, string> = {
@@ -910,6 +1088,7 @@ export const PRODUCT_WHY_HEADING: Record<string, string> = {
   'habba-bareeq': 'ليش مش حبّة نوم؟',
   'habba-jathr': 'ليش من الجذر؟',
   'habba-shilajit': 'ليش الشلاجيت مختلف عن الكافيين ومشروبات الطاقة؟',
+  'smart-remote-duplicator': 'ليش هذا الجهاز بدل ما تروح للمبرمج؟',
 };
 
 export const PRODUCT_WHY_BODY: Record<string, string> = {
@@ -921,6 +1100,8 @@ export const PRODUCT_WHY_BODY: Record<string, string> = {
     'الزيوت والشامبوهات تشتغل من الخارج. جذر تدعم الشعر من الداخل ببيوتين، كولاجين، وكيراتين. النتيجة تحتاج استمرار لأن دورة الشعر بطيئة، لكن الروتين واضح وسهل.',
   'habba-shilajit':
     'الكافيين ومشروبات الطاقة تحفّز الجهاز العصبي بشكل مصطنع — تعطيك ذروة ثم هبوطاً. الشلاجيت يعمل بطريقة مختلفة تماماً: حمض الفولفيك يفتح "أبواب" الخلية ويُحسّن امتصاص المعادن الأساسية التي يحتاجها جسمك لإنتاج الطاقة الخلوية (ATP) بشكل طبيعي. لا رعشة، لا هبوط، لا اعتماد. دراسات في PLOS ONE أكّدت تأثيره. دُمج مع الحبة السوداء المباركة لاستكمال دعم المناعة والحيوية العامة.',
+  'smart-remote-duplicator':
+    'المبرمجين يطلبون ٢٠٠-٣٠٠ درهم على ريموت واحد، ويتأخرون بالمواعيد، وأحياناً يبرمجون ريموت ما يشتغل صح. هذا الجهاز يخلّيك تسوي نفس الشغل بنفسك في ٣ ثوانٍ. تردد 433MHz الثابت هو الأكثر شيوعاً في بوابات الإمارات. ريموت واحد لكل فرد بالعائلة = راحة بال وتوفير مئات الدراهم.',
 };
 
 export const PRODUCT_CROSS_SELLS: Record<string, string[]> = {
@@ -929,6 +1110,7 @@ export const PRODUCT_CROSS_SELLS: Record<string, string[]> = {
   'habba-jathr': ['habba-nadra', 'habba-bareeq'],
   'bundle-glow-trio': ['habba-nadra', 'habba-bareeq'],
   'habba-shilajit': [],
+  'smart-remote-duplicator': [],
 };
 
 /**
@@ -943,6 +1125,18 @@ export interface ComparisonTableData {
 }
 
 export const PRODUCT_COMPARISON: Record<string, ComparisonTableData> = {
+  'smart-remote-duplicator': {
+    col1: { label: 'مبرمج ريموتات', icon: '🔧' },
+    col2: { label: 'ريموت من النت', icon: '📦' },
+    rows: [
+      { label: 'جاهز للاستخدام فوراً', a: false, b: false },
+      { label: 'ما يحتاج فني', a: false, b: true },
+      { label: 'سعر أقل من ١٤٠ درهم للريموت', a: false, b: true },
+      { label: 'هيكل معدني متين', a: true, b: false },
+      { label: 'نسخ في ٣ ثوانٍ', a: false, b: false },
+      { label: 'ضمان استرداد', a: false, b: false },
+    ],
+  },
   'habba-shilajit': {
     col1: { label: 'شلاجيت راتنج خام', icon: '🪨' },
     col2: { label: 'مشروبات الطاقة', icon: '🥤' },
@@ -961,6 +1155,7 @@ export const UPSELL_SKU_MAP: Record<string, string> = {
   'habba-nadra': 'habba-bareeq',
   'habba-bareeq': 'habba-nadra',
   'habba-jathr': 'habba-nadra',
+  'smart-remote-duplicator': 'smart-remote-duplicator',
 };
 
 export function getProductBySlug(slug: string): Product | undefined {

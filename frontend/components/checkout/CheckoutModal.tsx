@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { COPY } from '@/data/copy';
 import { validateKsaPhone } from '@/lib/phone';
-import { trackPurchase } from '@/lib/analytics';
+import { trackPurchase, trackInitiateCheckout } from '@/lib/analytics';
 import { showToast } from '@/components/ui/Toast';
 import { cn } from '@/lib/cn';
 import { v4 as uuidv4 } from 'uuid';
@@ -32,6 +32,9 @@ export function CheckoutModal() {
 
   const isMasc = lines.some((l) => PRODUCTS.find((p) => p.slug === l.productId)?.genderMasculine);
   const m = (masculine: string, feminine: string) => (isMasc ? masculine : feminine);
+  const cartProduct = lines[0] ? PRODUCTS.find((p) => p.slug === lines[0].productId) : undefined;
+  const currency = cartProduct?.currency ?? 'SAR';
+  const currencySymbol = cartProduct?.currencySymbolAr ?? 'ر.س';
   const modalRef = useRef<HTMLDivElement>(null);
   const idempotencyRef = useRef<string>(uuidv4());
 
@@ -47,8 +50,11 @@ export function CheckoutModal() {
       idempotencyRef.current = uuidv4();
       reset();
       void fetch('/api/geo/warm').catch(() => {});
+      const checkoutTotal = totalSar();
+      const cartItems = lines.map((l) => ({ slug: l.productId, quantity: l.quantity, unitPrice: l.unitPrice }));
+      trackInitiateCheckout(checkoutTotal, cartItems, currency);
     }
-  }, [isCheckoutOpen, reset]);
+  }, [isCheckoutOpen, reset]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (!isCheckoutOpen) return;
@@ -152,7 +158,7 @@ export function CheckoutModal() {
         totalSar: total,
         orderId,
       });
-      trackPurchase(orderId, total, values.phone, values.name, purchaseEventId);
+      trackPurchase(orderId, total, values.phone, values.name, purchaseEventId, currency);
       openUpsell(orderId, upsellToken, upsellSku, { name: values.name, phone: values.phone });
     } catch (err) {
       if (isLocalPreview()) {
@@ -162,7 +168,7 @@ export function CheckoutModal() {
           totalSar: total,
           orderId: previewOrderId,
         });
-        trackPurchase(previewOrderId, total, values.phone, values.name, uuidv4());
+        trackPurchase(previewOrderId, total, values.phone, values.name, uuidv4(), currency);
         const previewSku = lines[0]?.productId ?? 'habba-bareeq';
         openUpsell(previewOrderId, 'preview-upsell-token', previewSku, { name: values.name, phone: values.phone });
         return;
@@ -272,7 +278,7 @@ export function CheckoutModal() {
                     <p className="font-tajawal text-3xl font-black text-[#F5C842] leading-none">
                       {mounted ? line.totalPrice : 0}
                     </p>
-                    <p className="font-tajawal text-[10px] font-bold text-[#F5C842]/60 text-left">ر.س</p>
+                    <p className="font-tajawal text-[10px] font-bold text-[#F5C842]/60 text-left">{currencySymbol}</p>
                   </div>
                 </div>
               );
