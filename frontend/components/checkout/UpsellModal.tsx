@@ -11,11 +11,9 @@ import { cn } from '@/lib/cn';
 
 const COUNTDOWN_SECONDS = 25;
 
-// Flat upsell: 2 extra bottles for 99 SAR
-// Cost: ~26 SAR/bottle × 2 = 52 SAR → profit: 47 SAR ✅
 const UPSELL_ADD_PRICE = 99;
-const UPSELL_NORMAL_PRICE = 398; // 2 × T1 price (199 SAR each)
-const SAVINGS = UPSELL_NORMAL_PRICE - UPSELL_ADD_PRICE; // 299 SAR
+const UPSELL_NORMAL_PRICE = 398;
+const SAVINGS = UPSELL_NORMAL_PRICE - UPSELL_ADD_PRICE;
 
 export function UpsellModal() {
   const {
@@ -27,15 +25,21 @@ export function UpsellModal() {
   const cartProduct = PRODUCTS.find((p) => p.slug === lines[0]?.productId);
   const isMasc = cartProduct?.genderMasculine ?? false;
   const m = (masculine: string, feminine: string) => (isMasc ? masculine : feminine);
+  const currency = cartProduct?.currency ?? 'SAR';
+  const currencyLabel = currency === 'AED' ? 'درهم' : 'ريال سعودي';
+  const currencyLabelShort = currency === 'AED' ? 'د.إ' : 'ر.س';
+  const isRemote = lines[0]?.productId === 'smart-remote-duplicator';
+  const upsellItemLabel = isRemote ? 'ريموتين' : 'علبتين شلاجيت';
 
   const isShilajit = lines[0]?.productId === 'habba-shilajit';
   const orderedTier = lines[0]?.offerCode ?? 'T2';
 
-  // Compute early so handleAccept can reference them before the mounted guard
-  const bottleImgEarly = isShilajit
-    ? '/images/products/habba-shilajit/bottle.webp'
-    : `/images/products/${upsellSku || 'habba-bareeq'}/cover.webp`;
-  const productShortNameEarly = isShilajit ? 'الشلاجيت' : (cartProduct?.nameAr ?? 'المنتج');
+  const bottleImgEarly = isRemote
+    ? '/images/products/remote/cover.webp'
+    : isShilajit
+      ? '/images/products/habba-shilajit/bottle.webp'
+      : `/images/products/${upsellSku || 'habba-bareeq'}/cover.webp`;
+  const productShortNameEarly = isRemote ? 'الريموت' : isShilajit ? 'الشلاجيت' : (cartProduct?.nameAr ?? 'المنتج');
 
   const [mounted, setMounted] = useState(false);
   const [seconds, setSeconds] = useState(COUNTDOWN_SECONDS);
@@ -91,7 +95,7 @@ export function UpsellModal() {
   }, [isUpsellOpen, orderedTier, handleExpire]);
 
   const handleAccept = () => {
-    if (acceptedRef.current || accepting) return;
+    if (acceptedRef.current) return;
     acceptedRef.current = true;
     if (intervalRef.current) clearInterval(intervalRef.current);
 
@@ -194,7 +198,7 @@ export function UpsellModal() {
 
             {/* Headline */}
             <h2 className="font-tajawal text-2xl font-black text-white leading-snug">
-              {m('أضف علبتين شلاجيت', 'أضيفي علبتين شلاجيت')}
+              {m(`أضف ${upsellItemLabel}`, `أضيفي ${upsellItemLabel}`)}
             </h2>
             <p className="font-tajawal text-sm text-white/70 mt-1">
               {m('توصّل معك في نفس الطلب — بدون شحن زيادة', 'توصّل معكِ في نفس الطلب — بدون شحن زيادة')}
@@ -204,12 +208,12 @@ export function UpsellModal() {
             <div className="mt-4 flex items-center justify-center gap-3">
               <div className="text-center">
                 <p className="font-tajawal text-5xl font-black text-[#F5C842] leading-none">{UPSELL_ADD_PRICE}</p>
-                <p className="font-tajawal text-sm font-bold text-[#F5C842]/80">ريال سعودي فقط</p>
+                <p className="font-tajawal text-sm font-bold text-[#F5C842]/80">{currencyLabel} فقط</p>
               </div>
               <div className="h-12 w-px bg-white/20" />
               <div className="text-center">
-                <p className="font-tajawal text-sm text-white/50 line-through leading-none">{UPSELL_NORMAL_PRICE} ر.س</p>
-                <p className="font-tajawal text-lg font-black text-[#4ADE80] mt-0.5">وفّر {SAVINGS} ر.س</p>
+                <p className="font-tajawal text-sm text-white/50 line-through leading-none">{UPSELL_NORMAL_PRICE} {currencyLabelShort}</p>
+                <p className="font-tajawal text-lg font-black text-[#4ADE80] mt-0.5">وفّر {SAVINGS} {currencyLabelShort}</p>
               </div>
             </div>
           </div>
@@ -228,7 +232,7 @@ export function UpsellModal() {
                 />
               </div>
               <span className="rounded-full bg-emerald/15 px-2 py-0.5 font-tajawal text-[10px] font-black text-emerald">
-                علبة ١
+                {isRemote ? 'ريموت ١' : 'علبة ١'}
               </span>
             </div>
 
@@ -249,7 +253,7 @@ export function UpsellModal() {
                 />
               </div>
               <span className="rounded-full bg-emerald/15 px-2 py-0.5 font-tajawal text-[10px] font-black text-emerald">
-                علبة ٢
+                {isRemote ? 'ريموت ٢' : 'علبة ٢'}
               </span>
             </div>
 
@@ -259,8 +263,8 @@ export function UpsellModal() {
             </div>
             <div className="mb-8 flex flex-col items-center">
               <span className="font-tajawal text-3xl font-black text-emerald leading-none">{UPSELL_ADD_PRICE}</span>
-              <span className="font-tajawal text-xs font-bold text-emerald/70">ريال فقط</span>
-              <span className="font-tajawal text-[10px] text-charcoal/35 line-through mt-0.5">{UPSELL_NORMAL_PRICE} ر.س</span>
+              <span className="font-tajawal text-xs font-bold text-emerald/70">{currencyLabel} فقط</span>
+              <span className="font-tajawal text-[10px] text-charcoal/35 line-through mt-0.5">{UPSELL_NORMAL_PRICE} {currencyLabelShort}</span>
             </div>
           </div>
 
@@ -274,8 +278,8 @@ export function UpsellModal() {
               className="h-14 text-base font-black touch-manipulation select-none shadow-xl shadow-emerald/30"
             >
               {m(
-                `✅ أضفها لطلبي بـ ${UPSELL_ADD_PRICE} ريال`,
-                `✅ أضيفيها لطلبي بـ ${UPSELL_ADD_PRICE} ريال`,
+                `✅ أضفها لطلبي بـ ${UPSELL_ADD_PRICE} ${currencyLabel}`,
+                `✅ أضيفيها لطلبي بـ ${UPSELL_ADD_PRICE} ${currencyLabel}`,
               )}
             </Button>
 
